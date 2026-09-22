@@ -1,0 +1,995 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | Book Tournament</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #050509;
+        }
+
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .glass {
+            background: rgba(15, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(
+                    rgba(168, 85, 247, 0.05) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(6, 182, 212, 0.05) 1px,
+                    transparent 1px
+                );
+            background-size: 40px 40px;
+        }
+
+        .input-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: white;
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: #06b6d4;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+        }
+
+        select option {
+            background: #0f0f19;
+            color: white;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+
+<body class="text-white min-h-screen grid-bg">
+
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+
+<nav class="fixed top-0 left-0 right-0 z-50 
+            glass border-b border-white/10">
+
+    <div class="max-w-7xl mx-auto px-6 py-4 
+                flex items-center justify-between">
+
+        <!-- ================= LOGO ================= -->
+
+        <a href="{% url 'player_dashboard' %}"
+           class="font-orbitron text-xl font-bold">
+
+            <span class="gradient-text">
+                BGMI
+            </span>
+
+            <span class="text-white">
+                ARENA
+            </span>
+
+        </a>
+
+
+        <!-- ================= NAVIGATION ================= -->
+
+        <div class="flex items-center gap-3">
+
+            <!-- DASHBOARD BUTTON -->
+
+            <a href="{% url 'player_dashboard' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-purple-600/20
+                      border border-purple-500/30
+                      hover:bg-purple-600/40
+                      transition">
+
+                🏠 Dashboard
+
+            </a>
+
+
+            <!-- PROFILE BUTTON -->
+
+            <a href="{% url 'player_profile' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-white/5
+                      border border-white/10
+                      hover:bg-purple-600/20
+                      transition">
+
+                👤 Profile
+
+            </a>
+
+
+            <!-- TOURNAMENT BUTTON -->
+
+            <a href="{% url 'view_tournament' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-white/5
+                      border border-white/10
+                      hover:bg-purple-600/20
+                      transition">
+
+                🏆 Tournaments
+
+            </a>
+
+
+            <!-- LOGOUT BUTTON -->
+
+            <a href="{% url 'logout' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-red-500/10
+                      border border-red-500/20
+                      text-red-400
+                      hover:bg-red-500
+                      hover:text-white
+                      transition">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ============================================================
+     MAIN
+============================================================ -->
+
+<main class="pt-32 pb-16 px-4">
+
+    <div class="max-w-5xl mx-auto">
+
+
+        <!-- ====================================================
+             BACK BUTTON
+        ===================================================== -->
+
+        <div class="mb-8">
+
+            <a href="{% url 'view_tournament' %}"
+               class="inline-flex items-center gap-2
+                      text-gray-400
+                      hover:text-cyan-400
+                      transition">
+
+                <span class="text-xl">
+                    ←
+                </span>
+
+                Back to Tournaments
+
+            </a>
+
+        </div>
+
+
+
+        <!-- ====================================================
+             PAGE HEADING
+        ===================================================== -->
+
+        <div class="text-center mb-10">
+
+            <p class="text-cyan-400
+                      text-sm
+                      uppercase
+                      tracking-[4px]
+                      mb-3">
+
+                Tournament Booking
+
+            </p>
+
+
+            <h1 class="orbitron
+                       text-3xl
+                       md:text-5xl
+                       font-bold">
+
+                <span class="text-purple-400">
+                    BOOK
+                </span>
+
+                <span class="text-cyan-400">
+                    TOURNAMENT
+                </span>
+
+            </h1>
+
+
+            <p class="text-gray-400 mt-4">
+
+                Reserve your slot and compete in the tournament.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- ====================================================
+             TOURNAMENT INFORMATION
+        ===================================================== -->
+
+        <section class="glass
+                        rounded-2xl
+                        p-6 md:p-8
+                        mb-8
+                        shadow-2xl">
+
+
+            <!-- TITLE -->
+
+            <div class="flex flex-col md:flex-row
+                        md:items-center
+                        md:justify-between
+                        gap-5
+                        mb-8">
+
+                <div>
+
+                    <p class="text-purple-400
+                              text-sm
+                              uppercase
+                              tracking-widest">
+
+                        Selected Tournament
+
+                    </p>
+
+
+                    <h2 class="orbitron
+                               text-2xl
+                               md:text-3xl
+                               font-bold
+                               mt-2">
+
+                        {{ tournament.tournament_name }}
+
+                    </h2>
+
+
+                    {% if tournament.clan %}
+
+                    <p class="text-gray-400 mt-2">
+
+                        Organized by
+
+                        <span class="text-cyan-400 font-semibold">
+
+                            {{ tournament.clan.clan_name }}
+
+                        </span>
+
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- ENTRY FEE -->
+
+                <div class="glass
+                            rounded-xl
+                            px-7
+                            py-5
+                            text-center">
+
+                    <p class="text-gray-500
+                              text-xs
+                              uppercase
+                              tracking-widest">
+
+                        Entry Fee
+
+                    </p>
+
+
+                    <p class="orbitron
+                              text-3xl
+                              font-bold
+                              text-cyan-400
+                              mt-2">
+
+                        ₹{{ tournament.entry_fee }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TOURNAMENT DETAILS
+            ================================================== -->
+
+            <div class="grid
+                        grid-cols-2
+                        md:grid-cols-4
+                        gap-4">
+
+
+                <!-- MAP -->
+
+                <div class="rounded-xl
+                            bg-white/5
+                            border border-white/5
+                            p-4">
+
+                    <p class="text-gray-500
+                              text-xs
+                              uppercase">
+
+                        Map
+
+                    </p>
+
+                    <p class="font-semibold
+                              mt-2">
+
+                        {{ tournament.map }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- GAME MODE -->
+
+                <div class="rounded-xl
+                            bg-white/5
+                            border border-white/5
+                            p-4">
+
+                    <p class="text-gray-500
+                              text-xs
+                              uppercase">
+
+                        Mode
+
+                    </p>
+
+                    <p class="font-semibold
+                              mt-2
+                              text-purple-400">
+
+                        {{ tournament.game_mode }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- DATE -->
+
+                <div class="rounded-xl
+                            bg-white/5
+                            border border-white/5
+                            p-4">
+
+                    <p class="text-gray-500
+                              text-xs
+                              uppercase">
+
+                        Date
+
+                    </p>
+
+                    <p class="font-semibold
+                              mt-2">
+
+                        {{ tournament.tournament_date|date:"d M Y" }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- TIME -->
+
+                <div class="rounded-xl
+                            bg-white/5
+                            border border-white/5
+                            p-4">
+
+                    <p class="text-gray-500
+                              text-xs
+                              uppercase">
+
+                        Time
+
+                    </p>
+
+                    <p class="font-semibold
+                              mt-2">
+
+                        {{ tournament.tournament_time|time:"h:i A" }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 SLOT DETAILS
+            ================================================== -->
+
+            <div class="mt-6
+                        grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        gap-4">
+
+
+                <!-- MAXIMUM PLAYERS -->
+
+                <div class="rounded-xl
+                            bg-purple-500/10
+                            border border-purple-500/20
+                            p-5">
+
+                    <p class="text-gray-400
+                              text-xs
+                              uppercase
+                              tracking-wider">
+
+                        Maximum Players
+
+                    </p>
+
+
+                    <p class="orbitron
+                              text-2xl
+                              font-bold
+                              text-purple-400
+                              mt-2">
+
+                        {{ tournament.max_players }}
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- AVAILABLE SLOTS -->
+
+                <div class="rounded-xl
+
+                            {% if available_slots > 0 %}
+                                bg-cyan-500/10
+                                border-cyan-500/20
+                            {% else %}
+                                bg-red-500/10
+                                border-red-500/20
+                            {% endif %}
+
+                            border
+                            p-5">
+
+                    <p class="text-gray-400
+                              text-xs
+                              uppercase
+                              tracking-wider">
+
+                        Available Slots
+
+                    </p>
+
+
+                    {% if available_slots > 0 %}
+
+                        <p class="orbitron
+                                  text-2xl
+                                  font-bold
+                                  text-cyan-400
+                                  mt-2">
+
+                            {{ available_slots }}
+
+                        </p>
+
+                    {% else %}
+
+                        <p class="orbitron
+                                  text-2xl
+                                  font-bold
+                                  text-red-400
+                                  mt-2">
+
+                            FULL
+
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ====================================================
+             BOOKING FORM
+        ===================================================== -->
+
+        {% if available_slots > 0 %}
+
+        <section class="glass
+                        rounded-2xl
+                        p-6 md:p-10
+                        shadow-2xl">
+
+
+            <!-- FORM HEADING -->
+
+            <div class="mb-8">
+
+                <h2 class="orbitron
+                           text-xl
+                           md:text-2xl
+                           text-purple-400">
+
+                    PLAYER DETAILS
+
+                </h2>
+
+
+                <p class="text-gray-400
+                          text-sm
+                          mt-2">
+
+                    Confirm your details before booking.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FORM
+            ================================================== -->
+
+            <form method="POST"
+                  action="{% url 'booking' tournament.id %}">
+
+                {% csrf_token %}
+
+
+
+                <!-- PLAYER NAME -->
+
+                <div class="mb-6">
+
+                    <label class="block
+                                  text-sm
+                                  text-gray-300
+                                  mb-2">
+
+                        Player Name
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="player_name"
+                        value="{{ player.full_name|default:'' }}"
+                        placeholder="Enter player name"
+                        required
+                        class="input-box
+                               w-full
+                               rounded-lg
+                               px-4
+                               py-3">
+
+                </div>
+
+
+
+                <!-- BGMI ID -->
+
+                <div class="mb-6">
+
+                    <label class="block
+                                  text-sm
+                                  text-gray-300
+                                  mb-2">
+
+                        BGMI ID
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="bgmi_id"
+                        value="{{ player.bgmi_id|default:'' }}"
+                        placeholder="Enter BGMI ID"
+                        required
+                        class="input-box
+                               w-full
+                               rounded-lg
+                               px-4
+                               py-3">
+
+                </div>
+
+
+
+                <!-- IN GAME NAME -->
+
+                <div class="mb-6">
+
+                    <label class="block
+                                  text-sm
+                                  text-gray-300
+                                  mb-2">
+
+                        In-Game Name
+
+                    </label>
+
+
+                    <input
+                        type="text"
+                        name="in_game_name"
+                        value="{{ player.in_game_name|default:'' }}"
+                        placeholder="Enter in-game name"
+                        required
+                        class="input-box
+                               w-full
+                               rounded-lg
+                               px-4
+                               py-3">
+
+                </div>
+
+
+
+                <!-- PHONE -->
+
+                <div class="mb-6">
+
+                    <label class="block
+                                  text-sm
+                                  text-gray-300
+                                  mb-2">
+
+                        Phone Number
+
+                    </label>
+
+
+                    <input
+                        type="tel"
+                        name="phone"
+                        value="{{ player.phone|default:'' }}"
+                        placeholder="Enter phone number"
+                        required
+                        class="input-box
+                               w-full
+                               rounded-lg
+                               px-4
+                               py-3">
+
+                </div>
+
+
+
+                <!-- GAME MODE -->
+
+                <div class="mb-6">
+
+                    <label class="block
+                                  text-sm
+                                  text-gray-300
+                                  mb-2">
+
+                        Game Mode
+
+                    </label>
+
+
+                    <select
+                        name="game_mode"
+                        required
+                        class="input-box
+                               w-full
+                               rounded-lg
+                               px-4
+                               py-3">
+
+                        <option value="">
+                            Select Game Mode
+                        </option>
+
+
+                        <option value="Solo"
+                            {% if tournament.game_mode == "Solo" %}
+                                selected
+                            {% endif %}>
+
+                            Solo
+
+                        </option>
+
+
+                        <option value="Duo"
+                            {% if tournament.game_mode == "Duo" %}
+                                selected
+                            {% endif %}>
+
+                            Duo
+
+                        </option>
+
+
+                        <option value="Squad"
+                            {% if tournament.game_mode == "Squad" %}
+                                selected
+                            {% endif %}>
+
+                            Squad
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- TERMS -->
+
+                <div class="flex
+                            items-start
+                            gap-3
+                            mb-8">
+
+                    <input
+                        type="checkbox"
+                        name="terms"
+                        required
+                        class="mt-1
+                               w-4
+                               h-4
+                               accent-purple-500">
+
+
+                    <label class="text-sm
+                                  text-gray-400">
+
+                        I confirm that the information provided
+                        above is correct and I agree to participate
+                        in this tournament.
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     CONFIRM BOOKING
+                ================================================== -->
+
+                <button
+                    type="submit"
+                    class="w-full
+                           py-4
+                           rounded-lg
+                           font-semibold
+                           orbitron
+                           bg-gradient-to-r
+                           from-purple-600
+                           to-cyan-500
+                           hover:scale-[1.02]
+                           transition
+                           duration-300
+                           shadow-lg
+                           shadow-purple-500/20">
+
+                    🎮 CONFIRM BOOKING
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        {% else %}
+
+
+        <!-- ====================================================
+             TOURNAMENT FULL
+        ===================================================== -->
+
+        <section class="glass
+                        rounded-2xl
+                        p-10
+                        text-center
+                        border-red-500/20">
+
+
+            <div class="text-5xl mb-5">
+                🔒
+            </div>
+
+
+            <h2 class="orbitron
+                       text-2xl
+                       font-bold
+                       text-red-400">
+
+                TOURNAMENT FULL
+
+            </h2>
+
+
+            <p class="text-gray-400
+                      mt-4">
+
+                Sorry, all slots for this tournament
+                have been booked.
+
+            </p>
+
+
+            <a href="{% url 'view_tournament' %}"
+               class="inline-block
+                      mt-7
+                      px-8
+                      py-3
+                      rounded-lg
+                      border border-purple-500/40
+                      text-purple-400
+                      hover:bg-purple-500/10
+                      transition">
+
+                VIEW OTHER TOURNAMENTS
+
+            </a>
+
+        </section>
+
+        {% endif %}
+
+
+
+        <!-- ====================================================
+             INFORMATION
+        ===================================================== -->
+
+        <div class="glass
+                    rounded-xl
+                    p-5
+                    mt-6">
+
+            <p class="text-sm
+                      text-gray-400">
+
+                <span class="text-yellow-400
+                             font-semibold">
+
+                    Note:
+
+                </span>
+
+                Available slots are automatically calculated
+                from the maximum player count and confirmed
+                tournament bookings.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+
+<footer class="border-t
+               border-white/10
+               mt-10">
+
+    <div class="max-w-7xl
+                mx-auto
+                px-6
+                py-8
+                text-center">
+
+        <p class="text-gray-500
+                  text-sm">
+
+            © 2026 BGMI Arena. All rights reserved.
+
+        </p>
+
+
+        <p class="text-xs
+                  text-gray-600
+                  mt-2">
+
+            PLAY. COMPETE. CONQUER.
+
+        </p>
+
+    </div>
+
+</footer>
+
+
+</body>
+</html>
+```

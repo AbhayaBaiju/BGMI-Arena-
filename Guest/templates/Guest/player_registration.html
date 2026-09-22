@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Player Registration | BGMI Arena</title>
+
+
+<!-- =====================================================
+     TAILWIND CSS
+====================================================== -->
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+<!-- =====================================================
+     GOOGLE FONTS
+====================================================== -->
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<!-- =====================================================
+     CUSTOM CSS
+====================================================== -->
+
+<style>
+
+    body {
+
+        font-family: 'Poppins', sans-serif;
+
+        background:
+            radial-gradient(
+                circle at top left,
+                rgba(168, 85, 247, 0.18),
+                transparent 35%
+            ),
+
+            radial-gradient(
+                circle at bottom right,
+                rgba(6, 182, 212, 0.15),
+                transparent 35%
+            ),
+
+            #020617;
+    }
+
+
+    .gaming-font {
+
+        font-family: 'Orbitron', sans-serif;
+    }
+
+
+    .glass {
+
+        background: rgba(15, 23, 42, 0.78);
+
+        backdrop-filter: blur(20px);
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+
+    .input-box {
+
+        background: rgba(2, 6, 23, 0.8);
+
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        transition: 0.2s;
+    }
+
+
+    .input-box:focus {
+
+        border-color: #a855f7;
+
+        outline: none;
+
+        box-shadow:
+            0 0 15px rgba(168, 85, 247, 0.15);
+    }
+
+
+    .input-error {
+
+        border-color: #ef4444 !important;
+
+        box-shadow:
+            0 0 10px rgba(239, 68, 68, 0.15) !important;
+    }
+
+
+    .input-success {
+
+        border-color: #22c55e !important;
+    }
+
+
+    .error-message {
+
+        color: #f87171;
+
+        font-size: 12px;
+
+        margin-top: 6px;
+
+        display: none;
+    }
+
+
+    .success-message {
+
+        color: #4ade80;
+
+        font-size: 12px;
+
+        margin-top: 6px;
+
+        display: none;
+    }
+
+
+    .strength-container {
+
+        display: none;
+
+        margin-top: 8px;
+    }
+
+
+    .strength-bar {
+
+        height: 5px;
+
+        width: 0%;
+
+        border-radius: 10px;
+
+        transition: all 0.3s ease;
+    }
+
+
+    .strength-text {
+
+        font-size: 11px;
+
+        margin-top: 4px;
+    }
+
+</style>
+```
+
+</head>
+
+<body class="min-h-screen text-white">
+
+```
+<!-- =====================================================
+     NAVBAR
+====================================================== -->
+
+<nav class="border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
+
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+
+
+        <a href="{% url 'index' %}"
+           class="gaming-font text-xl font-bold">
+
+            <span class="text-purple-500">
+                BGMI
+            </span>
+
+            <span class="text-cyan-400">
+                ARENA
+            </span>
+
+        </a>
+
+
+        <a href="{% url 'registration_type' %}"
+           class="text-sm text-gray-400 hover:text-white transition">
+
+            ← Back
+
+        </a>
+
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main class="px-6 py-12">
+
+    <div class="max-w-3xl mx-auto">
+
+
+        <!-- =================================================
+             HEADING
+        ================================================== -->
+
+        <div class="text-center mb-10">
+
+            <p class="text-purple-400 uppercase tracking-[0.3em] text-sm font-semibold mb-3">
+
+                JOIN THE ARENA
+
+            </p>
+
+
+            <h1 class="gaming-font text-3xl md:text-4xl font-bold mb-4">
+
+                PLAYER
+
+                <span class="bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent">
+
+                    REGISTRATION
+
+                </span>
+
+            </h1>
+
+
+            <p class="text-gray-400">
+
+                Create your player account and start competing in BGMI tournaments.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM CARD
+        ================================================== -->
+
+        <div class="glass rounded-3xl p-6 md:p-10">
+
+
+            <form method="POST"
+                  action=""
+                  enctype="multipart/form-data"
+                  id="registrationForm">
+
+                {% csrf_token %}
+
+
+
+                <!-- =================================================
+                     PERSONAL INFORMATION
+                ================================================== -->
+
+                <div class="mb-8">
+
+                    <h2 class="gaming-font text-lg font-semibold mb-6 text-purple-400">
+
+                        PLAYER INFORMATION
+
+                    </h2>
+
+
+                    <div class="grid md:grid-cols-2 gap-6">
+
+
+                        <!-- FULL NAME -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                Full Name
+
+                            </label>
+
+
+                            <input type="text"
+                                   name="full_name"
+                                   id="full_name"
+                                   placeholder="Enter your full name"
+                                   minlength="3"
+                                   maxlength="50"
+                                   required
+                                   class="input-box w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600">
+
+
+                            <p id="full_name_error"
+                               class="error-message">
+
+                                Full name must contain only letters and spaces.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- USERNAME -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                Username
+
+                            </label>
+
+
+                            <input type="text"
+                                   name="username"
+                                   id="username"
+                                   placeholder="Choose a username"
+                                   minlength="3"
+                                   maxlength="20"
+                                   required
+                                   class="input-box w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600">
+
+
+                            <p id="username_error"
+                               class="error-message">
+
+                                Username must be 3–20 characters and contain only letters, numbers or underscore.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- EMAIL -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                Email Address
+
+                            </label>
+
+
+                            <input type="email"
+                                   name="email"
+                                   id="email"
+                                   placeholder="Enter your email"
+                                   maxlength="100"
+                                   required
+                                   class="input-box w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600">
+
+
+                            <p id="email_error"
+                               class="error-message">
+
+                                Please enter a valid email address.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- PHONE -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                Phone Number
+
+                            </label>
+
+
+                            <input type="tel"
+                                   name="phone"
+                                   id="phone"
+                                   placeholder="Enter phone number"
+                                   maxlength="10"
+                                   minlength="10"
+                                   inputmode="numeric"
+                                   required
+                                   class="input-box w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600">
+
+
+                            <p id="phone_error"
+                               class="error-message">
+
+                                Enter a valid 10-digit Indian mobile number.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     BGMI INFORMATION
+                ================================================== -->
+
+                <div class="mb-8">
+
+
+                    <h2 class="gaming-font text-lg font-semibold mb-6 text-cyan-400">
+
+                        BGMI INFORMATION
+
+                    </h2>
+
+
+                    <div class="grid md:grid-cols-2 gap-6">
+
+
+                        <!-- BGMI ID -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                BGMI ID
+
+                            </label>
+
+
+                            <input type="text"
+                                   name="bgmi_id"
+                                   id="bgmi_id"
+                                   placeholder="Enter your BGMI ID"
+                                   maxlength="20"
+                                   inputmode="numeric"
+                                   required
+                                   class="input-box w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600">
+
+
+                            <p id="bgmi_id_error"
+                               class="error-message">
+
+                                BGMI ID must contain numbers only.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- IN GAME NAME -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                In-Game Name
+
+                            </label>
+
+
+                            <input type="text"
+                                   name="in_game_name"
+                                   id="in_game_name"
+                                   placeholder="Enter your BGMI name"
+                                   minlength="3"
+                                   maxlength="20"
+                                   required
+                                   class="input-box w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600">
+
+
+                            <p id="in_game_name_error"
+                               class="error-message">
+
+                                In-game name must be between 3 and 20 characters.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- GAME MODE -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                Preferred Game Mode
+
+                            </label>
+
+
+                            <select name="game_mode"
+                                    id="game_mode"
+                                    required
+                                    class="input-box w-full rounded-xl px-4 py-3 text-sm text-gray-300">
+
+
+                                <option value="">
+
+                                    Select game mode
+
+                                </option>
+
+
+                                <option value="solo">
+
+                                    Solo
+
+                                </option>
+
+
+                                <option value="duo">
+
+                                    Duo
+
+                                </option>
+
+
+                                <option value="squad">
+
+                                    Squad
+
+                                </option>
+
+
+                            </select>
+
+
+                            <p id="game_mode_error"
+                               class="error-message">
+
+                                Please select a game mode.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- PLAYER ROLE -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                Player Role
+
+                            </label>
+
+
+                            <select name="player_role"
+                                    id="player_role"
+                                    required
+                                    class="input-box w-full rounded-xl px-4 py-3 text-sm text-gray-300">
+
+
+                                <option value="">
+
+                                    Select role
+
+                                </option>
+
+
+                                <option value="assault">
+
+                                    Assault
+
+                                </option>
+
+
+                                <option value="sniper">
+
+                                    Sniper
+
+                                </option>
+
+
+                                <option value="support">
+
+                                    Support
+
+                                </option>
+
+
+                                <option value="igl">
+
+                                    IGL
+
+                                </option>
+
+
+                            </select>
+
+
+                            <p id="player_role_error"
+                               class="error-message">
+
+                                Please select your player role.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PROFILE IMAGE
+                ================================================== -->
+
+                <div class="mb-8">
+
+
+                    <h2 class="gaming-font text-lg font-semibold mb-6 text-purple-400">
+
+                        PROFILE
+
+                    </h2>
+
+
+                    <label class="block text-sm text-gray-300 mb-2">
+
+                        Profile Image
+
+                    </label>
+
+
+                    <input type="file"
+                           name="profile_image"
+                           id="profile_image"
+                           accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                           class="block w-full text-sm text-gray-400
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-lg file:border-0
+                                  file:bg-purple-600 file:text-white
+                                  hover:file:bg-purple-500">
+
+
+                    <p id="profile_image_error"
+                       class="error-message">
+
+                        Please select a JPG, JPEG or PNG image below 2 MB.
+
+                    </p>
+
+
+                    <p class="text-xs text-gray-500 mt-2">
+
+                        Allowed formats: JPG, JPEG, PNG | Maximum size: 2 MB
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PASSWORD
+                ================================================== -->
+
+                <div class="mb-8">
+
+
+                    <h2 class="gaming-font text-lg font-semibold mb-6 text-cyan-400">
+
+                        ACCOUNT SECURITY
+
+                    </h2>
+
+
+                    <div class="grid md:grid-cols-2 gap-6">
+
+
+                        <!-- PASSWORD -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                Password
+
+                            </label>
+
+
+                            <input type="password"
+                                   name="password"
+                                   id="password"
+                                   placeholder="Create password"
+                                   minlength="8"
+                                   maxlength="50"
+                                   required
+                                   class="input-box w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600">
+
+
+                            <div id="strengthContainer"
+                                 class="strength-container">
+
+                                <div id="strengthBar"
+                                     class="strength-bar">
+                                </div>
+
+
+                                <p id="strengthText"
+                                   class="strength-text">
+                                </p>
+
+                            </div>
+
+
+                            <p id="password_error"
+                               class="error-message">
+
+                                Password must contain uppercase, lowercase, number and special character.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div>
+
+                            <label class="block text-sm text-gray-300 mb-2">
+
+                                Confirm Password
+
+                            </label>
+
+
+                            <input type="password"
+                                   name="confirm_password"
+                                   id="confirm_password"
+                                   placeholder="Confirm password"
+                                   minlength="8"
+                                   maxlength="50"
+                                   required
+                                   class="input-box w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600">
+
+
+                            <p id="confirm_password_error"
+                               class="error-message">
+
+                                Passwords do not match.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TERMS
+                ================================================== -->
+
+                <div class="mb-8">
+
+
+                    <div class="flex items-start gap-3">
+
+
+                        <input type="checkbox"
+                               name="terms"
+                               id="terms"
+                               required
+                               class="mt-1">
+
+
+                        <p class="text-sm text-gray-400">
+
+                            I agree to the tournament rules, terms and conditions
+                            of BGMI Arena.
+
+                        </p>
+
+
+                    </div>
+
+
+                    <p id="terms_error"
+                       class="error-message">
+
+                        You must accept the terms and conditions.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SUBMIT
+                ================================================== -->
+
+                <button type="submit"
+                        id="submitButton"
+                        class="w-full py-4 rounded-xl
+                               bg-gradient-to-r from-purple-600 to-cyan-500
+                               font-semibold
+                               hover:opacity-90
+                               transition">
+
+                    CREATE PLAYER ACCOUNT →
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT VALIDATION
+====================================================== -->
+
+<script>
+
+    const form = document.getElementById("registrationForm");
+
+
+    // =====================================================
+    // HELPER FUNCTIONS
+    // =====================================================
+
+    function showError(input, errorElement, message) {
+
+        input.classList.add("input-error");
+
+        input.classList.remove("input-success");
+
+        errorElement.textContent = message;
+
+        errorElement.style.display = "block";
+
+        return false;
+    }
+
+
+    function showSuccess(input, errorElement) {
+
+        input.classList.remove("input-error");
+
+        input.classList.add("input-success");
+
+        errorElement.style.display = "none";
+
+        return true;
+    }
+
+
+    function hideError(input, errorElement) {
+
+        input.classList.remove("input-error");
+
+        errorElement.style.display = "none";
+
+    }
+
+
+
+    // =====================================================
+    // FULL NAME VALIDATION
+    // =====================================================
+
+    const fullName = document.getElementById("full_name");
+
+    const fullNameError =
+        document.getElementById("full_name_error");
+
+
+    fullName.addEventListener("input", function () {
+
+        this.value = this.value.replace(
+            /[^a-zA-Z\s]/g,
+            ""
+        );
+
+
+        const value = this.value.trim();
+
+
+        if (value.length < 3) {
+
+            showError(
+                fullName,
+                fullNameError,
+                "Full name must contain at least 3 characters."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                fullName,
+                fullNameError
+            );
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // USERNAME VALIDATION
+    // =====================================================
+
+    const username =
+        document.getElementById("username");
+
+    const usernameError =
+        document.getElementById("username_error");
+
+
+    username.addEventListener("input", function () {
+
+        this.value = this.value.replace(
+            /[^a-zA-Z0-9_]/g,
+            ""
+        );
+
+
+        const value = this.value;
+
+
+        const pattern =
+            /^[a-zA-Z0-9_]{3,20}$/;
+
+
+        if (!pattern.test(value)) {
+
+            showError(
+                username,
+                usernameError,
+                "Username must be 3–20 characters and contain only letters, numbers or underscore."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                username,
+                usernameError
+            );
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // EMAIL VALIDATION
+    // =====================================================
+
+    const email =
+        document.getElementById("email");
+
+    const emailError =
+        document.getElementById("email_error");
+
+
+    email.addEventListener("input", function () {
+
+        const pattern =
+            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+
+        if (!pattern.test(this.value.trim())) {
+
+            showError(
+                email,
+                emailError,
+                "Please enter a valid email address."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                email,
+                emailError
+            );
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // PHONE VALIDATION
+    // =====================================================
+
+    const phone =
+        document.getElementById("phone");
+
+    const phoneError =
+        document.getElementById("phone_error");
+
+
+    phone.addEventListener("input", function () {
+
+        this.value = this.value.replace(
+            /[^0-9]/g,
+            ""
+        );
+
+
+        const pattern =
+            /^[6-9][0-9]{9}$/;
+
+
+        if (!pattern.test(this.value)) {
+
+            showError(
+                phone,
+                phoneError,
+                "Enter a valid 10-digit Indian mobile number."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                phone,
+                phoneError
+            );
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // BGMI ID VALIDATION
+    // =====================================================
+
+    const bgmiId =
+        document.getElementById("bgmi_id");
+
+    const bgmiIdError =
+        document.getElementById("bgmi_id_error");
+
+
+    bgmiId.addEventListener("input", function () {
+
+        this.value = this.value.replace(
+            /[^0-9]/g,
+            ""
+        );
+
+
+        if (
+            this.value.length < 5 ||
+            this.value.length > 20
+        ) {
+
+            showError(
+                bgmiId,
+                bgmiIdError,
+                "BGMI ID must contain 5–20 digits."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                bgmiId,
+                bgmiIdError
+            );
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // IN GAME NAME
+    // =====================================================
+
+    const inGameName =
+        document.getElementById("in_game_name");
+
+    const inGameNameError =
+        document.getElementById("in_game_name_error");
+
+
+    inGameName.addEventListener("input", function () {
+
+        const value =
+            this.value.trim();
+
+
+        if (
+            value.length < 3 ||
+            value.length > 20
+        ) {
+
+            showError(
+                inGameName,
+                inGameNameError,
+                "In-game name must be between 3 and 20 characters."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                inGameName,
+                inGameNameError
+            );
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // GAME MODE
+    // =====================================================
+
+    const gameMode =
+        document.getElementById("game_mode");
+
+    const gameModeError =
+        document.getElementById("game_mode_error");
+
+
+    gameMode.addEventListener("change", function () {
+
+        if (!this.value) {
+
+            showError(
+                gameMode,
+                gameModeError,
+                "Please select a game mode."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                gameMode,
+                gameModeError
+            );
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // PLAYER ROLE
+    // =====================================================
+
+    const playerRole =
+        document.getElementById("player_role");
+
+    const playerRoleError =
+        document.getElementById("player_role_error");
+
+
+    playerRole.addEventListener("change", function () {
+
+        if (!this.value) {
+
+            showError(
+                playerRole,
+                playerRoleError,
+                "Please select your player role."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                playerRole,
+                playerRoleError
+            );
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // PROFILE IMAGE VALIDATION
+    // =====================================================
+
+    const profileImage =
+        document.getElementById("profile_image");
+
+    const profileImageError =
+        document.getElementById("profile_image_error");
+
+
+    profileImage.addEventListener("change", function () {
+
+        if (!this.files.length) {
+
+            hideError(
+                profileImage,
+                profileImageError
+            );
+
+            return;
+
+        }
+
+
+        const file = this.files[0];
+
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png"
+        ];
+
+
+        const maxSize =
+            2 * 1024 * 1024;
+
+
+        if (!allowedTypes.includes(file.type)) {
+
+            showError(
+                profileImage,
+                profileImageError,
+                "Only JPG, JPEG and PNG images are allowed."
+            );
+
+            this.value = "";
+
+            return;
+
+        }
+
+
+        if (file.size > maxSize) {
+
+            showError(
+                profileImage,
+                profileImageError,
+                "Image size must be less than 2 MB."
+            );
+
+            this.value = "";
+
+            return;
+
+        }
+
+
+        showSuccess(
+            profileImage,
+            profileImageError
+        );
+
+    });
+
+
+
+    // =====================================================
+    // PASSWORD VALIDATION
+    // =====================================================
+
+    const password =
+        document.getElementById("password");
+
+    const passwordError =
+        document.getElementById("password_error");
+
+    const strengthContainer =
+        document.getElementById("strengthContainer");
+
+    const strengthBar =
+        document.getElementById("strengthBar");
+
+    const strengthText =
+        document.getElementById("strengthText");
+
+
+    password.addEventListener("input", function () {
+
+        const value = this.value;
+
+
+        strengthContainer.style.display =
+            value.length > 0 ? "block" : "none";
+
+
+        let score = 0;
+
+
+        if (value.length >= 8)
+            score++;
+
+
+        if (/[A-Z]/.test(value))
+            score++;
+
+
+        if (/[a-z]/.test(value))
+            score++;
+
+
+        if (/[0-9]/.test(value))
+            score++;
+
+
+        if (/[^A-Za-z0-9]/.test(value))
+            score++;
+
+
+        const percentage =
+            (score / 5) * 100;
+
+
+        strengthBar.style.width =
+            percentage + "%";
+
+
+        if (score <= 2) {
+
+            strengthText.textContent =
+                "Weak password";
+
+            strengthBar.style.background =
+                "#ef4444";
+
+        }
+
+        else if (score === 3 || score === 4) {
+
+            strengthText.textContent =
+                "Medium password";
+
+            strengthBar.style.background =
+                "#f59e0b";
+
+        }
+
+        else {
+
+            strengthText.textContent =
+                "Strong password";
+
+            strengthBar.style.background =
+                "#22c55e";
+
+        }
+
+
+        const pattern =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,50}$/;
+
+
+        if (!pattern.test(value)) {
+
+            showError(
+                password,
+                passwordError,
+                "Password must be 8+ characters with uppercase, lowercase, number and special character."
+            );
+
+        }
+
+        else {
+
+            showSuccess(
+                password,
+                passwordError
+            );
+
+        }
+
+
+        validateConfirmPassword();
+
+    });
+
+
+
+    // =====================================================
+    // CONFIRM PASSWORD
+    // =====================================================
+
+    const confirmPassword =
+        document.getElementById("confirm_password");
+
+    const confirmPasswordError =
+        document.getElementById("confirm_password_error");
+
+
+    function validateConfirmPassword() {
+
+        if (
+            confirmPassword.value === "" ||
+            confirmPassword.value !== password.value
+        ) {
+
+            showError(
+                confirmPassword,
+                confirmPasswordError,
+                "Passwords do not match."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            confirmPassword,
+            confirmPasswordError
+        );
+
+        return true;
+
+    }
+
+
+    confirmPassword.addEventListener(
+        "input",
+        validateConfirmPassword
+    );
+
+
+
+    // =====================================================
+    // TERMS VALIDATION
+    // =====================================================
+
+    const terms =
+        document.getElementById("terms");
+
+    const termsError =
+        document.getElementById("terms_error");
+
+
+    terms.addEventListener("change", function () {
+
+        if (!this.checked) {
+
+            termsError.style.display =
+                "block";
+
+        }
+
+        else {
+
+            termsError.style.display =
+                "none";
+
+        }
+
+    });
+
+
+
+    // =====================================================
+    // FORM SUBMIT VALIDATION
+    // =====================================================
+
+    form.addEventListener("submit", function (event) {
+
+        let valid = true;
+
+
+        // FULL NAME
+
+        if (
+            !/^[a-zA-Z\s]{3,50}$/.test(
+                fullName.value.trim()
+            )
+        ) {
+
+            showError(
+                fullName,
+                fullNameError,
+                "Full name must contain only letters and spaces."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // USERNAME
+
+        if (
+            !/^[a-zA-Z0-9_]{3,20}$/.test(
+                username.value
+            )
+        ) {
+
+            showError(
+                username,
+                usernameError,
+                "Username must be 3–20 characters and contain only letters, numbers or underscore."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // EMAIL
+
+        if (
+            !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(
+                email.value.trim()
+            )
+        ) {
+
+            showError(
+                email,
+                emailError,
+                "Please enter a valid email address."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // PHONE
+
+        if (
+            !/^[6-9][0-9]{9}$/.test(
+                phone.value
+            )
+        ) {
+
+            showError(
+                phone,
+                phoneError,
+                "Enter a valid 10-digit Indian mobile number."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // BGMI ID
+
+        if (
+            !/^[0-9]{5,20}$/.test(
+                bgmiId.value
+            )
+        ) {
+
+            showError(
+                bgmiId,
+                bgmiIdError,
+                "BGMI ID must contain 5–20 digits."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // IN GAME NAME
+
+        if (
+            inGameName.value.trim().length < 3 ||
+            inGameName.value.trim().length > 20
+        ) {
+
+            showError(
+                inGameName,
+                inGameNameError,
+                "In-game name must be between 3 and 20 characters."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // GAME MODE
+
+        if (!gameMode.value) {
+
+            showError(
+                gameMode,
+                gameModeError,
+                "Please select a game mode."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // PLAYER ROLE
+
+        if (!playerRole.value) {
+
+            showError(
+                playerRole,
+                playerRoleError,
+                "Please select your player role."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // PROFILE IMAGE
+
+        if (profileImage.files.length) {
+
+            const file =
+                profileImage.files[0];
+
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png"
+            ];
+
+
+            if (!allowedTypes.includes(file.type)) {
+
+                showError(
+                    profileImage,
+                    profileImageError,
+                    "Only JPG, JPEG and PNG images are allowed."
+                );
+
+                valid = false;
+
+            }
+
+
+            if (
+                file.size >
+                2 * 1024 * 1024
+            ) {
+
+                showError(
+                    profileImage,
+                    profileImageError,
+                    "Image size must be less than 2 MB."
+                );
+
+                valid = false;
+
+            }
+
+        }
+
+
+
+        // PASSWORD
+
+        const passwordPattern =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,50}$/;
+
+
+        if (
+            !passwordPattern.test(
+                password.value
+            )
+        ) {
+
+            showError(
+                password,
+                passwordError,
+                "Password must be 8+ characters with uppercase, lowercase, number and special character."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // CONFIRM PASSWORD
+
+        if (
+            password.value !==
+            confirmPassword.value
+        ) {
+
+            showError(
+                confirmPassword,
+                confirmPasswordError,
+                "Passwords do not match."
+            );
+
+            valid = false;
+
+        }
+
+
+
+        // TERMS
+
+        if (!terms.checked) {
+
+            termsError.style.display =
+                "block";
+
+            valid = false;
+
+        }
+
+        else {
+
+            termsError.style.display =
+                "none";
+
+        }
+
+
+
+        // STOP SUBMISSION
+
+        if (!valid) {
+
+            event.preventDefault();
+
+
+            const firstError =
+                document.querySelector(
+                    ".input-error"
+                );
+
+
+            if (firstError) {
+
+                firstError.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+
+                firstError.focus();
+
+            }
+
+            return;
+
+        }
+
+
+        // DISABLE BUTTON AFTER VALID SUBMIT
+
+        const submitButton =
+            document.getElementById("submitButton");
+
+
+        submitButton.disabled = true;
+
+        submitButton.innerHTML =
+            "CREATING ACCOUNT...";
+
+        submitButton.classList.add(
+            "opacity-60",
+            "cursor-not-allowed"
+        );
+
+    });
+
+</script>
+```
+
+</body>
+
+</html>

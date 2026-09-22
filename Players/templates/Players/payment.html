@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | Secure Payment</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    fontFamily: {
+
+                        orbitron: ['Orbitron', 'sans-serif'],
+
+                        poppins: ['Poppins', 'sans-serif']
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+
+    <style>
+
+        body {
+
+            font-family: 'Poppins', sans-serif;
+
+            background: #050509;
+
+        }
+
+
+        .orbitron {
+
+            font-family: 'Orbitron', sans-serif;
+
+        }
+
+
+        /* GLASS */
+
+        .glass {
+
+            background: rgba(15, 15, 25, 0.88);
+
+            backdrop-filter: blur(15px);
+
+            border: 1px solid rgba(168, 85, 247, 0.25);
+
+        }
+
+
+        /* GRID BACKGROUND */
+
+        .grid-bg {
+
+            background-image:
+
+                linear-gradient(
+                    rgba(168, 85, 247, 0.05) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(6, 182, 212, 0.05) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+        }
+
+
+        /* PAYMENT METHOD */
+
+        .payment-method {
+
+            background: rgba(255, 255, 255, 0.03);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            transition: 0.3s;
+
+        }
+
+
+        .payment-method:hover {
+
+            border-color: rgba(168, 85, 247, 0.6);
+
+            transform: translateY(-2px);
+
+        }
+
+
+        .payment-method.active {
+
+            background: rgba(168, 85, 247, 0.12);
+
+            border-color: #a855f7;
+
+            box-shadow:
+                0 0 20px rgba(168, 85, 247, 0.12);
+
+        }
+
+
+        /* INPUT */
+
+        .input-field {
+
+            width: 100%;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            border: 1px solid rgba(168, 85, 247, 0.25);
+
+            color: white;
+
+            border-radius: 10px;
+
+            padding: 13px 15px;
+
+            outline: none;
+
+            transition: 0.3s;
+
+        }
+
+
+        .input-field:focus {
+
+            border-color: #06b6d4;
+
+            box-shadow:
+                0 0 15px rgba(6, 182, 212, 0.15);
+
+        }
+
+
+        .input-field::placeholder {
+
+            color: #6b7280;
+
+        }
+
+
+        /* PAYMENT CONTENT */
+
+        .payment-content {
+
+            display: none;
+
+        }
+
+
+        .payment-content.active {
+
+            display: block;
+
+            animation: fadeIn 0.3s ease;
+
+        }
+
+
+        @keyframes fadeIn {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(5px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+
+        /* NEON LINE */
+
+        .neon-line {
+
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #a855f7,
+                    #06b6d4,
+                    transparent
+                );
+
+        }
+
+
+        /* PAY BUTTON */
+
+        .pay-button {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #9333ea,
+                    #06b6d4
+                );
+
+            transition: 0.3s;
+
+        }
+
+
+        .pay-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 35px rgba(168, 85, 247, 0.25);
+
+        }
+
+
+        /* CARD NUMBER ICON */
+
+        .card-icon {
+
+            background: rgba(6, 182, 212, 0.08);
+
+            border: 1px solid rgba(6, 182, 212, 0.2);
+
+        }
+
+
+        /* SECURITY */
+
+        .security-box {
+
+            background: rgba(34, 197, 94, 0.05);
+
+            border: 1px solid rgba(34, 197, 94, 0.15);
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white min-h-screen grid-bg">
+
+
+<!-- ============================================================
+     NAVBAR
+============================================================= -->
+
+<nav class="fixed top-0 left-0 right-0 z-50
+            bg-[#050509]/90
+            backdrop-blur-lg
+            border-b border-purple-500/20">
+
+    <div class="max-w-7xl mx-auto px-6 py-4
+                flex items-center justify-between">
+
+
+        <!-- LOGO -->
+
+        <a href="{% url 'player_dashboard' %}"
+           class="orbitron text-xl md:text-2xl font-bold">
+
+            <span class="text-purple-400">
+
+                BGMI
+
+            </span>
+
+            <span class="text-cyan-400">
+
+                ARENA
+
+            </span>
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="hidden md:flex items-center gap-6">
+
+            <a href="{% url 'player_dashboard' %}"
+               class="text-gray-400 hover:text-cyan-400 transition">
+
+                Dashboard
+
+            </a>
+
+
+            <a href="{% url 'view_tournament' %}"
+               class="text-gray-400 hover:text-purple-400 transition">
+
+                Tournaments
+
+            </a>
+
+
+            <a href="{% url 'player_profile' %}"
+               class="text-gray-400 hover:text-cyan-400 transition">
+
+                Profile
+
+            </a>
+
+
+            <a href="{% url 'logout' %}"
+               class="px-4 py-2
+                      rounded-lg
+                      border border-red-500/40
+                      text-red-400
+                      hover:bg-red-500/10
+                      transition">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ============================================================
+     MAIN
+============================================================= -->
+
+<main class="pt-32 pb-16 px-4">
+
+    <div class="max-w-6xl mx-auto">
+
+
+        <!-- ====================================================
+             BACK BUTTON
+        ===================================================== -->
+
+        <div class="mb-8">
+
+            <a href="{% url 'booking' tournament.id %}"
+               class="inline-flex items-center gap-2
+                      text-gray-400
+                      hover:text-cyan-400
+                      transition">
+
+                <span class="text-xl">
+
+                    ←
+
+                </span>
+
+                Back to Booking
+
+            </a>
+
+        </div>
+
+
+
+        <!-- ====================================================
+             HEADER
+        ===================================================== -->
+
+        <div class="text-center mb-10">
+
+            <p class="text-cyan-400
+                      text-xs
+                      md:text-sm
+                      uppercase
+                      tracking-[5px]
+                      mb-3">
+
+                Secure Checkout
+
+            </p>
+
+
+            <h1 class="orbitron
+                       text-3xl
+                       md:text-5xl
+                       font-bold">
+
+                <span class="text-purple-400">
+
+                    PAYMENT
+
+                </span>
+
+                <span class="text-cyan-400">
+
+                    GATEWAY
+
+                </span>
+
+            </h1>
+
+
+            <p class="text-gray-500 mt-4">
+
+                Complete your payment to reserve your tournament slot.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- ====================================================
+             CHECKOUT GRID
+        ===================================================== -->
+
+        <div class="grid
+                    grid-cols-1
+                    lg:grid-cols-5
+                    gap-7">
+
+
+            <!-- =================================================
+                 ORDER SUMMARY
+            ================================================== -->
+
+            <div class="lg:col-span-2">
+
+                <section class="glass rounded-2xl overflow-hidden">
+
+
+                    <!-- HEADER -->
+
+                    <div class="p-6
+                                border-b
+                                border-white/10">
+
+                        <p class="text-purple-400
+                                  text-xs
+                                  uppercase
+                                  tracking-widest">
+
+                            Order Summary
+
+                        </p>
+
+
+                        <h2 class="orbitron
+                                   text-xl
+                                   font-bold
+                                   mt-2">
+
+                            TOURNAMENT ENTRY
+
+                        </h2>
+
+                    </div>
+
+
+
+                    <div class="p-6">
+
+
+                        <!-- TOURNAMENT -->
+
+                        <div class="mb-6">
+
+                            <p class="text-gray-500
+                                      text-xs
+                                      uppercase">
+
+                                Tournament
+
+                            </p>
+
+
+                            <h3 class="orbitron
+                                       text-lg
+                                       font-bold
+                                       mt-2">
+
+                                {{ tournament.tournament_name }}
+
+                            </h3>
+
+                        </div>
+
+
+
+                        <!-- DETAILS -->
+
+                        <div class="space-y-4">
+
+
+                            <div class="flex justify-between gap-4">
+
+                                <span class="text-gray-500">
+                                    Player
+                                </span>
+
+                                <span class="text-right font-medium">
+                                    {{ booking.player_name }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between gap-4">
+
+                                <span class="text-gray-500">
+                                    BGMI ID
+                                </span>
+
+                                <span class="text-cyan-400 font-medium">
+                                    {{ booking.bgmi_id }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    Mode
+                                </span>
+
+                                <span class="text-purple-400 font-medium">
+                                    {{ booking.game_mode }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    Map
+                                </span>
+
+                                <span>
+                                    {{ tournament.map }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    Date
+                                </span>
+
+                                <span>
+                                    {{ tournament.tournament_date|date:"d M Y" }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    Time
+                                </span>
+
+                                <span>
+                                    {{ tournament.tournament_time|time:"h:i A" }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="neon-line my-7"></div>
+
+
+
+                        <!-- PRICE -->
+
+                        <div class="flex
+                                    justify-between
+                                    items-center">
+
+                            <span class="text-gray-400">
+
+                                Tournament Fee
+
+                            </span>
+
+
+                            <span class="font-semibold">
+
+                                ₹{{ tournament.entry_fee }}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="flex
+                                    justify-between
+                                    items-center
+                                    mt-3">
+
+                            <span class="text-gray-400">
+
+                                Platform Fee
+
+                            </span>
+
+
+                            <span class="text-green-400">
+
+                                FREE
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- TOTAL -->
+
+                        <div class="mt-6
+                                    pt-5
+                                    border-t
+                                    border-white/10
+                                    flex
+                                    justify-between
+                                    items-center">
+
+                            <span class="orbitron
+                                         font-bold">
+
+                                TOTAL
+
+                            </span>
+
+
+                            <span class="orbitron
+                                         text-3xl
+                                         font-bold
+                                         text-cyan-400">
+
+                                ₹{{ tournament.entry_fee }}
+
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- SECURITY -->
+
+                        <div class="security-box
+                                    rounded-xl
+                                    p-4
+                                    mt-6">
+
+                            <div class="flex gap-3">
+
+                                <span class="text-green-400">
+                                    🔒
+                                </span>
+
+                                <div>
+
+                                    <p class="text-green-400
+                                              text-sm
+                                              font-semibold">
+
+                                        Secure Checkout
+
+                                    </p>
+
+                                    <p class="text-gray-500
+                                              text-xs
+                                              mt-1">
+
+                                        Your booking information
+                                        is securely handled.
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PAYMENT SECTION
+            ================================================== -->
+
+            <div class="lg:col-span-3">
+
+                <section class="glass rounded-2xl overflow-hidden">
+
+
+                    <!-- PAYMENT HEADER -->
+
+                    <div class="p-6 md:p-8
+                                border-b
+                                border-white/10">
+
+                        <div class="flex
+                                    justify-between
+                                    items-center">
+
+                            <div>
+
+                                <p class="text-gray-500
+                                          text-xs
+                                          uppercase
+                                          tracking-widest">
+
+                                    Payment Method
+
+                                </p>
+
+
+                                <h2 class="orbitron
+                                           text-xl
+                                           font-bold
+                                           mt-2">
+
+                                    SELECT PAYMENT
+
+                                </h2>
+
+                            </div>
+
+
+                            <div class="text-green-400
+                                        text-sm">
+
+                                🔒 Secure
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="p-6 md:p-8">
+
+
+                        <!-- =================================================
+                             PAYMENT OPTIONS
+                        ================================================== -->
+
+                        <div class="grid
+                                    grid-cols-2
+                                    md:grid-cols-4
+                                    gap-3
+                                    mb-7">
+
+
+                            <!-- UPI -->
+
+                            <button type="button"
+                                    onclick="selectPayment('upi', this)"
+                                    class="payment-method active
+                                           rounded-xl
+                                           p-4
+                                           text-center">
+
+                                <div class="text-2xl mb-2">
+
+                                    📱
+
+                                </div>
+
+                                <p class="text-sm
+                                          font-semibold">
+
+                                    UPI
+
+                                </p>
+
+                                <p class="text-[10px]
+                                          text-gray-500
+                                          mt-1">
+
+                                    GPay / PhonePe
+
+                                </p>
+
+                            </button>
+
+
+
+                            <!-- CARD -->
+
+                            <button type="button"
+                                    onclick="selectPayment('card', this)"
+                                    class="payment-method
+                                           rounded-xl
+                                           p-4
+                                           text-center">
+
+                                <div class="text-2xl mb-2">
+
+                                    💳
+
+                                </div>
+
+                                <p class="text-sm
+                                          font-semibold">
+
+                                    Card
+
+                                </p>
+
+                                <p class="text-[10px]
+                                          text-gray-500
+                                          mt-1">
+
+                                    Debit / Credit
+
+                                </p>
+
+                            </button>
+
+
+
+                            <!-- BANK -->
+
+                            <button type="button"
+                                    onclick="selectPayment('bank', this)"
+                                    class="payment-method
+                                           rounded-xl
+                                           p-4
+                                           text-center">
+
+                                <div class="text-2xl mb-2">
+
+                                    🏦
+
+                                </div>
+
+                                <p class="text-sm
+                                          font-semibold">
+
+                                    Banking
+
+                                </p>
+
+                                <p class="text-[10px]
+                                          text-gray-500
+                                          mt-1">
+
+                                    All Banks
+
+                                </p>
+
+                            </button>
+
+
+
+                            <!-- WALLET -->
+
+                            <button type="button"
+                                    onclick="selectPayment('wallet', this)"
+                                    class="payment-method
+                                           rounded-xl
+                                           p-4
+                                           text-center">
+
+                                <div class="text-2xl mb-2">
+
+                                    👛
+
+                                </div>
+
+                                <p class="text-sm
+                                          font-semibold">
+
+                                    Wallet
+
+                                </p>
+
+                                <p class="text-[10px]
+                                          text-gray-500
+                                          mt-1">
+
+                                    Digital Wallet
+
+                                </p>
+
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             UPI FORM
+                        ================================================== -->
+
+                        <div id="upi"
+                             class="payment-content active">
+
+
+                            <div class="rounded-xl
+                                        bg-white/[0.03]
+                                        border
+                                        border-white/10
+                                        p-5">
+
+
+                                <div class="flex
+                                            items-center
+                                            gap-4
+                                            mb-5">
+
+                                    <div class="w-12 h-12
+                                                rounded-xl
+                                                bg-purple-500/10
+                                                border
+                                                border-purple-500/20
+                                                flex
+                                                items-center
+                                                justify-center
+                                                text-2xl">
+
+                                        📱
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <h3 class="font-semibold">
+
+                                            Pay using UPI
+
+                                        </h3>
+
+                                        <p class="text-gray-500 text-xs">
+
+                                            Enter your UPI ID
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <label class="text-sm
+                                              text-gray-300">
+
+                                    UPI ID
+
+                                </label>
+
+
+                                <input type="text"
+                                       placeholder="example@upi"
+                                       class="input-field mt-2">
+
+
+                                <div class="flex
+                                            gap-2
+                                            mt-4
+                                            flex-wrap">
+
+                                    <span class="px-3 py-2
+                                                 rounded-lg
+                                                 bg-white/5
+                                                 border
+                                                 border-white/10
+                                                 text-xs">
+
+                                        Google Pay
+
+                                    </span>
+
+                                    <span class="px-3 py-2
+                                                 rounded-lg
+                                                 bg-white/5
+                                                 border
+                                                 border-white/10
+                                                 text-xs">
+
+                                        PhonePe
+
+                                    </span>
+
+                                    <span class="px-3 py-2
+                                                 rounded-lg
+                                                 bg-white/5
+                                                 border
+                                                 border-white/10
+                                                 text-xs">
+
+                                        Paytm
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             CARD FORM
+                        ================================================== -->
+
+                        <div id="card"
+                             class="payment-content">
+
+
+                            <div class="rounded-xl
+                                        bg-white/[0.03]
+                                        border
+                                        border-white/10
+                                        p-5">
+
+
+                                <div class="flex
+                                            items-center
+                                            gap-4
+                                            mb-5">
+
+                                    <div class="w-12 h-12
+                                                rounded-xl
+                                                card-icon
+                                                flex
+                                                items-center
+                                                justify-center
+                                                text-2xl">
+
+                                        💳
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <h3 class="font-semibold">
+
+                                            Card Payment
+
+                                        </h3>
+
+                                        <p class="text-gray-500 text-xs">
+
+                                            Demo card details
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <label class="text-sm text-gray-300">
+
+                                    Card Number
+
+                                </label>
+
+
+                                <input type="text"
+                                       maxlength="19"
+                                       placeholder="XXXX XXXX XXXX XXXX"
+                                       class="input-field mt-2">
+
+
+
+                                <div class="grid
+                                            grid-cols-2
+                                            gap-4
+                                            mt-4">
+
+
+                                    <div>
+
+                                        <label class="text-sm text-gray-300">
+
+                                            Expiry Date
+
+                                        </label>
+
+                                        <input type="text"
+                                               maxlength="5"
+                                               placeholder="MM / YY"
+                                               class="input-field mt-2">
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <label class="text-sm text-gray-300">
+
+                                            CVV
+
+                                        </label>
+
+                                        <input type="password"
+                                               maxlength="3"
+                                               placeholder="•••"
+                                               class="input-field mt-2">
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="mt-4">
+
+                                    <label class="text-sm text-gray-300">
+
+                                        Card Holder Name
+
+                                    </label>
+
+                                    <input type="text"
+                                           placeholder="Name on card"
+                                           class="input-field mt-2">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             BANKING
+                        ================================================== -->
+
+                        <div id="bank"
+                             class="payment-content">
+
+
+                            <div class="rounded-xl
+                                        bg-white/[0.03]
+                                        border
+                                        border-white/10
+                                        p-5">
+
+
+                                <div class="flex
+                                            items-center
+                                            gap-4
+                                            mb-5">
+
+                                    <div class="w-12 h-12
+                                                rounded-xl
+                                                bg-cyan-500/10
+                                                border
+                                                border-cyan-500/20
+                                                flex
+                                                items-center
+                                                justify-center
+                                                text-2xl">
+
+                                        🏦
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <h3 class="font-semibold">
+
+                                            Net Banking
+
+                                        </h3>
+
+                                        <p class="text-gray-500 text-xs">
+
+                                            Select your bank
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <label class="text-sm text-gray-300">
+
+                                    Select Bank
+
+                                </label>
+
+
+                                <select class="input-field mt-2">
+
+                                    <option value="">
+                                        Select your bank
+                                    </option>
+
+                                    <option>
+                                        State Bank of India
+                                    </option>
+
+                                    <option>
+                                        HDFC Bank
+                                    </option>
+
+                                    <option>
+                                        ICICI Bank
+                                    </option>
+
+                                    <option>
+                                        Axis Bank
+                                    </option>
+
+                                    <option>
+                                        Federal Bank
+                                    </option>
+
+                                    <option>
+                                        South Indian Bank
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             WALLET
+                        ================================================== -->
+
+                        <div id="wallet"
+                             class="payment-content">
+
+
+                            <div class="rounded-xl
+                                        bg-white/[0.03]
+                                        border
+                                        border-white/10
+                                        p-5">
+
+
+                                <div class="flex
+                                            items-center
+                                            gap-4
+                                            mb-5">
+
+                                    <div class="w-12 h-12
+                                                rounded-xl
+                                                bg-purple-500/10
+                                                border
+                                                border-purple-500/20
+                                                flex
+                                                items-center
+                                                justify-center
+                                                text-2xl">
+
+                                        👛
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <h3 class="font-semibold">
+
+                                            Digital Wallet
+
+                                        </h3>
+
+                                        <p class="text-gray-500 text-xs">
+
+                                            Select wallet
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="grid
+                                            grid-cols-1
+                                            sm:grid-cols-3
+                                            gap-3">
+
+
+                                    <button type="button"
+                                            class="payment-method
+                                                   rounded-lg
+                                                   p-4">
+
+                                        Paytm
+
+                                    </button>
+
+
+                                    <button type="button"
+                                            class="payment-method
+                                                   rounded-lg
+                                                   p-4">
+
+                                        Mobikwik
+
+                                    </button>
+
+
+                                    <button type="button"
+                                            class="payment-method
+                                                   rounded-lg
+                                                   p-4">
+
+                                        Amazon Pay
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             PAYMENT TOTAL
+                        ================================================== -->
+
+                        <div class="neon-line mt-7 mb-6"></div>
+
+
+                        <div class="flex
+                                    justify-between
+                                    items-center
+                                    mb-5">
+
+                            <span class="text-gray-400">
+
+                                Amount to Pay
+
+                            </span>
+
+
+                            <span class="orbitron
+                                         text-2xl
+                                         font-bold
+                                         text-cyan-400">
+
+                                ₹{{ tournament.entry_fee }}
+
+                            </span>
+
+                        </div>
+
+
+
+                        
+
+
+                        <!-- PAY BUTTON -->
+
+                        <button type="button"
+                                onclick="processPayment()"
+                                class="pay-button
+                                       w-full
+                                       py-4
+                                       rounded-xl
+                                       text-white
+                                       font-bold
+                                       orbitron
+                                       text-base">
+
+                            🔒 PAY ₹{{ tournament.entry_fee }}
+
+                        </button>
+
+
+                       <br><br>
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- ============================================================
+     FOOTER
+============================================================= -->
+
+<footer class="border-t border-white/10 mt-10">
+
+    <div class="max-w-7xl
+                mx-auto
+                px-6
+                py-8
+                text-center">
+
+        <p class="text-gray-500 text-sm">
+
+            © 2026 BGMI Arena. All rights reserved.
+
+        </p>
+
+
+        <p class="text-gray-600 text-xs mt-2">
+
+            PLAY. COMPETE. CONQUER.
+
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================= -->
+
+<script>
+
+
+    /* ============================================
+       CHANGE PAYMENT METHOD
+    ============================================ */
+
+    function selectPayment(method, button) {
+
+
+        // Hide payment contents
+
+        document.querySelectorAll('.payment-content')
+            .forEach(function(content) {
+
+                content.classList.remove('active');
+
+            });
+
+
+        // Remove active from buttons
+
+        document.querySelectorAll('.payment-method')
+            .forEach(function(btn) {
+
+                btn.classList.remove('active');
+
+            });
+
+
+        // Show selected payment
+
+        document.getElementById(method)
+            .classList.add('active');
+
+
+        // Highlight selected button
+
+        button.classList.add('active');
+
+    }
+
+
+
+    /* ============================================
+       DUMMY PAYMENT
+    ============================================ */
+
+    function processPayment() {
+
+
+        const amount =
+            "{{ tournament.entry_fee }}";
+
+
+        const confirmPayment = confirm(
+            "Confirm dummy payment of ₹" +
+            amount +
+            "?"
+        );
+
+
+        if (confirmPayment) {
+
+
+            // Redirect to Django success view
+
+            window.location.href =
+                "{% url 'payment_success' tournament.id %}";
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

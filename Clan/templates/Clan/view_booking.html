@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | View Bookings</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        arena: "#050509",
+                        purple: "#a855f7",
+                        cyan: "#06b6d4"
+                    },
+                    fontFamily: {
+                        orbitron: ["Orbitron", "sans-serif"],
+                        poppins: ["Poppins", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #050509;
+            color: white;
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(168,85,247,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.06) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .glass {
+            background: rgba(15, 15, 25, 0.75);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            backdrop-filter: blur(12px);
+        }
+
+        .neon-border {
+            box-shadow:
+                0 0 10px rgba(168, 85, 247, 0.15),
+                inset 0 0 10px rgba(6, 182, 212, 0.05);
+        }
+
+        .gradient-text {
+            background: linear-gradient(
+                90deg,
+                #a855f7,
+                #06b6d4
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body class="grid-bg min-h-screen">
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="glass sticky top-0 z-50 border-b border-purple-500/20">
+
+    <div class="max-w-7xl mx-auto px-6 py-4">
+
+        <div class="flex items-center justify-between">
+
+            <!-- Logo -->
+            <a href="{% url 'clan_dashboard' %}"
+               class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl
+                            bg-gradient-to-br from-purple-600 to-cyan-500
+                            flex items-center justify-center
+                            font-orbitron font-bold">
+
+                    BA
+                </div>
+
+                <div>
+                    <h1 class="font-orbitron text-lg font-bold">
+                        BGMI <span class="gradient-text">ARENA</span>
+                    </h1>
+
+                    <p class="text-xs text-gray-500">
+                        CLAN PANEL
+                    </p>
+                </div>
+
+            </a>
+
+            <!-- Navigation -->
+            <div class="hidden md:flex items-center gap-6">
+
+                <a href="{% url 'clan_dashboard' %}"
+                   class="text-gray-400 hover:text-white transition">
+                    Dashboard
+                </a>
+
+                <a href="{% url 'clan_profile' %}"
+                   class="text-gray-400 hover:text-white transition">
+                    Profile
+                </a>
+
+                <a href="{% url 'view_tournaments' %}"
+                   class="text-gray-400 hover:text-white transition">
+                    Tournaments
+                </a>
+
+                <a href="{% url 'view_booking' %}"
+                   class="text-purple-400 font-semibold">
+                    Bookings
+                </a>
+
+                <a href="{% url 'clan_logout' %}"
+                   class="px-4 py-2 rounded-lg
+                          bg-red-500/10
+                          border border-red-500/30
+                          text-red-400
+                          hover:bg-red-500/20
+                          transition">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav><nav class="fixed
+                top-0
+                left-0
+                right-0
+                z-50
+
+                bg-black/70
+                backdrop-blur-xl
+
+                border-b
+                border-white/10">
+
+
+        <div class="max-w-7xl
+                    mx-auto
+                    px-6">
+
+
+            <div class="flex
+                        items-center
+                        justify-between
+                        h-20">
+
+
+                <!-- LOGO -->
+
+                <a href="{% url 'index' %}"
+                   class="flex
+                          items-center
+                          gap-3">
+
+
+                    <div class="w-11
+                                h-11
+                                rounded-xl
+
+                                bg-gradient-to-br
+                                from-purple-600
+                                to-cyan-500
+
+                                flex
+                                items-center
+                                justify-center
+
+                                shadow-neon">
+
+                        ⚔️
+
+                    </div>
+
+
+                    <div>
+
+                        <h1 class="gaming-font
+                                   font-bold
+                                   text-lg
+                                   tracking-wider">
+
+                            BGMI
+
+                            <span class="gradient-text">
+
+                                ARENA
+
+                            </span>
+
+                        </h1>
+
+
+                        <p class="text-[10px]
+                                  text-gray-500
+                                  tracking-[3px]">
+
+                            CLAN PANEL
+
+                        </p>
+
+                    </div>
+
+
+                </a>
+
+
+                <!-- RIGHT SIDE -->
+
+                <div class="flex
+                            items-center
+                            gap-3
+                            sm:gap-4">
+
+
+                    <!-- ===================================== -->
+                    <!-- NAVIGATION BUTTONS -->
+                    <!-- ===================================== -->
+
+                    <div class="hidden md:flex
+                                items-center
+                                gap-3
+                                text-sm">
+
+
+                        <!-- DASHBOARD BUTTON -->
+
+                        <a href="{% url 'clan_dashboard' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  text-slate-300
+
+                                  border
+                                  border-white/10
+
+                                  hover:border-purple-500/40
+                                  hover:text-purple-400
+
+                                  transition
+                                  duration-300">
+
+                            🏠 Dashboard
+
+                        </a>
+
+
+                        <!-- ================================= -->
+                        <!-- VIEW BOOKINGS BUTTON -->
+                        <!-- ================================= -->
+
+                        <a href="{% url 'view_booking' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  text-slate-300
+
+                                  border
+                                  border-white/10
+
+                                  hover:border-cyan-500/40
+                                  hover:text-cyan-400
+
+                                  transition
+                                  duration-300">
+
+                            👥 Bookings
+
+                        </a>
+
+
+                        <!-- PROFILE BUTTON -->
+
+                        <a href="{% url 'clan_profile' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  bg-gradient-to-r
+                                  from-purple-600
+                                  to-cyan-500
+
+                                  text-white
+                                  font-semibold
+
+                                  hover:opacity-90
+                                  hover:scale-105
+
+                                  transition
+                                  duration-300
+
+                                  shadow-lg
+                                  shadow-purple-500/20">
+
+                            👤 Profile
+
+                        </a>
+
+
+                    </div>
+
+
+                    <!-- ===================================== -->
+                    <!-- LOGOUT -->
+                    <!-- ===================================== -->
+
+                    <a href="{% url 'logout' %}"
+
+                       class="hidden
+                              sm:block
+
+                              px-4
+                              py-2
+
+                              rounded-lg
+
+                              bg-red-500/10
+
+                              text-red-400
+
+                              border
+                              border-red-500/20
+
+                              hover:bg-red-500
+                              hover:text-white
+
+                              transition
+
+                              text-sm">
+
+                        Logout
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- Heading -->
+
+    <div class="mb-10">
+
+        <p class="text-cyan-400 text-sm font-semibold tracking-widest">
+            CLAN CONTROL CENTER
+        </p>
+
+        <h2 class="font-orbitron text-3xl md:text-4xl font-bold mt-2">
+            TOURNAMENT <span class="gradient-text">BOOKINGS</span>
+        </h2>
+
+        <p class="text-gray-500 mt-3">
+            Manage your tournament bookings and send tournament links to players.
+        </p>
+
+    </div>
+
+
+    <!-- ================= MESSAGES ================= -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="mb-5 p-4 rounded-xl
+                        glass
+                        border border-purple-500/30
+                        text-gray-200">
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- ================= TOURNAMENT LINKS ================= -->
+
+    <section class="glass neon-border rounded-2xl p-6 mb-10">
+
+        <div class="flex items-center gap-3 mb-6">
+
+            <div class="w-11 h-11 rounded-xl
+                        bg-purple-500/10
+                        border border-purple-500/30
+                        flex items-center justify-center">
+
+                🔗
+
+            </div>
+
+            <div>
+
+                <h3 class="font-orbitron text-xl font-bold">
+                    TOURNAMENT LINKS
+                </h3>
+
+                <p class="text-gray-500 text-sm">
+                    Links are handled completely by frontend JavaScript.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-2 gap-5">
+
+            {% for tournament in tournaments %}
+
+                <div class="rounded-xl
+                            bg-black/30
+                            border border-white/10
+                            p-5">
+
+                    <div class="flex items-center justify-between mb-4">
+
+                        <div>
+
+                            <p class="text-xs text-gray-500">
+                                TOURNAMENT
+                            </p>
+
+                            <h4 class="font-orbitron font-bold text-lg">
+                                {{ tournament.tournament_name }}
+                            </h4>
+
+                        </div>
+
+                        <span class="text-xs px-3 py-1 rounded-full
+                                     bg-purple-500/10
+                                     text-purple-400
+                                     border border-purple-500/20">
+
+                            #{{ tournament.id }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Frontend link -->
+
+                    <button
+                        type="button"
+                        onclick="copyTournamentLink({{ tournament.id }})"
+                        class="w-full py-3 rounded-xl
+                               bg-gradient-to-r
+                               from-purple-600
+                               to-cyan-500
+                               font-semibold
+                               hover:opacity-90
+                               transition">
+
+                        🔗 Copy Tournament Link
+
+                    </button>
+
+                </div>
+
+            {% empty %}
+
+                <div class="col-span-full text-center py-10">
+
+                    <p class="text-gray-500">
+                        No tournaments available.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= BOOKINGS ================= -->
+
+    <section>
+
+        <div class="flex items-center justify-between mb-6">
+
+            <div>
+
+                <h3 class="font-orbitron text-2xl font-bold">
+                    PLAYER BOOKINGS
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-1">
+                    Send tournament links directly through WhatsApp.
+                </p>
+
+            </div>
+
+            <div class="px-4 py-2 rounded-xl
+                        bg-purple-500/10
+                        border border-purple-500/20
+                        text-purple-400">
+
+                {{ bookings|length }} Bookings
+
+            </div>
+
+        </div>
+
+
+        {% if bookings %}
+
+            <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+                {% for booking in bookings %}
+
+                    <div class="glass neon-border rounded-2xl p-6
+                                hover:border-purple-500/50
+                                transition">
+
+                        <!-- Player -->
+
+                        <div class="flex items-center justify-between mb-5">
+
+                            <div>
+
+                                <p class="text-xs text-gray-500 uppercase">
+                                    Player
+                                </p>
+
+                                <h4 class="text-xl font-bold">
+                                    {{ booking.player_name }}
+                                </h4>
+
+                            </div>
+
+                            <div class="w-10 h-10 rounded-full
+                                        bg-gradient-to-br
+                                        from-purple-600
+                                        to-cyan-500
+                                        flex items-center justify-center
+                                        font-bold">
+
+                                {{ booking.player_name|first|upper }}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Player details -->
+
+                        <div class="space-y-3 text-sm">
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    BGMI ID
+                                </span>
+
+                                <span class="font-semibold">
+                                    {{ booking.bgmi_id }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    In Game Name
+                                </span>
+
+                                <span class="font-semibold">
+                                    {{ booking.in_game_name }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    Phone
+                                </span>
+
+                                <span class="font-semibold">
+                                    {{ booking.phone }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    Game Mode
+                                </span>
+
+                                <span class="font-semibold">
+                                    {{ booking.game_mode }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    Slot
+                                </span>
+
+                                <span class="font-semibold text-cyan-400">
+                                    {{ booking.slot_number|default:"-" }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="flex justify-between">
+
+                                <span class="text-gray-500">
+                                    Status
+                                </span>
+
+                                <span class="text-green-400 font-semibold">
+                                    {{ booking.status }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Divider -->
+
+                        <div class="border-t border-white/10 my-5"></div>
+
+
+                        <!-- Tournament -->
+
+                        <div class="mb-5">
+
+                            <p class="text-xs text-gray-500 uppercase">
+                                Tournament
+                            </p>
+
+                            <p class="font-orbitron font-semibold mt-1">
+                                {{ booking.tournament.tournament_name }}
+                            </p>
+
+                        </div>
+
+
+                        <!-- Send WhatsApp -->
+
+                        <button
+                            type="button"
+                            onclick="sendWhatsApp(
+                                '{{ booking.phone|escapejs }}',
+                                '{{ booking.player_name|escapejs }}',
+                                '{{ booking.tournament.id }}',
+                                '{{ booking.tournament.tournament_name|escapejs }}'
+                            )"
+                            class="w-full py-3 rounded-xl
+                                   bg-green-600
+                                   hover:bg-green-500
+                                   font-semibold
+                                   transition">
+
+                            📱 Send Tournament Link
+
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="glass rounded-2xl p-12 text-center">
+
+                <div class="text-5xl mb-4">
+                    🎮
+                </div>
+
+                <h3 class="font-orbitron text-xl font-bold">
+                    NO BOOKINGS YET
+                </h3>
+
+                <p class="text-gray-500 mt-2">
+                    Players who book your tournaments will appear here.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+/*
+==========================================================
+TOURNAMENT LINKS
+==========================================================
+
+IMPORTANT:
+
+These links are stored ONLY in frontend JavaScript.
+
+They are NOT sent to Django backend.
+
+Change these URLs according to your tournaments.
+
+The key is the Tournament ID.
+
+Example:
+
+Tournament ID 1 -> link 1
+Tournament ID 2 -> link 2
+Tournament ID 3 -> link 3
+
+==========================================================
+*/
+
+const tournamentLinks = {
+
+    1: "https://example.com/tournament1",
+
+    2: "https://example.com/tournament2",
+
+    3: "https://example.com/tournament3",
+
+    4: "https://example.com/tournament4",
+
+    5: "https://example.com/tournament5"
+
+};
+
+
+/*
+==========================================================
+GET TOURNAMENT LINK
+==========================================================
+*/
+
+function getTournamentLink(tournamentId) {
+
+    const link = tournamentLinks[tournamentId];
+
+    if (!link) {
+
+        alert(
+            "Tournament link is not configured for Tournament ID: "
+            + tournamentId
+        );
+
+        return null;
+    }
+
+    return link;
+}
+
+
+/*
+==========================================================
+COPY TOURNAMENT LINK
+==========================================================
+*/
+
+function copyTournamentLink(tournamentId) {
+
+    const link = getTournamentLink(tournamentId);
+
+    if (!link) {
+        return;
+    }
+
+    navigator.clipboard.writeText(link)
+        .then(function () {
+
+            alert("Tournament link copied!");
+
+        })
+        .catch(function () {
+
+            alert("Unable to copy the tournament link.");
+
+        });
+}
+
+
+/*
+==========================================================
+SEND WHATSAPP
+==========================================================
+*/
+
+function sendWhatsApp(
+    phone,
+    playerName,
+    tournamentId,
+    tournamentName
+) {
+
+    /*
+    Get link from frontend JavaScript.
+
+    NOTHING is requested from Django backend.
+    */
+
+    const tournamentLink =
+        getTournamentLink(tournamentId);
+
+    if (!tournamentLink) {
+        return;
+    }
+
+
+    /*
+    Clean phone number
+    */
+
+    phone = phone.replace(/\D/g, "");
+
+
+    /*
+    Add India country code
+    */
+
+    if (phone.length === 10) {
+
+        phone = "91" + phone;
+
+    }
+
+
+    /*
+    Validate phone number
+    */
+
+    if (phone.length < 10) {
+
+        alert("Invalid WhatsApp phone number.");
+
+        return;
+    }
+
+
+    /*
+    WhatsApp message
+    */
+
+    const message =
+        "Hello " + playerName + ",\n\n" +
+
+        "🎮 Your BGMI tournament booking is confirmed.\n\n" +
+
+        "🏆 Tournament:\n" +
+        tournamentName + "\n\n" +
+
+        "🔗 Tournament Link:\n" +
+        tournamentLink + "\n\n" +
+
+        "Please open the link to join the tournament.\n\n" +
+
+        "🔥 Good luck!\n\n" +
+
+        "BGMI ARENA";
+
+
+    /*
+    Create WhatsApp URL
+    */
+
+    const whatsappUrl =
+        "https://wa.me/" +
+        phone +
+        "?text=" +
+        encodeURIComponent(message);
+
+
+    /*
+    Open WhatsApp
+    */
+
+    window.open(
+        whatsappUrl,
+        "_blank"
+    );
+
+}
+
+</script>
+
+</body>
+</html>

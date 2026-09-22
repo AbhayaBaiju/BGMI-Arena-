@@ -1,0 +1,1123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | Verified Clans</title>
+
+
+    <!-- =====================================================
+         TAILWIND CSS
+    ====================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =====================================================
+         GOOGLE FONTS
+    ====================================================== -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap"
+          rel="stylesheet">
+
+
+    <!-- =====================================================
+         STYLE
+    ====================================================== -->
+
+    <style>
+
+        body {
+
+            font-family: 'Poppins', sans-serif;
+
+            background: #050509;
+
+        }
+
+
+        .orbitron {
+
+            font-family: 'Orbitron', sans-serif;
+
+        }
+
+
+        .sidebar {
+
+            background: rgba(10, 10, 18, 0.96);
+
+            border-right: 1px solid rgba(168, 85, 247, 0.25);
+
+        }
+
+
+        .glass {
+
+            background: rgba(17, 17, 27, 0.78);
+
+            backdrop-filter: blur(14px);
+
+            border: 1px solid rgba(168, 85, 247, 0.18);
+
+        }
+
+
+        .menu-item {
+
+            transition: 0.3s;
+
+        }
+
+
+        .menu-item:hover {
+
+            background: rgba(168, 85, 247, 0.12);
+
+            color: #c084fc;
+
+        }
+
+
+        .active {
+
+            background: linear-gradient(
+                90deg,
+                rgba(168, 85, 247, 0.25),
+                rgba(6, 182, 212, 0.08)
+            );
+
+            color: #c084fc;
+
+            border-left: 3px solid #a855f7;
+
+        }
+
+
+        .clan-card {
+
+            transition: 0.3s;
+
+        }
+
+
+        .clan-card:hover {
+
+            transform: translateY(-2px);
+
+            border-color: rgba(168, 85, 247, 0.45);
+
+            box-shadow:
+                0 10px 30px rgba(168, 85, 247, 0.08);
+
+        }
+
+
+        .profile-image {
+
+            background: linear-gradient(
+                135deg,
+                #a855f7,
+                #06b6d4
+            );
+
+        }
+
+
+        .scrollbar::-webkit-scrollbar {
+
+            width: 6px;
+
+        }
+
+
+        .scrollbar::-webkit-scrollbar-track {
+
+            background: #050509;
+
+        }
+
+
+        .scrollbar::-webkit-scrollbar-thumb {
+
+            background: #7c3aed;
+
+            border-radius: 10px;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white">
+
+
+<div class="flex min-h-screen">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar fixed left-0 top-0
+                  h-screen w-64 z-50 hidden lg:block">
+
+
+        <!-- LOGO -->
+
+        <div class="px-6 py-6
+                    border-b border-purple-500/10">
+
+            <h1 class="orbitron text-xl
+                       font-bold tracking-wider">
+
+                <span class="text-purple-400">
+                    BGMI
+                </span>
+
+                <span class="text-cyan-400">
+                    ARENA
+                </span>
+
+            </h1>
+
+
+            <p class="text-xs text-gray-500
+                      mt-1 tracking-widest">
+
+                ADMIN PANEL
+
+            </p>
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <nav class="p-4 space-y-1">
+
+
+            <p class="text-xs text-gray-600
+                      uppercase tracking-widest
+                      px-3 py-3">
+
+                Main Menu
+
+            </p>
+
+
+            <!-- DASHBOARD -->
+
+            <a href="{% url 'admin_dashboard' %}"
+               class="menu-item flex items-center
+                      gap-3 px-4 py-3
+                      rounded-lg text-gray-400">
+
+                <span>▣</span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- PLAYERS -->
+
+            <a href="{% url 'player_details' %}"
+               class="menu-item flex items-center
+                      gap-3 px-4 py-3
+                      rounded-lg text-gray-400">
+
+                <span>♙</span>
+
+                <span>
+                    Players
+                </span>
+
+            </a>
+
+
+            <!-- CLANS -->
+
+            <a href="{% url 'clan_list' %}"
+               class="menu-item flex items-center
+                      gap-3 px-4 py-3
+                      rounded-lg text-gray-400">
+
+                <span>♜</span>
+
+                <span>
+                    Clans
+                </span>
+
+            </a>
+
+
+            <!-- PENDING VERIFICATION -->
+
+            <a href="{% url 'clan_verification' %}"
+               class="menu-item flex items-center
+                      gap-3 px-4 py-3
+                      rounded-lg text-gray-400">
+
+                <span>✓</span>
+
+                <span>
+                    Pending Verification
+                </span>
+
+            </a>
+
+
+            <!-- VERIFIED CLANS -->
+
+            <a href="{% url 'verified_clans' %}"
+               class="menu-item active flex items-center
+                      gap-3 px-4 py-3
+                      rounded-lg">
+
+                <span>★</span>
+
+                <span>
+                    Verified Clans
+                </span>
+
+            </a>
+
+
+            
+
+
+        </nav>
+
+
+        <!-- =================================================
+             ADMIN PROFILE
+        ================================================== -->
+
+        <div class="absolute bottom-0
+                    left-0 right-0
+                    p-4
+                    border-t border-purple-500/10">
+
+
+            <div class="flex items-center
+                        gap-3 mb-4">
+
+
+                <div class="w-10 h-10
+                            rounded-full
+                            profile-image
+                            flex items-center
+                            justify-center
+                            font-bold">
+
+                    {{ request.session.admin_username|first|upper }}
+
+                </div>
+
+
+                <div class="overflow-hidden">
+
+                    <p class="text-sm
+                              font-semibold
+                              truncate">
+
+                        {{ request.session.admin_username }}
+
+                    </p>
+
+
+                    <p class="text-xs
+                              text-purple-400">
+
+                        Administrator
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOGOUT -->
+
+            <a href="{% url 'admin_logout' %}"
+               class="block text-center
+                      bg-red-500/10
+                      hover:bg-red-500/20
+                      text-red-400
+                      py-2 rounded-lg
+                      text-sm">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="lg:ml-64 flex-1 w-full">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="glass sticky top-0
+                       z-40 px-6 py-5">
+
+
+            <div class="flex flex-col
+                        md:flex-row
+                        md:items-center
+                        md:justify-between
+                        gap-4">
+
+
+                <div>
+
+                    <p class="text-xs
+                              text-purple-400
+                              uppercase
+                              tracking-widest">
+
+                        Admin / Clans
+
+                    </p>
+
+
+                    <h2 class="orbitron
+                               text-2xl
+                               font-bold
+                               mt-1">
+
+                        VERIFIED CLANS
+
+                    </h2>
+
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-1">
+
+                        View all approved BGMI clans
+
+                    </p>
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="relative">
+
+                    <input
+                        type="text"
+                        id="searchClan"
+                        placeholder="Search clan..."
+                        class="w-full md:w-72
+                               bg-black/40
+                               border border-purple-500/20
+                               rounded-lg
+                               px-4 py-3
+                               text-sm
+                               text-white
+                               placeholder-gray-600
+                               focus:outline-none
+                               focus:border-purple-500">
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <section class="p-6">
+
+
+            <!-- =================================================
+                 STATS
+            ================================================== -->
+
+            <div class="grid grid-cols-1
+                        sm:grid-cols-2
+                        xl:grid-cols-4
+                        gap-5 mb-8">
+
+
+                <!-- VERIFIED CLANS -->
+
+                <div class="glass rounded-xl p-5">
+
+                    <div class="flex justify-between
+                                items-center">
+
+
+                        <div>
+
+                            <p class="text-sm
+                                      text-gray-500">
+
+                                Verified Clans
+
+                            </p>
+
+
+                            <h3 class="orbitron
+                                       text-3xl
+                                       font-bold
+                                       mt-2
+                                       text-cyan-400">
+
+                                {{ clans|length }}
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="w-12 h-12
+                                    rounded-xl
+                                    bg-cyan-500/10
+                                    flex items-center
+                                    justify-center
+                                    text-cyan-400
+                                    text-xl">
+
+                            ✓
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- APPROVED -->
+
+                <div class="glass rounded-xl p-5">
+
+                    <div class="flex justify-between
+                                items-center">
+
+
+                        <div>
+
+                            <p class="text-sm
+                                      text-gray-500">
+
+                                Approval Status
+
+                            </p>
+
+
+                            <h3 class="orbitron
+                                       text-3xl
+                                       font-bold
+                                       mt-2
+                                       text-green-400">
+
+                                APPROVED
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="w-12 h-12
+                                    rounded-xl
+                                    bg-green-500/10
+                                    flex items-center
+                                    justify-center
+                                    text-green-400">
+
+                            ●
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CLAN MANAGEMENT -->
+
+                <div class="glass rounded-xl p-5">
+
+                    <div class="flex justify-between
+                                items-center">
+
+
+                        <div>
+
+                            <p class="text-sm
+                                      text-gray-500">
+
+                                Clan Management
+
+                            </p>
+
+
+                            <h3 class="orbitron
+                                       text-lg
+                                       font-bold
+                                       mt-3
+                                       text-purple-400">
+
+                                VERIFIED
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="w-12 h-12
+                                    rounded-xl
+                                    bg-purple-500/10
+                                    flex items-center
+                                    justify-center
+                                    text-purple-400
+                                    text-xl">
+
+                            ♜
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PLATFORM STATUS -->
+
+                <div class="glass rounded-xl p-5">
+
+                    <div class="flex justify-between
+                                items-center">
+
+
+                        <div>
+
+                            <p class="text-sm
+                                      text-gray-500">
+
+                                Platform Status
+
+                            </p>
+
+
+                            <h3 class="orbitron
+                                       text-lg
+                                       font-bold
+                                       mt-3
+                                       text-green-400">
+
+                                ACTIVE
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="w-12 h-12
+                                    rounded-xl
+                                    bg-green-500/10
+                                    flex items-center
+                                    justify-center
+                                    text-green-400">
+
+                            ●
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
+
+            <div class="glass rounded-xl overflow-hidden">
+
+
+                <!-- TABLE HEADER -->
+
+                <div class="px-6 py-5
+                            border-b
+                            border-purple-500/10
+                            flex flex-col
+                            sm:flex-row
+                            sm:items-center
+                            sm:justify-between
+                            gap-3">
+
+
+                    <div>
+
+                        <h3 class="orbitron font-semibold">
+
+                            Verified Clans
+
+                        </h3>
+
+
+                        <p class="text-xs
+                                  text-gray-600
+                                  mt-1">
+
+                            Approved clan registrations
+
+                        </p>
+
+                    </div>
+
+
+                    <span class="text-xs
+                                 px-3 py-2
+                                 rounded-full
+                                 bg-cyan-500/10
+                                 text-cyan-400">
+
+                        {{ clans|length }} Clans
+
+                    </span>
+
+                </div>
+
+
+                <!-- TABLE -->
+
+                <div class="overflow-x-auto scrollbar">
+
+
+                    <table class="w-full min-w-[1000px]">
+
+
+                        <thead>
+
+                        <tr class="text-left
+                                   text-xs
+                                   uppercase
+                                   tracking-wider
+                                   text-gray-600
+                                   border-b
+                                   border-purple-500/10">
+
+
+                            <th class="px-6 py-4">
+
+                                Clan
+
+                            </th>
+
+
+                            <th class="px-6 py-4">
+
+                                Captain
+
+                            </th>
+
+
+                            <th class="px-6 py-4">
+
+                                BGMI ID
+
+                            </th>
+
+
+                            <th class="px-6 py-4">
+
+                                Game Mode
+
+                            </th>
+
+
+                            <th class="px-6 py-4">
+
+                                Members
+
+                            </th>
+
+
+                            <th class="px-6 py-4">
+
+                                Status
+
+                            </th>
+
+
+                            <th class="px-6 py-4">
+
+                                Action
+
+                            </th>
+
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody id="clanTable">
+
+
+                        {% for clan in clans %}
+
+
+                        <tr class="clan-card
+                                   border-b
+                                   border-purple-500/5
+                                   hover:bg-purple-500/5
+                                   transition"
+                            data-search="
+                                {{ clan.clan_name }}
+                                {{ clan.clan_tag }}
+                                {{ clan.captain_name }}
+                                {{ clan.captain_bgmi_id }}
+                                {{ clan.email }}
+                                {{ clan.game_mode }}
+                            ">
+
+
+                            <!-- CLAN -->
+
+                            <td class="px-6 py-5">
+
+
+                                <div class="flex
+                                            items-center
+                                            gap-3">
+
+
+                                    {% if clan.clan_logo %}
+
+                                    <img
+                                        src="{{ clan.clan_logo.url }}"
+                                        alt="{{ clan.clan_name }}"
+                                        class="w-11 h-11
+                                               rounded-full
+                                               object-cover
+                                               border
+                                               border-purple-500/30">
+
+                                    {% else %}
+
+                                    <div class="w-11 h-11
+                                                rounded-full
+                                                profile-image
+                                                flex items-center
+                                                justify-center
+                                                font-bold">
+
+                                        ♜
+
+                                    </div>
+
+                                    {% endif %}
+
+
+                                    <div>
+
+                                        <p class="font-semibold
+                                                  text-sm">
+
+                                            {{ clan.clan_name }}
+
+                                        </p>
+
+
+                                        <p class="text-xs
+                                                  text-gray-600">
+
+                                            #{{ clan.clan_tag }}
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- CAPTAIN -->
+
+                            <td class="px-6 py-5">
+
+                                <p class="text-sm
+                                          text-gray-300">
+
+                                    {{ clan.captain_name }}
+
+                                </p>
+
+
+                                <p class="text-xs
+                                          text-gray-600
+                                          mt-1">
+
+                                    {{ clan.email }}
+
+                                </p>
+
+                            </td>
+
+
+                            <!-- BGMI ID -->
+
+                            <td class="px-6 py-5">
+
+                                <span class="font-mono
+                                             text-sm
+                                             text-cyan-400">
+
+                                    {{ clan.captain_bgmi_id }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- GAME MODE -->
+
+                            <td class="px-6 py-5">
+
+                                <span class="px-3 py-1
+                                             rounded-full
+                                             bg-purple-500/10
+                                             text-purple-400
+                                             text-xs">
+
+                                    {{ clan.game_mode|title }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- MEMBERS -->
+
+                            <td class="px-6 py-5">
+
+                                <span class="text-sm
+                                             text-gray-300">
+
+                                    {{ clan.member_count }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td class="px-6 py-5">
+
+                                <span class="inline-flex
+                                             items-center
+                                             gap-2
+                                             px-3 py-1
+                                             rounded-full
+                                             bg-green-500/10
+                                             text-green-400
+                                             text-xs">
+
+                                    <span class="w-2 h-2
+                                                 rounded-full
+                                                 bg-green-400">
+                                    </span>
+
+                                    Verified
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td class="px-6 py-5">
+
+                                <a href="{% url 'clan_details' clan.id %}"
+                                   class="inline-flex
+                                          items-center
+                                          px-4 py-2
+                                          rounded-lg
+                                          bg-purple-500/10
+                                          border
+                                          border-purple-500/20
+                                          text-purple-400
+                                          text-sm
+                                          hover:bg-purple-500/20
+                                          transition">
+
+                                    View Details
+
+                                </a>
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% empty %}
+
+
+                        <!-- EMPTY -->
+
+                        <tr>
+
+                            <td colspan="7"
+                                class="px-6 py-16
+                                       text-center">
+
+
+                                <div class="text-5xl mb-4">
+
+                                    ♜
+
+                                </div>
+
+
+                                <h3 class="text-lg
+                                           font-semibold">
+
+                                    No Verified Clans
+
+                                </h3>
+
+
+                                <p class="text-sm
+                                          text-gray-600
+                                          mt-2">
+
+                                    No clans have been verified yet.
+
+                                </p>
+
+
+                                <a href="{% url 'clan_verification' %}"
+                                   class="inline-block
+                                          mt-5
+                                          px-5 py-2
+                                          rounded-lg
+                                          bg-purple-500/10
+                                          text-purple-400
+                                          hover:bg-purple-500/20">
+
+                                    View Pending Clans
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     SEARCH JAVASCRIPT
+====================================================== -->
+
+<script>
+
+    const searchInput =
+        document.getElementById("searchClan");
+
+
+    searchInput.addEventListener("keyup", function () {
+
+
+        const searchValue =
+            this.value.toLowerCase().trim();
+
+
+        const rows =
+            document.querySelectorAll(
+                "#clanTable .clan-card"
+            );
+
+
+        rows.forEach(row => {
+
+
+            const text =
+                row.getAttribute("data-search");
+
+
+            if (!text) return;
+
+
+            if (
+                text.toLowerCase()
+                    .includes(searchValue)
+            ) {
+
+                row.style.display = "";
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+</script>
+
+
+</body>
+
+</html>

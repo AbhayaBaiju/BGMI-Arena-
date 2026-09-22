@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | My Tournaments</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #050509;
+        }
+
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(
+                    rgba(168, 85, 247, 0.04) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(6, 182, 212, 0.04) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            backdrop-filter: blur(12px);
+        }
+
+        .tournament-card {
+            transition: all 0.3s ease;
+        }
+
+        .tournament-card:hover {
+            transform: translateY(-6px);
+            border-color: #a855f7;
+            box-shadow:
+                0 0 25px rgba(168, 85, 247, 0.25);
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white grid-bg min-h-screen">
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="fixed
+                top-0
+                left-0
+                right-0
+                z-50
+
+                bg-black/70
+                backdrop-blur-xl
+
+                border-b
+                border-white/10">
+
+
+        <div class="max-w-7xl
+                    mx-auto
+                    px-6">
+
+
+            <div class="flex
+                        items-center
+                        justify-between
+                        h-20">
+
+
+                <!-- LOGO -->
+
+                <a href="{% url 'index' %}"
+                   class="flex
+                          items-center
+                          gap-3">
+
+
+                    <div class="w-11
+                                h-11
+                                rounded-xl
+
+                                bg-gradient-to-br
+                                from-purple-600
+                                to-cyan-500
+
+                                flex
+                                items-center
+                                justify-center
+
+                                shadow-neon">
+
+                        ⚔️
+
+                    </div>
+
+
+                    <div>
+
+                        <h1 class="gaming-font
+                                   font-bold
+                                   text-lg
+                                   tracking-wider">
+
+                            BGMI
+
+                            <span class="gradient-text">
+
+                                ARENA
+
+                            </span>
+
+                        </h1>
+
+
+                        <p class="text-[10px]
+                                  text-gray-500
+                                  tracking-[3px]">
+
+                            CLAN PANEL
+
+                        </p>
+
+                    </div>
+
+
+                </a>
+
+
+                <!-- RIGHT SIDE -->
+
+                <div class="flex
+                            items-center
+                            gap-3
+                            sm:gap-4">
+
+
+                    <!-- ===================================== -->
+                    <!-- NAVIGATION BUTTONS -->
+                    <!-- ===================================== -->
+
+                    <div class="hidden md:flex
+                                items-center
+                                gap-3
+                                text-sm">
+
+
+                        <!-- DASHBOARD BUTTON -->
+
+                        <a href="{% url 'clan_dashboard' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  text-slate-300
+
+                                  border
+                                  border-white/10
+
+                                  hover:border-purple-500/40
+                                  hover:text-purple-400
+
+                                  transition
+                                  duration-300">
+
+                            🏠 Dashboard
+
+                        </a>
+
+
+                        <!-- ================================= -->
+                        <!-- VIEW BOOKINGS BUTTON -->
+                        <!-- ================================= -->
+
+                        <a href="{% url 'view_booking' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  text-slate-300
+
+                                  border
+                                  border-white/10
+
+                                  hover:border-cyan-500/40
+                                  hover:text-cyan-400
+
+                                  transition
+                                  duration-300">
+
+                            👥 Bookings
+
+                        </a>
+
+
+                        <!-- PROFILE BUTTON -->
+
+                        <a href="{% url 'clan_profile' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  bg-gradient-to-r
+                                  from-purple-600
+                                  to-cyan-500
+
+                                  text-white
+                                  font-semibold
+
+                                  hover:opacity-90
+                                  hover:scale-105
+
+                                  transition
+                                  duration-300
+
+                                  shadow-lg
+                                  shadow-purple-500/20">
+
+                            👤 Profile
+
+                        </a>
+
+
+                    </div>
+
+
+                    <!-- ===================================== -->
+                    <!-- LOGOUT -->
+                    <!-- ===================================== -->
+
+                    <a href="{% url 'logout' %}"
+
+                       class="hidden
+                              sm:block
+
+                              px-4
+                              py-2
+
+                              rounded-lg
+
+                              bg-red-500/10
+
+                              text-red-400
+
+                              border
+                              border-red-500/20
+
+                              hover:bg-red-500
+                              hover:text-white
+
+                              transition
+
+                              text-sm">
+
+                        Logout
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </nav>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main class="max-w-7xl mx-auto px-6 py-12">
+
+
+    <!-- PAGE TITLE -->
+
+    <div class="mb-10">
+
+        <p class="text-cyan-400
+                  text-sm
+                  font-semibold
+                  uppercase
+                  tracking-[0.3em]">
+
+            Clan Panel
+
+        </p>
+
+        <h1 class="orbitron
+                   text-3xl
+                   md:text-4xl
+                   font-bold
+                   mt-2">
+
+            My Tournaments
+
+        </h1>
+
+        <p class="text-gray-400 mt-3">
+
+            Manage and view tournaments created by
+            {{ clan.clan_name }}.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TOURNAMENT GRID
+    ====================================================== -->
+
+    {% if tournaments %}
+
+    <div class="grid grid-cols-1
+                md:grid-cols-2
+                lg:grid-cols-3
+                gap-6">
+
+
+        {% for tournament in tournaments %}
+
+
+        <!-- =================================================
+             TOURNAMENT CARD
+        ================================================== -->
+
+        <a href="{% url 'tournament_detail' tournament.id %}"
+           class="block">
+
+
+            <div class="tournament-card
+                        glass
+                        rounded-2xl
+                        overflow-hidden
+                        h-full">
+
+
+                <!-- Card Header -->
+
+                <div class="p-6
+                            border-b
+                            border-purple-500/10">
+
+                    <div class="flex
+                                items-start
+                                justify-between
+                                gap-3">
+
+                        <div>
+
+                            <p class="text-xs
+                                      text-purple-400
+                                      uppercase
+                                      tracking-wider">
+
+                                Tournament
+
+                            </p>
+
+
+                            <h2 class="orbitron
+                                       text-lg
+                                       font-bold
+                                       mt-2">
+
+                                {{ tournament.tournament_name }}
+
+                            </h2>
+
+                        </div>
+
+
+                        <span class="px-3 py-1
+                                     rounded-full
+                                     bg-purple-500/10
+                                     text-purple-400
+                                     text-xs
+                                     font-semibold">
+
+                            {{ tournament.game_mode }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Card Body -->
+
+                <div class="p-6 space-y-4">
+
+
+                    <!-- Map -->
+
+                    <div class="flex
+                                justify-between
+                                items-center">
+
+                        <span class="text-gray-400 text-sm">
+
+                            Map
+
+                        </span>
+
+                        <span class="font-semibold">
+
+                            {{ tournament.map }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Date -->
+
+                    <div class="flex
+                                justify-between
+                                items-center">
+
+                        <span class="text-gray-400 text-sm">
+
+                            Date
+
+                        </span>
+
+                        <span class="font-semibold">
+
+                            {{ tournament.tournament_date }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Time -->
+
+                    <div class="flex
+                                justify-between
+                                items-center">
+
+                        <span class="text-gray-400 text-sm">
+
+                            Time
+
+                        </span>
+
+                        <span class="font-semibold">
+
+                            {{ tournament.tournament_time }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Entry Fee -->
+
+                    <div class="flex
+                                justify-between
+                                items-center">
+
+                        <span class="text-gray-400 text-sm">
+
+                            Entry Fee
+
+                        </span>
+
+                        <span class="text-cyan-400
+                                     font-bold">
+
+                            ₹{{ tournament.entry_fee }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Prize -->
+
+                    <div class="flex
+                                justify-between
+                                items-center">
+
+                        <span class="text-gray-400 text-sm">
+
+                            Prize Pool
+
+                        </span>
+
+                        <span class="text-purple-400
+                                     font-bold">
+
+                            ₹{{ tournament.prize_pool }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Matches -->
+
+                    <div class="flex
+                                justify-between
+                                items-center">
+
+                        <span class="text-gray-400 text-sm">
+
+                            Matches
+
+                        </span>
+
+                        <span class="font-semibold">
+
+                            {{ tournament.matches }}
+
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- Card Footer -->
+
+                <div class="px-6 pb-6">
+
+
+                    <div class="w-full
+                                py-3
+                                rounded-xl
+                                text-center
+                                font-semibold
+                                bg-purple-600/20
+                                border
+                                border-purple-500/30
+                                text-purple-300
+                                hover:bg-purple-600/30
+                                transition">
+
+                        View Tournament Details →
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </a>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- =====================================================
+         NO TOURNAMENTS
+    ====================================================== -->
+
+    <div class="glass
+                rounded-2xl
+                p-12
+                text-center">
+
+        <div class="text-5xl mb-5">
+            🎮
+        </div>
+
+        <h2 class="orbitron
+                   text-xl
+                   font-bold">
+
+            No Tournaments Yet
+
+        </h2>
+
+        <p class="text-gray-400
+                  mt-3">
+
+            You haven't created any tournaments yet.
+
+        </p>
+
+
+        <a href="{% url 'add_tournament' %}"
+           class="inline-block
+                  mt-6
+                  px-6
+                  py-3
+                  rounded-xl
+                  bg-purple-600
+                  hover:bg-purple-500
+                  font-semibold
+                  transition">
+
+            + Create Tournament
+
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+</body>
+
+</html>

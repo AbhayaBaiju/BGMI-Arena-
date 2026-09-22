@@ -1,0 +1,2845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | Tournaments</title>
+
+    <!-- =====================================================
+         TAILWIND CSS
+    ====================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neon: "#a855f7",
+                        cyan: "#06b6d4",
+                        dark: "#050509"
+                    },
+
+                    boxShadow: {
+                        neon: "0 0 30px rgba(168,85,247,0.35)"
+                    }
+                }
+            }
+        }
+    </script>
+
+
+    <!-- =====================================================
+         GOOGLE FONTS
+    ====================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+
+    <!-- =====================================================
+         CUSTOM CSS
+    ====================================================== -->
+
+    <style>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #050509;
+        }
+
+
+        .gaming-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+
+        /* =====================================================
+           HERO BACKGROUND
+        ====================================================== */
+
+        .hero-bg {
+
+            background:
+                radial-gradient(
+                    circle at 20% 30%,
+                    rgba(168, 85, 247, 0.20),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 80% 20%,
+                    rgba(6, 182, 212, 0.15),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #050509 0%,
+                    #090912 50%,
+                    #050509 100%
+                );
+        }
+
+
+        /* =====================================================
+           GRID BACKGROUND
+        ====================================================== */
+
+        .grid-bg {
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255, 255, 255, 0.03) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.03) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+        }
+
+
+        /* =====================================================
+           GLASS
+        ====================================================== */
+
+        .glass {
+
+            background: rgba(255, 255, 255, 0.04);
+
+            backdrop-filter: blur(15px);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+
+        /* =====================================================
+           GRADIENT TEXT
+        ====================================================== */
+
+        .gradient-text {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #c084fc,
+                    #22d3ee
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        /* =====================================================
+           TOURNAMENT CARD
+        ====================================================== */
+
+        .tournament-card {
+
+            transition:
+                all 0.3s ease;
+        }
+
+
+        .tournament-card:hover {
+
+            transform:
+                translateY(-8px);
+
+            border-color:
+                rgba(168, 85, 247, 0.5);
+
+            box-shadow:
+                0 20px 50px rgba(168, 85, 247, 0.12);
+        }
+
+
+        /* =====================================================
+           CAROUSEL
+        ====================================================== */
+
+        #tournamentCarousel {
+
+            will-change:
+                transform;
+        }
+
+
+        .tournament-slide {
+
+            box-sizing:
+                border-box;
+        }
+
+
+        /* =====================================================
+           SCROLLBAR HIDE
+        ====================================================== */
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        .hide-scrollbar {
+
+            -ms-overflow-style: none;
+
+            scrollbar-width: none;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
+        #navbar {
+
+            transition:
+                transform 0.3s ease-in-out;
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white">
+
+
+    <!-- =========================================================
+         NAVBAR
+    ========================================================= -->
+
+    <nav id="navbar"
+         class="fixed
+                top-0
+                left-0
+                right-0
+                z-50
+                bg-black/70
+                backdrop-blur-xl
+                border-b
+                border-white/10">
+
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="flex items-center justify-between h-20">
+
+
+                <!-- =================================================
+                     LOGO
+                ================================================== -->
+
+                <a href="/" class="flex items-center gap-3">
+
+                    <div class="w-11
+                                h-11
+                                rounded-xl
+                                bg-gradient-to-br
+                                from-purple-600
+                                to-cyan-500
+                                flex
+                                items-center
+                                justify-center
+                                shadow-neon">
+
+                        <span class="text-xl">
+                            🎮
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <h1 class="gaming-font
+                                   font-bold
+                                   text-lg
+                                   tracking-wider">
+
+                            BGMI
+
+                            <span class="gradient-text">
+                                ARENA
+                            </span>
+
+                        </h1>
+
+
+                        <p class="text-[10px]
+                                  text-gray-500
+                                  tracking-[3px]">
+
+                            TOURNAMENTS
+
+                        </p>
+
+                    </div>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     AUTH BUTTONS
+                ================================================== -->
+
+                <div class="flex items-center gap-3">
+
+
+                    <!-- LOGIN -->
+
+                    <a href="/login/"
+                       class="px-5
+                              py-2.5
+                              rounded-xl
+                              bg-gradient-to-r
+                              from-purple-600
+                              to-cyan-500
+                              text-sm
+                              font-semibold
+                              text-white
+                              hover:opacity-90
+                              transition
+                              shadow-neon">
+
+                        Login
+
+                    </a>
+
+
+                    <!-- REGISTER -->
+
+                    <a href="/register/"
+                       class="px-5
+                              py-2.5
+                              rounded-xl
+                              bg-gradient-to-r
+                              from-purple-600
+                              to-cyan-500
+                              text-sm
+                              font-semibold
+                              text-white
+                              hover:opacity-90
+                              transition
+                              shadow-neon">
+
+                        Register
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =========================================================
+         HERO
+    ========================================================= -->
+
+    <section class="hero-bg
+                    grid-bg
+                    min-h-screen
+                    flex
+                    items-center
+                    pt-20">
+
+        <div class="max-w-7xl
+                    mx-auto
+                    px-6
+                    py-24
+                    w-full">
+
+            <div class="grid
+                        lg:grid-cols-2
+                        gap-16
+                        items-center">
+
+
+                <!-- =================================================
+                     HERO LEFT
+                ================================================== -->
+
+                <div>
+
+
+                    <div class="inline-flex
+                                items-center
+                                gap-2
+                                glass
+                                px-4
+                                py-2
+                                rounded-full
+                                mb-7">
+
+                        <span class="w-2
+                                     h-2
+                                     bg-green-400
+                                     rounded-full
+                                     animate-pulse">
+                        </span>
+
+
+                        <span class="text-xs
+                                     text-gray-300">
+
+                            LIVE TOURNAMENTS AVAILABLE
+
+                        </span>
+
+                    </div>
+
+
+
+                    <h2 class="gaming-font
+                               text-4xl
+                               md:text-6xl
+                               lg:text-7xl
+                               font-bold
+                               leading-tight">
+
+                        PLAY.
+
+                        <span class="gradient-text">
+                            COMPETE.
+                        </span>
+
+                        <br>
+
+                        <span class="text-white">
+                            CONQUER.
+                        </span>
+
+                    </h2>
+
+
+
+                    <p class="mt-7
+                              text-gray-400
+                              text-base
+                              md:text-lg
+                              leading-relaxed
+                              max-w-xl">
+
+                        Join competitive BGMI tournaments,
+                        compete against other players,
+                        and experience the ultimate battle arena.
+
+                    </p>
+
+
+
+                    <div class="flex flex-wrap
+                                gap-4
+                                mt-9">
+
+                        <a href="#tournaments"
+                           class="px-7
+                                  py-4
+                                  rounded-xl
+                                  bg-gradient-to-r
+                                  from-purple-600
+                                  to-cyan-500
+                                  font-semibold
+                                  hover:scale-105
+                                  transition
+                                  shadow-neon">
+
+                            🏆 Explore Tournaments
+
+                        </a>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         STATS
+                    ================================================== -->
+
+                    <div class="flex flex-wrap
+                                gap-8
+                                mt-12">
+
+
+                        <div>
+
+                            <h3 class="gaming-font
+                                       text-2xl
+                                       font-bold">
+
+                                500+
+
+                            </h3>
+
+                            <p class="text-xs
+                                      text-gray-500
+                                      mt-1">
+
+                                Players
+
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3 class="gaming-font
+                                       text-2xl
+                                       font-bold">
+
+                                100+
+
+                            </h3>
+
+                            <p class="text-xs
+                                      text-gray-500
+                                      mt-1">
+
+                                Tournaments
+
+                            </p>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3 class="gaming-font
+                                       text-2xl
+                                       font-bold">
+
+                                ₹5L+
+
+                            </h3>
+
+                            <p class="text-xs
+                                      text-gray-500
+                                      mt-1">
+
+                                Prize Distributed
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FEATURED TOURNAMENT
+                ================================================== -->
+
+                <div class="relative">
+
+                    <div class="absolute
+                                -inset-5
+                                bg-purple-600/20
+                                blur-3xl
+                                rounded-full">
+                    </div>
+
+
+                    <div class="relative
+                                glass
+                                rounded-3xl
+                                p-7
+                                border
+                                border-purple-500/20">
+
+
+                        <div class="flex
+                                    items-center
+                                    justify-between
+                                    mb-6">
+
+                            <div>
+
+                                <p class="text-xs
+                                          text-purple-400
+                                          font-semibold
+                                          tracking-widest">
+
+                                    FEATURED MATCH
+
+                                </p>
+
+
+                                <h3 class="gaming-font
+                                           text-2xl
+                                           font-bold
+                                           mt-2">
+
+                                    REVENGE OF WARRIORS
+
+                                </h3>
+
+                            </div>
+
+
+                            <span class="px-3
+                                         py-1
+                                         rounded-full
+                                         bg-green-500/10
+                                         text-green-400
+                                         text-xs">
+
+                                OPEN
+
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="rounded-2xl
+                                    bg-black/40
+                                    p-6
+                                    mb-5">
+
+                            <div class="grid
+                                        grid-cols-2
+                                        gap-5">
+
+
+                                <div>
+
+                                    <p class="text-gray-500
+                                              text-xs">
+
+                                        MAP
+
+                                    </p>
+
+                                    <p class="font-semibold
+                                              mt-1">
+
+                                        Erangel
+
+                                    </p>
+
+                                </div>
+
+
+                                <div>
+
+                                    <p class="text-gray-500
+                                              text-xs">
+
+                                        MODE
+
+                                    </p>
+
+                                    <p class="font-semibold
+                                              mt-1">
+
+                                        Squad
+
+                                    </p>
+
+                                </div>
+
+
+                                <div>
+
+                                    <p class="text-gray-500
+                                              text-xs">
+
+                                        ENTRY FEE
+
+                                    </p>
+
+                                    <p class="font-semibold
+                                              text-cyan-400
+                                              mt-1">
+
+                                        ₹60
+
+                                    </p>
+
+                                </div>
+
+
+                                <div>
+
+                                    <p class="text-gray-500
+                                              text-xs">
+
+                                        PRIZE POOL
+
+                                    </p>
+
+                                    <p class="font-semibold
+                                              text-purple-400
+                                              mt-1">
+
+                                        ₹750
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="flex
+                                    items-center
+                                    justify-between
+                                    text-sm
+                                    mb-5">
+
+
+                            <div>
+
+                                <span class="text-gray-500">
+                                    Date
+                                </span>
+
+                                <p class="font-medium">
+                                    13 Sep 2026
+                                </p>
+
+                            </div>
+
+
+                            <div class="text-right">
+
+                                <span class="text-gray-500">
+                                    Time
+                                </span>
+
+                                <p class="font-medium">
+                                    9:00 PM
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <a href="{% url 'login' %}"
+                           class="block
+                                  text-center
+                                  py-3.5
+                                  rounded-xl
+                                  bg-white
+                                  text-black
+                                  font-semibold
+                                  hover:bg-gray-200
+                                  transition">
+
+                            View Tournament
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         TOURNAMENTS
+    ========================================================= -->
+
+    <section id="tournaments"
+             class="py-24
+                    bg-[#07070d]">
+
+        <div class="max-w-7xl
+                    mx-auto
+                    px-6">
+
+
+            <!-- =================================================
+                 SECTION HEADER
+            ================================================== -->
+
+            <div class="flex
+                        flex-col
+                        md:flex-row
+                        md:items-end
+                        justify-between
+                        gap-5
+                        mb-12">
+
+
+                <div>
+
+                    <p class="text-purple-400
+                              text-sm
+                              font-semibold
+                              tracking-widest">
+
+                        COMPETE NOW
+
+                    </p>
+
+
+                    <h2 class="gaming-font
+                               text-3xl
+                               md:text-4xl
+                               font-bold
+                               mt-3">
+
+                        Upcoming Tournaments
+
+                    </h2>
+
+
+                    <p class="text-gray-500
+                              mt-3">
+
+                        Choose a tournament and join the battle.
+
+                    </p>
+
+                </div>
+
+
+                <!-- TOTAL TOURNAMENTS -->
+
+                <div class="glass
+                            rounded-xl
+                            px-5
+                            py-3">
+
+                    <span class="text-gray-400
+                                 text-sm">
+
+                        Total Tournaments:
+
+                    </span>
+
+
+                    <span class="text-cyan-400
+                                 font-bold
+                                 ml-2">
+
+                        {{ tournaments|length }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TOURNAMENT CAROUSEL
+            ================================================== -->
+
+            {% if tournaments %}
+
+            <div class="relative">
+
+
+                <!-- PREVIOUS BUTTON -->
+
+                <button id="prevTournament"
+                        type="button"
+                        aria-label="Previous tournament"
+                        class="absolute
+                               left-0
+                               top-1/2
+                               -translate-y-1/2
+                               z-20
+                               w-12
+                               h-12
+                               rounded-full
+                               bg-black/80
+                               backdrop-blur-xl
+                               border
+                               border-purple-500/30
+                               text-white
+                               text-xl
+                               hover:bg-purple-600
+                               hover:scale-110
+                               transition
+                               -ml-4
+                               shadow-neon">
+
+                    ❮
+
+                </button>
+
+
+
+                <!-- CAROUSEL VIEWPORT -->
+
+                <div class="overflow-hidden px-2">
+
+
+                    <!-- CAROUSEL TRACK -->
+
+                    <div id="tournamentCarousel"
+                         class="flex
+                                gap-7
+                                transition-transform
+                                duration-500
+                                ease-in-out">
+
+
+                        {% for tournament in tournaments %}
+
+
+                        <!-- =================================================
+                             TOURNAMENT SLIDE
+                        ================================================== -->
+
+                        <div class="tournament-slide
+                                    flex-shrink-0
+                                    w-full
+                                    md:w-[calc(50%-14px)]
+                                    lg:w-[calc(33.333%-18.67px)]">
+
+
+                            <!-- TOURNAMENT CARD -->
+
+                            <div class="tournament-card
+                                        glass
+                                        rounded-2xl
+                                        overflow-hidden
+                                        h-full
+                                        flex
+                                        flex-col">
+
+
+                                <!-- CARD BODY -->
+
+                                <div class="p-6
+                                            flex-1">
+
+
+                                    <!-- CLAN -->
+
+                                    <div class="flex
+                                                items-center
+                                                justify-between
+                                                mb-5">
+
+
+                                        <div>
+
+                                            <p class="text-xs
+                                                      text-gray-500
+                                                      uppercase
+                                                      tracking-wider">
+
+                                                Hosted By
+
+                                            </p>
+
+
+                                            {% if tournament.clan %}
+
+                                            <h3 class="text-lg
+                                                       font-bold
+                                                       text-cyan-400
+                                                       mt-1">
+
+                                                {{ tournament.clan.clan_name }}
+
+                                            </h3>
+
+
+                                            <p class="text-xs
+                                                      text-purple-400
+                                                      mt-1">
+
+                                                [{{ tournament.clan.clan_tag }}]
+
+                                            </p>
+
+                                            {% else %}
+
+                                            <h3 class="text-lg
+                                                       font-bold
+                                                       text-gray-400
+                                                       mt-1">
+
+                                                Unknown Clan
+
+                                            </h3>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+
+                                        <!-- CLAN LOGO -->
+
+                                        {% if tournament.clan and tournament.clan.clan_logo %}
+
+                                        <img src="{{ tournament.clan.clan_logo.url }}"
+                                             alt="{{ tournament.clan.clan_name }}"
+                                             class="w-14
+                                                    h-14
+                                                    rounded-full
+                                                    object-cover
+                                                    border
+                                                    border-purple-500/40">
+
+                                        {% else %}
+
+                                        <div class="w-14
+                                                    h-14
+                                                    rounded-full
+                                                    bg-gradient-to-r
+                                                    from-purple-600
+                                                    to-cyan-500
+                                                    flex
+                                                    items-center
+                                                    justify-center
+                                                    font-bold
+                                                    text-lg">
+
+                                            {% if tournament.clan %}
+
+                                            {{ tournament.clan.clan_name|first }}
+
+                                            {% else %}
+
+                                            T
+
+                                            {% endif %}
+
+                                        </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+
+                                    <!-- TOURNAMENT NAME -->
+
+                                    <h2 class="gaming-font
+                                               text-xl
+                                               font-bold
+                                               mb-5">
+
+                                        {{ tournament.tournament_name }}
+
+                                    </h2>
+
+
+
+                                    <!-- DETAILS -->
+
+                                    <div class="space-y-3
+                                                text-sm">
+
+
+                                        <!-- MAP -->
+
+                                        <div class="flex
+                                                    justify-between
+                                                    gap-3">
+
+                                            <span class="text-gray-400">
+                                                🗺️ Map
+                                            </span>
+
+                                            <span class="font-semibold
+                                                         text-right">
+
+                                                {{ tournament.map }}
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        <!-- GAME MODE -->
+
+                                        <div class="flex
+                                                    justify-between
+                                                    gap-3">
+
+                                            <span class="text-gray-400">
+                                                🎮 Game Mode
+                                            </span>
+
+                                            <span class="font-semibold
+                                                         text-right">
+
+                                                {{ tournament.game_mode }}
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        <!-- DATE -->
+
+                                        <div class="flex
+                                                    justify-between
+                                                    gap-3">
+
+                                            <span class="text-gray-400">
+                                                📅 Date
+                                            </span>
+
+                                            <span class="font-semibold
+                                                         text-right">
+
+                                                {% if tournament.tournament_date %}
+
+                                                {{ tournament.tournament_date|date:"d M Y" }}
+
+                                                {% else %}
+
+                                                Not set
+
+                                                {% endif %}
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        <!-- TIME -->
+
+                                        <div class="flex
+                                                    justify-between
+                                                    gap-3">
+
+                                            <span class="text-gray-400">
+                                                ⏰ Time
+                                            </span>
+
+                                            <span class="font-semibold
+                                                         text-right">
+
+                                                {% if tournament.tournament_time %}
+
+                                                {{ tournament.tournament_time|time:"h:i A" }}
+
+                                                {% else %}
+
+                                                Not set
+
+                                                {% endif %}
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        <!-- ENTRY FEE -->
+
+                                        <div class="flex
+                                                    justify-between
+                                                    gap-3">
+
+                                            <span class="text-gray-400">
+                                                💰 Entry Fee
+                                            </span>
+
+                                            <span class="text-cyan-400
+                                                         font-bold">
+
+                                                ₹{{ tournament.entry_fee }}
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        <!-- PRIZE -->
+
+                                        <div class="flex
+                                                    justify-between
+                                                    gap-3">
+
+                                            <span class="text-gray-400">
+                                                🏆 Prize Pool
+                                            </span>
+
+                                            <span class="text-purple-400
+                                                         font-bold">
+
+                                                ₹{{ tournament.prize_pool }}
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        <!-- MATCHES -->
+
+                                        <div class="flex
+                                                    justify-between
+                                                    gap-3">
+
+                                            <span class="text-gray-400">
+                                                🎯 Matches
+                                            </span>
+
+                                            <span class="font-semibold">
+
+                                                {{ tournament.matches }}
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        
+
+                                    </div>
+
+
+
+                                    <!-- DESCRIPTION -->
+
+                                    {% if tournament.description %}
+
+                                    <div class="mt-5
+                                                pt-5
+                                                border-t
+                                                border-white/10">
+
+                                        <p class="text-xs
+                                                  text-gray-500
+                                                  uppercase
+                                                  mb-2">
+
+                                            Description
+
+                                        </p>
+
+
+                                        <p class="text-sm
+                                                  text-gray-400
+                                                  leading-relaxed">
+
+                                            {{ tournament.description|truncatechars:120 }}
+
+                                        </p>
+
+                                    </div>
+
+                                    {% endif %}
+
+
+
+                                    <!-- STATUS -->
+
+                                    <div class="mt-5">
+
+                                        <span class="inline-flex
+                                                     items-center
+                                                     gap-2
+                                                     px-3
+                                                     py-1
+                                                     rounded-full
+                                                     bg-green-500/10
+                                                     text-green-400
+                                                     text-xs">
+
+                                            <span class="w-2
+                                                         h-2
+                                                         bg-green-400
+                                                         rounded-full
+                                                         animate-pulse">
+                                            </span>
+
+                                            OPEN
+
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <!-- CARD FOOTER -->
+
+                                <div class="px-6
+                                            py-4
+                                            bg-white/[0.02]
+                                            border-t
+                                            border-white/10">
+
+
+                                    <a href="{% url 'login' %}"
+                                       class="block
+                                              w-full
+                                              text-center
+                                              py-3
+                                              rounded-xl
+                                              bg-gradient-to-r
+                                              from-purple-600
+                                              to-cyan-500
+                                              font-semibold
+                                              hover:opacity-90
+                                              transition">
+
+                                        🏆 View & Join Tournament
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NEXT BUTTON -->
+
+                <button id="nextTournament"
+                        type="button"
+                        aria-label="Next tournament"
+                        class="absolute
+                               right-0
+                               top-1/2
+                               -translate-y-1/2
+                               z-20
+                               w-12
+                               h-12
+                               rounded-full
+                               bg-black/80
+                               backdrop-blur-xl
+                               border
+                               border-cyan-500/30
+                               text-white
+                               text-xl
+                               hover:bg-cyan-600
+                               hover:scale-110
+                               transition
+                               -mr-4
+                               shadow-neon">
+
+                    ❯
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CAROUSEL DOTS
+            ================================================== -->
+
+            <div id="tournamentDots"
+                 class="flex
+                        justify-center
+                        items-center
+                        gap-2
+                        mt-8">
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- =================================================
+                 NO TOURNAMENTS
+            ================================================== -->
+
+            <div class="glass
+                        rounded-2xl
+                        p-12
+                        text-center">
+
+                <div class="text-5xl mb-5">
+                    🏆
+                </div>
+
+
+                <h2 class="gaming-font
+                           text-2xl
+                           font-bold
+                           mb-3">
+
+                    No Tournaments Available
+
+                </h2>
+
+
+                <p class="text-gray-400">
+
+                    Clans haven't added any tournaments yet.
+                    Please check again later.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         HOW IT WORKS
+    ========================================================= -->
+
+    <section id="how-it-works"
+             class="py-24
+                    hero-bg">
+
+        <div class="max-w-7xl
+                    mx-auto
+                    px-6">
+
+
+            <div class="text-center
+                        max-w-2xl
+                        mx-auto">
+
+
+                <p class="text-cyan-400
+                          text-sm
+                          font-semibold
+                          tracking-widest">
+
+                    SIMPLE PROCESS
+
+                </p>
+
+
+                <h2 class="gaming-font
+                           text-3xl
+                           md:text-4xl
+                           font-bold
+                           mt-3">
+
+                    How It Works
+
+                </h2>
+
+
+                <p class="text-gray-500
+                          mt-4">
+
+                    Get your squad into the battlefield
+                    in just a few steps.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="grid
+                        md:grid-cols-4
+                        gap-6
+                        mt-14">
+
+
+                <!-- STEP 1 -->
+
+                <div class="glass
+                            p-7
+                            rounded-2xl
+                            text-center">
+
+                    <div class="w-14
+                                h-14
+                                mx-auto
+                                rounded-2xl
+                                bg-purple-500/10
+                                flex
+                                items-center
+                                justify-center
+                                text-2xl">
+
+                        👤
+
+                    </div>
+
+
+                    <h3 class="font-semibold
+                               mt-5">
+
+                        Create Account
+
+                    </h3>
+
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-3">
+
+                        Register your player account.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- STEP 2 -->
+
+                <div class="glass
+                            p-7
+                            rounded-2xl
+                            text-center">
+
+                    <div class="w-14
+                                h-14
+                                mx-auto
+                                rounded-2xl
+                                bg-cyan-500/10
+                                flex
+                                items-center
+                                justify-center
+                                text-2xl">
+
+                        👥
+
+                    </div>
+
+
+                    <h3 class="font-semibold
+                               mt-5">
+
+                        Create Team
+
+                    </h3>
+
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-3">
+
+                        Build your squad and add players.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- STEP 3 -->
+
+                <div class="glass
+                            p-7
+                            rounded-2xl
+                            text-center">
+
+                    <div class="w-14
+                                h-14
+                                mx-auto
+                                rounded-2xl
+                                bg-pink-500/10
+                                flex
+                                items-center
+                                justify-center
+                                text-2xl">
+
+                        🎟️
+
+                    </div>
+
+
+                    <h3 class="font-semibold
+                               mt-5">
+
+                        Book Tournament
+
+                    </h3>
+
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-3">
+
+                        Select a tournament and register.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- STEP 4 -->
+
+                <div class="glass
+                            p-7
+                            rounded-2xl
+                            text-center">
+
+                    <div class="w-14
+                                h-14
+                                mx-auto
+                                rounded-2xl
+                                bg-green-500/10
+                                flex
+                                items-center
+                                justify-center
+                                text-2xl">
+
+                        🏆
+
+                    </div>
+
+
+                    <h3 class="font-semibold
+                               mt-5">
+
+                        Play & Win
+
+                    </h3>
+
+
+                    <p class="text-sm
+                              text-gray-500
+                              mt-3">
+
+                        Join the match and climb the leaderboard.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         CTA
+    ========================================================= -->
+
+    <section class="py-24">
+
+        <div class="max-w-5xl
+                    mx-auto
+                    px-6">
+
+
+            <div class="relative
+                        overflow-hidden
+                        rounded-3xl
+                        p-10
+                        md:p-16
+                        text-center
+                        bg-gradient-to-br
+                        from-purple-900/60
+                        to-cyan-900/40
+                        border
+                        border-purple-500/20">
+
+
+                <div class="absolute
+                            inset-0
+                            grid-bg
+                            opacity-50">
+                </div>
+
+
+                <div class="relative">
+
+
+                    <p class="text-cyan-400
+                              text-sm
+                              font-semibold
+                              tracking-widest">
+
+                        READY FOR BATTLE?
+
+                    </p>
+
+
+                    <h2 class="gaming-font
+                               text-3xl
+                               md:text-5xl
+                               font-bold
+                               mt-4">
+
+                        Build Your Squad.
+
+                        <br>
+
+                        Enter The Arena.
+
+                    </h2>
+
+
+                    <p class="text-gray-400
+                              max-w-xl
+                              mx-auto
+                              mt-5">
+
+                        Register today and start competing
+                        in BGMI tournaments.
+
+                    </p>
+
+
+                    <a href="/register/"
+                       class="inline-block
+                              mt-8
+                              px-8
+                              py-4
+                              rounded-xl
+                              bg-white
+                              text-black
+                              font-semibold
+                              hover:bg-gray-200
+                              transition">
+
+                        Join The Arena →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+
+    <footer class="relative
+                   bg-black
+                   border-t
+                   border-white/10
+                   overflow-hidden">
+
+        <!-- Background Glow -->
+
+        <div class="absolute
+                    -top-32
+                    left-1/2
+                    -translate-x-1/2
+                    w-96
+                    h-96
+                    bg-purple-600/10
+                    blur-3xl
+                    rounded-full">
+        </div>
+
+
+        <div class="relative
+                    max-w-7xl
+                    mx-auto
+                    px-6">
+
+
+            <!-- =================================================
+                 MAIN FOOTER
+            ================================================== -->
+
+            <div class="grid
+                        grid-cols-1
+                        sm:grid-cols-2
+                        lg:grid-cols-4
+                        gap-10
+                        py-16">
+
+
+                <!-- =================================================
+                     BRAND
+                ================================================== -->
+
+                <div>
+
+
+                    <a href="/"
+                       class="flex
+                              items-center
+                              gap-3
+                              mb-5">
+
+                        <div class="w-11
+                                    h-11
+                                    rounded-xl
+                                    bg-gradient-to-br
+                                    from-purple-600
+                                    to-cyan-500
+                                    flex
+                                    items-center
+                                    justify-center
+                                    shadow-neon">
+
+                            <span class="text-xl">
+                                🎮
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2 class="gaming-font
+                                       font-bold
+                                       text-lg
+                                       tracking-wider
+                                       text-white">
+
+                                BGMI
+
+                                <span class="gradient-text">
+                                    ARENA
+                                </span>
+
+                            </h2>
+
+
+                            <p class="text-[9px]
+                                      text-gray-500
+                                      tracking-[3px]">
+
+                                TOURNAMENTS
+
+                            </p>
+
+                        </div>
+
+                    </a>
+
+
+                    <p class="text-gray-500
+                              text-sm
+                              leading-relaxed
+                              max-w-sm">
+
+                        BGMI Arena is a competitive gaming
+                        platform where players and clans can
+                        discover tournaments, register for
+                        battles and compete for exciting prizes.
+
+                    </p>
+
+
+                    <!-- SOCIAL ICONS -->
+
+                    <div class="flex
+                                items-center
+                                gap-3
+                                mt-6">
+
+
+                        <a href="#"
+                           class="w-10
+                                  h-10
+                                  rounded-xl
+                                  glass
+                                  flex
+                                  items-center
+                                  justify-center
+                                  text-gray-400
+                                  hover:text-white
+                                  hover:border-purple-500/50
+                                  hover:bg-purple-500/10
+                                  transition">
+
+                            📷
+
+                        </a>
+
+
+                        <a href="#"
+                           class="w-10
+                                  h-10
+                                  rounded-xl
+                                  glass
+                                  flex
+                                  items-center
+                                  justify-center
+                                  text-gray-400
+                                  hover:text-white
+                                  hover:border-cyan-500/50
+                                  hover:bg-cyan-500/10
+                                  transition">
+
+                            ▶️
+
+                        </a>
+
+
+                        <a href="#"
+                           class="w-10
+                                  h-10
+                                  rounded-xl
+                                  glass
+                                  flex
+                                  items-center
+                                  justify-center
+                                  text-gray-400
+                                  hover:text-white
+                                  hover:border-purple-500/50
+                                  hover:bg-purple-500/10
+                                  transition">
+
+                            🎮
+
+                        </a>
+
+
+                        <a href="#"
+                           class="w-10
+                                  h-10
+                                  rounded-xl
+                                  glass
+                                  flex
+                                  items-center
+                                  justify-center
+                                  text-gray-400
+                                  hover:text-white
+                                  hover:border-cyan-500/50
+                                  hover:bg-cyan-500/10
+                                  transition">
+
+                            💬
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     QUICK LINKS
+                ================================================== -->
+
+                <div>
+
+                    <h3 class="gaming-font
+                               text-sm
+                               font-bold
+                               tracking-wider
+                               text-white
+                               mb-6">
+
+                        QUICK LINKS
+
+                    </h3>
+
+
+                    <ul class="space-y-4
+                               text-sm">
+
+
+                        <li>
+
+                            <a href="/"
+                               class="text-gray-500
+                                      hover:text-purple-400
+                                      transition">
+
+                                Home
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="#tournaments"
+                               class="text-gray-500
+                                      hover:text-purple-400
+                                      transition">
+
+                                Tournaments
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="#how-it-works"
+                               class="text-gray-500
+                                      hover:text-purple-400
+                                      transition">
+
+                                How It Works
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="#features"
+                               class="text-gray-500
+                                      hover:text-purple-400
+                                      transition">
+
+                                Features
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="/register/"
+                               class="text-gray-500
+                                      hover:text-purple-400
+                                      transition">
+
+                                Create Account
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="/login/"
+                               class="text-gray-500
+                                      hover:text-purple-400
+                                      transition">
+
+                                Player Login
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TOURNAMENTS
+                ================================================== -->
+
+                <div>
+
+                    <h3 class="gaming-font
+                               text-sm
+                               font-bold
+                               tracking-wider
+                               text-white
+                               mb-6">
+
+                        TOURNAMENTS
+
+                    </h3>
+
+
+                    <ul class="space-y-4
+                               text-sm">
+
+
+                        <li>
+
+                            <a href="#tournaments"
+                               class="text-gray-500
+                                      hover:text-cyan-400
+                                      transition">
+
+                                🏆 Upcoming Tournaments
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="#tournaments"
+                               class="text-gray-500
+                                      hover:text-cyan-400
+                                      transition">
+
+                                🎮 Squad Matches
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="#tournaments"
+                               class="text-gray-500
+                                      hover:text-cyan-400
+                                      transition">
+
+                                👤 Solo Matches
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="#tournaments"
+                               class="text-gray-500
+                                      hover:text-cyan-400
+                                      transition">
+
+                                👥 Duo Matches
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="#features"
+                               class="text-gray-500
+                                      hover:text-cyan-400
+                                      transition">
+
+                                📊 Leaderboard
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a href="/register/"
+                               class="text-gray-500
+                                      hover:text-cyan-400
+                                      transition">
+
+                                🎟️ Join Tournament
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     GET STARTED
+                ================================================== -->
+
+                <div>
+
+                    <h3 class="gaming-font
+                               text-sm
+                               font-bold
+                               tracking-wider
+                               text-white
+                               mb-6">
+
+                        GET STARTED
+
+                    </h3>
+
+
+                    <p class="text-gray-500
+                              text-sm
+                              leading-relaxed
+                              mb-6">
+
+                        Ready to enter the battlefield?
+                        Create your account and start
+                        competing in BGMI tournaments.
+
+                    </p>
+
+
+                    <div class="p-5
+                                rounded-2xl
+                                border
+                                border-purple-500/20
+                                bg-purple-500/5
+                                hover:border-purple-500/50
+                                transition">
+
+
+                        <div class="flex
+                                    items-center
+                                    gap-3
+                                    mb-4">
+
+                            <div class="w-10
+                                        h-10
+                                        rounded-xl
+                                        bg-purple-500/10
+                                        flex
+                                        items-center
+                                        justify-center">
+
+                                🎮
+
+                            </div>
+
+
+                            <div>
+
+                                <h4 class="text-white
+                                           font-semibold
+                                           text-sm">
+
+                                    Join BGMI Arena
+
+                                </h4>
+
+                                <p class="text-gray-600
+                                          text-xs">
+
+                                    Create your player account
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- REGISTER -->
+
+                        <a href="/register/"
+                           class="block
+                                  w-full
+                                  text-center
+                                  px-5
+                                  py-3
+                                  rounded-xl
+                                  bg-gradient-to-r
+                                  from-purple-600
+                                  to-cyan-500
+                                  text-white
+                                  font-bold
+                                  text-sm
+                                  hover:scale-105
+                                  transition
+                                  shadow-lg">
+
+                            REGISTER NOW →
+
+                        </a>
+
+
+                        <!-- LOGIN -->
+
+                        <a href="/login/"
+                           class="block
+                                  text-center
+                                  mt-3
+                                  text-gray-500
+                                  hover:text-cyan-400
+                                  text-xs
+                                  transition">
+
+                            Already have an account?
+                            Login
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================= -->
+
+    <script>
+
+        /* =====================================================
+           NAVBAR SCROLL HIDE / SHOW
+        ====================================================== */
+
+        const navbar =
+            document.getElementById("navbar");
+
+        let lastScrollTop = 0;
+
+        let scrollTimeout;
+
+
+        window.addEventListener(
+            "scroll",
+            function () {
+
+                const currentScroll =
+                    window.pageYOffset ||
+                    document.documentElement.scrollTop;
+
+
+                /*
+                 * Always show navbar when
+                 * user is at the very top
+                 */
+
+                if (currentScroll <= 10) {
+
+                    navbar.style.transform =
+                        "translateY(0)";
+
+                    lastScrollTop =
+                        currentScroll;
+
+                    return;
+
+                }
+
+
+                /*
+                 * SCROLL DOWN
+                 * Hide navbar
+                 */
+
+                if (currentScroll > lastScrollTop) {
+
+                    navbar.style.transform =
+                        "translateY(-100%)";
+
+                }
+
+
+                /*
+                 * SCROLL UP
+                 * Show navbar
+                 */
+
+                else {
+
+                    navbar.style.transform =
+                        "translateY(0)";
+
+                }
+
+
+                lastScrollTop =
+                    currentScroll <= 0
+                        ? 0
+                        : currentScroll;
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+
+        /* =====================================================
+           TOURNAMENT CAROUSEL
+        ====================================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                const carousel =
+                    document.getElementById(
+                        "tournamentCarousel"
+                    );
+
+
+                const slides =
+                    document.querySelectorAll(
+                        ".tournament-slide"
+                    );
+
+
+                const prevButton =
+                    document.getElementById(
+                        "prevTournament"
+                    );
+
+
+                const nextButton =
+                    document.getElementById(
+                        "nextTournament"
+                    );
+
+
+                const dotsContainer =
+                    document.getElementById(
+                        "tournamentDots"
+                    );
+
+
+                if (
+                    !carousel ||
+                    slides.length === 0 ||
+                    !prevButton ||
+                    !nextButton ||
+                    !dotsContainer
+                ) {
+
+                    return;
+
+                }
+
+
+                let currentIndex = 0;
+
+
+
+                /* =================================================
+                   GET VISIBLE CARD COUNT
+                ================================================== */
+
+                function getVisibleCards() {
+
+                    if (window.innerWidth >= 1024) {
+
+                        return 3;
+
+                    }
+
+
+                    if (window.innerWidth >= 768) {
+
+                        return 2;
+
+                    }
+
+
+                    return 1;
+
+                }
+
+
+
+                /* =================================================
+                   GET MAX INDEX
+                ================================================== */
+
+                function getMaxIndex() {
+
+                    const visibleCards =
+                        getVisibleCards();
+
+
+                    return Math.max(
+                        0,
+                        slides.length -
+                        visibleCards
+                    );
+
+                }
+
+
+
+                /* =================================================
+                   CREATE DOTS
+                ================================================== */
+
+                function createDots() {
+
+                    dotsContainer.innerHTML = "";
+
+
+                    const totalDots =
+                        getMaxIndex() + 1;
+
+
+                    for (
+                        let i = 0;
+                        i < totalDots;
+                        i++
+                    ) {
+
+
+                        const dot =
+                            document.createElement(
+                                "button"
+                            );
+
+
+                        dot.type =
+                            "button";
+
+
+                        dot.setAttribute(
+                            "aria-label",
+                            "Go to tournament " +
+                            (i + 1)
+                        );
+
+
+                        dot.className =
+                            "w-2.5 h-2.5 " +
+                            "rounded-full " +
+                            "bg-gray-600 " +
+                            "transition-all " +
+                            "duration-300";
+
+
+                        dot.addEventListener(
+                            "click",
+                            function () {
+
+                                currentIndex =
+                                    i;
+
+                                updateCarousel();
+
+                            }
+                        );
+
+
+                        dotsContainer.appendChild(
+                            dot
+                        );
+
+                    }
+
+                }
+
+
+
+                /* =================================================
+                   UPDATE DOTS
+                ================================================== */
+
+                function updateDots() {
+
+                    const dots =
+                        dotsContainer.querySelectorAll(
+                            "button"
+                        );
+
+
+                    dots.forEach(
+                        function (
+                            dot,
+                            index
+                        ) {
+
+
+                            if (
+                                index ===
+                                currentIndex
+                            ) {
+
+
+                                dot.classList.remove(
+                                    "bg-gray-600"
+                                );
+
+
+                                dot.classList.add(
+                                    "bg-purple-500",
+                                    "w-7"
+                                );
+
+                            }
+
+                            else {
+
+
+                                dot.classList.remove(
+                                    "bg-purple-500",
+                                    "w-7"
+                                );
+
+
+                                dot.classList.add(
+                                    "bg-gray-600"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+
+                /* =================================================
+                   UPDATE CAROUSEL
+                ================================================== */
+
+                function updateCarousel() {
+
+
+                    const visibleCards =
+                        getVisibleCards();
+
+
+                    const movePercentage =
+                        100 /
+                        visibleCards;
+
+
+                    carousel.style.transform =
+                        "translateX(-" +
+                        (
+                            currentIndex *
+                            movePercentage
+                        ) +
+                        "%)";
+
+
+                    updateDots();
+
+
+
+                    /* =================================================
+                       PREVIOUS BUTTON
+                    ================================================== */
+
+                    if (
+                        currentIndex <= 0
+                    ) {
+
+
+                        prevButton.disabled =
+                            true;
+
+
+                        prevButton.classList.add(
+                            "opacity-40",
+                            "cursor-not-allowed"
+                        );
+
+                    }
+
+                    else {
+
+
+                        prevButton.disabled =
+                            false;
+
+
+                        prevButton.classList.remove(
+                            "opacity-40",
+                            "cursor-not-allowed"
+                        );
+
+                    }
+
+
+
+                    /* =================================================
+                       NEXT BUTTON
+                    ================================================== */
+
+                    if (
+                        currentIndex >=
+                        getMaxIndex()
+                    ) {
+
+
+                        nextButton.disabled =
+                            true;
+
+
+                        nextButton.classList.add(
+                            "opacity-40",
+                            "cursor-not-allowed"
+                        );
+
+                    }
+
+                    else {
+
+
+                        nextButton.disabled =
+                            false;
+
+
+                        nextButton.classList.remove(
+                            "opacity-40",
+                            "cursor-not-allowed"
+                        );
+
+                    }
+
+                }
+
+
+
+                /* =================================================
+                   NEXT BUTTON
+                ================================================== */
+
+                nextButton.addEventListener(
+                    "click",
+                    function () {
+
+
+                        const maxIndex =
+                            getMaxIndex();
+
+
+                        if (
+                            currentIndex <
+                            maxIndex
+                        ) {
+
+
+                            currentIndex++;
+
+
+                            updateCarousel();
+
+                        }
+
+                    }
+                );
+
+
+
+                /* =================================================
+                   PREVIOUS BUTTON
+                ================================================== */
+
+                prevButton.addEventListener(
+                    "click",
+                    function () {
+
+
+                        if (
+                            currentIndex >
+                            0
+                        ) {
+
+
+                            currentIndex--;
+
+
+                            updateCarousel();
+
+                        }
+
+                    }
+                );
+
+
+
+                /* =================================================
+                   WINDOW RESIZE
+                ================================================== */
+
+                window.addEventListener(
+                    "resize",
+                    function () {
+
+
+                        const maxIndex =
+                            getMaxIndex();
+
+
+                        if (
+                            currentIndex >
+                            maxIndex
+                        ) {
+
+                            currentIndex =
+                                maxIndex;
+
+                        }
+
+
+                        createDots();
+
+                        updateCarousel();
+
+                    }
+                );
+
+
+
+                /* =================================================
+                   INITIALIZE
+                ================================================== */
+
+                createDots();
+
+                updateCarousel();
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

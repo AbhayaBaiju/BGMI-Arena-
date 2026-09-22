@@ -1,0 +1,2648 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | Add Tournament</title>
+
+
+    <!-- =========================================================
+         TAILWIND CSS
+    ========================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =========================================================
+         GOOGLE FONTS
+    ========================================================== -->
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        body {
+
+            font-family: 'Poppins', sans-serif;
+
+            background: #050509;
+
+        }
+
+
+        .orbitron {
+
+            font-family: 'Orbitron', sans-serif;
+
+        }
+
+
+        .glass {
+
+            background: rgba(15, 15, 25, 0.85);
+
+            backdrop-filter: blur(12px);
+
+            border: 1px solid rgba(168, 85, 247, 0.25);
+
+        }
+
+
+        .grid-bg {
+
+            background-image:
+
+                linear-gradient(
+                    rgba(168, 85, 247, 0.06) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(6, 182, 212, 0.06) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+        }
+
+
+        .input-box {
+
+            background: rgba(255, 255, 255, 0.04);
+
+            border: 1px solid rgba(168, 85, 247, 0.3);
+
+            color: white;
+
+            transition: all 0.25s ease;
+
+        }
+
+
+        .input-box:focus {
+
+            outline: none;
+
+            border-color: #06b6d4;
+
+            box-shadow:
+                0 0 12px rgba(6, 182, 212, 0.25);
+
+        }
+
+
+        .input-error {
+
+            border-color: #ef4444 !important;
+
+            box-shadow:
+                0 0 0 2px rgba(239, 68, 68, 0.10);
+
+        }
+
+
+        .input-success {
+
+            border-color: #22c55e !important;
+
+            box-shadow:
+                0 0 0 2px rgba(34, 197, 94, 0.08);
+
+        }
+
+
+        .error-message {
+
+            display: none;
+
+            color: #f87171;
+
+            font-size: 12px;
+
+            margin-top: 6px;
+
+        }
+
+
+        .error-message.show {
+
+            display: block;
+
+        }
+
+
+        .success-message {
+
+            color: #4ade80;
+
+            font-size: 12px;
+
+            margin-top: 6px;
+
+        }
+
+
+        select option {
+
+            background: #0f0f19;
+
+            color: white;
+
+        }
+
+
+        input[type="date"],
+        input[type="time"] {
+
+            color-scheme: dark;
+
+        }
+
+
+        .neon-button {
+
+            box-shadow:
+
+                0 0 10px rgba(168, 85, 247, 0.25),
+
+                0 0 20px rgba(6, 182, 212, 0.10);
+
+        }
+
+
+        .neon-button:hover {
+
+            box-shadow:
+
+                0 0 15px rgba(168, 85, 247, 0.45),
+
+                0 0 30px rgba(6, 182, 212, 0.20);
+
+        }
+
+
+        .neon-button:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none !important;
+
+        }
+
+
+        .prize-warning {
+
+            color: #f87171;
+
+            font-size: 12px;
+
+            margin-top: 8px;
+
+            display: none;
+
+        }
+
+
+        .prize-warning.show {
+
+            display: block;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white min-h-screen grid-bg">
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="fixed
+                top-0
+                left-0
+                right-0
+                z-50
+
+                bg-black/70
+                backdrop-blur-xl
+
+                border-b
+                border-white/10">
+
+
+    <div class="max-w-7xl
+                mx-auto
+                px-6">
+
+
+        <div class="flex
+                    items-center
+                    justify-between
+                    h-20">
+
+
+            <!-- LOGO -->
+
+            <a href="{% url 'index' %}"
+               class="flex
+                      items-center
+                      gap-3">
+
+
+                <div class="w-11
+                            h-11
+                            rounded-xl
+
+                            bg-gradient-to-br
+                            from-purple-600
+                            to-cyan-500
+
+                            flex
+                            items-center
+                            justify-center
+
+                            shadow-neon">
+
+                    ⚔️
+
+                </div>
+
+
+                <div>
+
+                    <h1 class="gaming-font
+                               font-bold
+                               text-lg
+                               tracking-wider">
+
+                        BGMI
+
+                        <span class="gradient-text">
+
+                            ARENA
+
+                        </span>
+
+                    </h1>
+
+
+                    <p class="text-[10px]
+                              text-gray-500
+                              tracking-[3px]">
+
+                        CLAN PANEL
+
+                    </p>
+
+                </div>
+
+
+            </a>
+
+
+            <!-- RIGHT SIDE -->
+
+            <div class="flex
+                        items-center
+                        gap-3
+                        sm:gap-4">
+
+
+                <div class="hidden md:flex
+                            items-center
+                            gap-3
+                            text-sm">
+
+
+                    <!-- DASHBOARD -->
+
+                    <a href="{% url 'clan_dashboard' %}"
+
+                       class="px-5
+                              py-2.5
+
+                              rounded-xl
+
+                              text-slate-300
+
+                              border
+                              border-white/10
+
+                              hover:border-purple-500/40
+                              hover:text-purple-400
+
+                              transition
+                              duration-300">
+
+                        🏠 Dashboard
+
+                    </a>
+
+
+                    <!-- BOOKINGS -->
+
+                    <a href="{% url 'view_booking' %}"
+
+                       class="px-5
+                              py-2.5
+
+                              rounded-xl
+
+                              text-slate-300
+
+                              border
+                              border-white/10
+
+                              hover:border-cyan-500/40
+                              hover:text-cyan-400
+
+                              transition
+                              duration-300">
+
+                        👥 Bookings
+
+                    </a>
+
+
+                    <!-- PROFILE -->
+
+                    <a href="{% url 'clan_profile' %}"
+
+                       class="px-5
+                              py-2.5
+
+                              rounded-xl
+
+                              bg-gradient-to-r
+                              from-purple-600
+                              to-cyan-500
+
+                              text-white
+                              font-semibold
+
+                              hover:opacity-90
+                              hover:scale-105
+
+                              transition
+                              duration-300
+
+                              shadow-lg
+                              shadow-purple-500/20">
+
+                        👤 Profile
+
+                    </a>
+
+
+                </div>
+
+
+                <!-- LOGOUT -->
+
+                <a href="{% url 'logout' %}"
+
+                   class="hidden
+                          sm:block
+
+                          px-4
+                          py-2
+
+                          rounded-lg
+
+                          bg-red-500/10
+
+                          text-red-400
+
+                          border
+                          border-red-500/20
+
+                          hover:bg-red-500
+                          hover:text-white
+
+                          transition
+
+                          text-sm">
+
+                    Logout
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</nav>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="pt-32 pb-16 px-4">
+
+    <div class="max-w-5xl mx-auto">
+
+
+        <!-- =================================================
+             HEADING
+        ================================================== -->
+
+        <div class="text-center mb-10">
+
+            <h1
+                class="orbitron
+                       text-3xl
+                       md:text-5xl
+                       font-bold"
+            >
+
+                <span class="text-purple-400">
+                    CREATE
+                </span>
+
+                <span class="text-cyan-400">
+                    TOURNAMENT
+                </span>
+
+            </h1>
+
+
+            <p class="text-gray-400 mt-3">
+
+                Create a new BGMI tournament for your clan
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM CARD
+        ================================================== -->
+
+        <div
+            class="glass
+                   rounded-2xl
+                   p-6
+                   md:p-10
+                   shadow-2xl"
+        >
+
+
+            <form
+                method="POST"
+                action="{% url 'add_tournament' %}"
+                id="tournamentForm"
+                novalidate
+            >
+
+                {% csrf_token %}
+
+
+
+                <!-- =========================================
+                     TOURNAMENT DETAILS
+                ========================================== -->
+
+                <h2
+                    class="orbitron
+                           text-xl
+                           text-purple-400
+                           mb-6"
+                >
+
+                    Tournament Details
+
+                </h2>
+
+
+                <div
+                    class="grid
+                           grid-cols-1
+                           md:grid-cols-2
+                           gap-6"
+                >
+
+
+                    <!-- TOURNAMENT NAME -->
+
+                    <div class="md:col-span-2">
+
+                        <label
+                            for="tournament_name"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Tournament Name
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="tournament_name"
+                            name="tournament_name"
+                            placeholder="Enter tournament name"
+                            maxlength="200"
+                            autocomplete="off"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="tournament_name_error"
+                           class="error-message">
+
+                            Tournament name must be 3–200 characters.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- MAP -->
+
+                    <div>
+
+                        <label
+                            for="map"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Map
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <select
+                            id="map"
+                            name="map"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+                            <option value="">
+                                Select Map
+                            </option>
+
+                            <option value="Erangel">
+                                Erangel
+                            </option>
+
+                            <option value="Miramar">
+                                Miramar
+                            </option>
+
+                            <option value="Sanhok">
+                                Sanhok
+                            </option>
+
+                            <option value="Livik">
+                                Livik
+                            </option>
+
+                            <option value="Rondo">
+                                Rondo
+                            </option>
+
+                            <option value="Vikendi">
+                                Vikendi
+                            </option>
+
+                        </select>
+
+
+                        <p id="map_error"
+                           class="error-message">
+
+                            Please select a map.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- GAME MODE -->
+
+                    <div>
+
+                        <label
+                            for="game_mode"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Game Mode
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <select
+                            id="game_mode"
+                            name="game_mode"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+                            <option value="">
+                                Select Game Mode
+                            </option>
+
+                            <option value="Solo">
+                                Solo
+                            </option>
+
+                            <option value="Duo">
+                                Duo
+                            </option>
+
+                            <option value="Squad">
+                                Squad
+                            </option>
+
+                        </select>
+
+
+                        <p id="game_mode_error"
+                           class="error-message">
+
+                            Please select a game mode.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- DATE -->
+
+                    <div>
+
+                        <label
+                            for="tournament_date"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Tournament Date
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="date"
+                            id="tournament_date"
+                            name="tournament_date"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="tournament_date_error"
+                           class="error-message">
+
+                            Tournament date cannot be in the past.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- TIME -->
+
+                    <div>
+
+                        <label
+                            for="tournament_time"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Tournament Time
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="time"
+                            id="tournament_time"
+                            name="tournament_time"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="tournament_time_error"
+                           class="error-message">
+
+                            Please select a tournament time.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     ENTRY & PRIZE DETAILS
+                ========================================== -->
+
+                <h2
+                    class="orbitron
+                           text-xl
+                           text-cyan-400
+                           mt-10
+                           mb-6"
+                >
+
+                    Entry & Prize Details
+
+                </h2>
+
+
+                <div
+                    class="grid
+                           grid-cols-1
+                           md:grid-cols-2
+                           gap-6"
+                >
+
+
+                    <!-- ENTRY FEE -->
+
+                    <div>
+
+                        <label
+                            for="entry_fee"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Entry Fee (₹)
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="entry_fee"
+                            name="entry_fee"
+                            min="0"
+                            step="0.01"
+                            placeholder="Example: 60"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="entry_fee_error"
+                           class="error-message">
+
+                            Entry fee must be 0 or greater.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- PRIZE POOL -->
+
+                    <div>
+
+                        <label
+                            for="prize_pool"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Prize Pool (₹)
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="prize_pool"
+                            name="prize_pool"
+                            min="0"
+                            step="0.01"
+                            placeholder="Example: 750"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="prize_pool_error"
+                           class="error-message">
+
+                            Prize pool must be 0 or greater.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- FIRST PRIZE -->
+
+                    <div>
+
+                        <label
+                            for="first_prize"
+                            class="block
+                                   text-sm
+                                   text-yellow-400
+                                   mb-2"
+                        >
+
+                            🥇 First Prize (₹)
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="first_prize"
+                            name="first_prize"
+                            min="0"
+                            step="0.01"
+                            placeholder="Example: 500"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="first_prize_error"
+                           class="error-message">
+
+                            First prize must be 0 or greater.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- SECOND PRIZE -->
+
+                    <div>
+
+                        <label
+                            for="second_prize"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            🥈 Second Prize (₹)
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="second_prize"
+                            name="second_prize"
+                            min="0"
+                            step="0.01"
+                            placeholder="Example: 250"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="second_prize_error"
+                           class="error-message">
+
+                            Second prize must be 0 or greater.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- THIRD PRIZE -->
+
+                    <div>
+
+                        <label
+                            for="third_prize"
+                            class="block
+                                   text-sm
+                                   text-orange-400
+                                   mb-2"
+                        >
+
+                            🥉 Third Prize (₹)
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="third_prize"
+                            name="third_prize"
+                            min="0"
+                            step="0.01"
+                            placeholder="Example: 0"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="third_prize_error"
+                           class="error-message">
+
+                            Third prize must be 0 or greater.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- TOTAL SLOTS -->
+
+                    <div>
+
+                        <label
+                            for="total_slots"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Total Slots
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="total_slots"
+                            name="total_slots"
+                            min="1"
+                            step="1"
+                            placeholder="Example: 100"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="total_slots_error"
+                           class="error-message">
+
+                            Total slots must be at least 1.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- MATCHES -->
+
+                    <div>
+
+                        <label
+                            for="matches"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Number of Matches
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="matches"
+                            name="matches"
+                            min="1"
+                            step="1"
+                            placeholder="Example: 2"
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3"
+                        >
+
+
+                        <p id="matches_error"
+                           class="error-message">
+
+                            Number of matches must be at least 1.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     PRIZE SUMMARY
+                ========================================== -->
+
+                <div
+                    class="mt-8
+                           p-5
+                           rounded-xl
+                           border
+                           border-purple-500/20
+                           bg-purple-500/5"
+                >
+
+                    <h3
+                        class="orbitron
+                               text-sm
+                               text-purple-400
+                               mb-4"
+                    >
+
+                        🏆 PRIZE DISTRIBUTION
+
+                    </h3>
+
+
+                    <div
+                        class="grid
+                               grid-cols-1
+                               sm:grid-cols-3
+                               gap-4"
+                    >
+
+
+                        <!-- FIRST -->
+
+                        <div
+                            class="rounded-lg
+                                   border
+                                   border-yellow-500/20
+                                   bg-yellow-500/5
+                                   p-4
+                                   text-center"
+                        >
+
+                            <div class="text-2xl">
+                                🥇
+                            </div>
+
+                            <p class="text-gray-400 text-xs mt-2">
+                                FIRST PRIZE
+                            </p>
+
+                            <p
+                                id="firstPrizeDisplay"
+                                class="text-yellow-400
+                                       text-xl
+                                       font-bold
+                                       mt-1"
+                            >
+
+                                ₹0
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- SECOND -->
+
+                        <div
+                            class="rounded-lg
+                                   border
+                                   border-gray-500/20
+                                   bg-white/5
+                                   p-4
+                                   text-center"
+                        >
+
+                            <div class="text-2xl">
+                                🥈
+                            </div>
+
+                            <p class="text-gray-400 text-xs mt-2">
+                                SECOND PRIZE
+                            </p>
+
+                            <p
+                                id="secondPrizeDisplay"
+                                class="text-gray-300
+                                       text-xl
+                                       font-bold
+                                       mt-1"
+                            >
+
+                                ₹0
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- THIRD -->
+
+                        <div
+                            class="rounded-lg
+                                   border
+                                   border-orange-500/20
+                                   bg-orange-500/5
+                                   p-4
+                                   text-center"
+                        >
+
+                            <div class="text-2xl">
+                                🥉
+                            </div>
+
+                            <p class="text-gray-400 text-xs mt-2">
+                                THIRD PRIZE
+                            </p>
+
+                            <p
+                                id="thirdPrizeDisplay"
+                                class="text-orange-400
+                                       text-xl
+                                       font-bold
+                                       mt-1"
+                            >
+
+                                ₹0
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRIZE TOTAL -->
+
+                    <div class="mt-5 text-center">
+
+                        <p class="text-gray-500 text-xs">
+
+                            Prize Distribution Total
+
+                        </p>
+
+
+                        <p
+                            id="prizeTotalDisplay"
+                            class="text-cyan-400
+                                   text-lg
+                                   font-bold
+                                   mt-1"
+                        >
+
+                            ₹0
+
+                        </p>
+
+
+                        <p
+                            id="prizeWarning"
+                            class="prize-warning"
+                        >
+
+                            Prize distribution must equal the total
+                            prize pool.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     MATCH DETAILS
+                ========================================== -->
+
+                <h2
+                    class="orbitron
+                           text-xl
+                           text-purple-400
+                           mt-10
+                           mb-6"
+                >
+
+                    Match Details
+
+                </h2>
+
+
+                <div
+                    class="grid
+                           grid-cols-1
+                           md:grid-cols-2
+                           gap-6"
+                >
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="md:col-span-2">
+
+                        <label
+                            for="description"
+                            class="block
+                                   text-sm
+                                   text-gray-300
+                                   mb-2"
+                        >
+
+                            Description
+
+                            <span class="text-red-400">*</span>
+
+                        </label>
+
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="5"
+                            maxlength="1000"
+                            placeholder="Enter tournament rules, room details, special instructions..."
+                            required
+                            class="input-box
+                                   w-full
+                                   rounded-lg
+                                   px-4
+                                   py-3
+                                   resize-none"
+                        ></textarea>
+
+
+                        <div class="flex justify-between mt-2">
+
+                            <p id="description_error"
+                               class="error-message">
+
+                                Description must contain
+                                10–1000 characters.
+
+                            </p>
+
+
+                            <p class="text-xs text-gray-500">
+
+                                <span id="descriptionCount">
+                                    0
+                                </span>
+                                / 1000
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     GENERAL FORM ERROR
+                ========================================== -->
+
+                <div
+                    id="formError"
+                    class="hidden
+                           mt-8
+                           p-4
+                           rounded-xl
+                           border
+                           border-red-500/30
+                           bg-red-500/10
+                           text-red-300
+                           text-sm"
+                >
+
+                    Please correct the highlighted fields
+                    before submitting the tournament.
+
+                </div>
+
+
+
+                <!-- =========================================
+                     BUTTONS
+                ========================================== -->
+
+                <div
+                    class="flex
+                           flex-col
+                           md:flex-row
+                           gap-4
+                           mt-10"
+                >
+
+
+                    <!-- CREATE -->
+
+                    <button
+                        type="submit"
+                        id="submitButton"
+                        class="flex-1
+                               py-3
+                               rounded-lg
+                               font-semibold
+                               orbitron
+                               bg-gradient-to-r
+                               from-purple-600
+                               to-cyan-500
+                               hover:scale-[1.02]
+                               transition
+                               duration-300
+                               neon-button"
+                    >
+
+                        CREATE TOURNAMENT
+
+                    </button>
+
+
+
+                    <!-- CANCEL -->
+
+                    <a
+                        href="{% url 'clan_dashboard' %}"
+                        class="flex-1
+                               text-center
+                               py-3
+                               rounded-lg
+                               border
+                               border-gray-600
+                               text-gray-300
+                               hover:bg-white/5
+                               transition"
+                    >
+
+                        CANCEL
+
+                    </a>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer
+    class="border-t
+           border-purple-500/10
+           py-6
+           text-center
+           text-gray-500
+           text-sm"
+>
+
+    <p>
+
+        © 2026
+
+        <span class="text-purple-400">
+            BGMI
+        </span>
+
+        <span class="text-cyan-400">
+            ARENA
+        </span>
+
+        . All Rights Reserved.
+
+    </p>
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     VALIDATION + LIVE PRIZE DISPLAY
+========================================================= -->
+
+<script>
+
+
+    /* =========================================================
+       FORM ELEMENTS
+    ========================================================== */
+
+    const form =
+        document.getElementById("tournamentForm");
+
+    const submitButton =
+        document.getElementById("submitButton");
+
+    const formError =
+        document.getElementById("formError");
+
+
+
+    /* =========================================================
+       INPUT ELEMENTS
+    ========================================================== */
+
+    const tournamentName =
+        document.getElementById("tournament_name");
+
+    const map =
+        document.getElementById("map");
+
+    const gameMode =
+        document.getElementById("game_mode");
+
+    const tournamentDate =
+        document.getElementById("tournament_date");
+
+    const tournamentTime =
+        document.getElementById("tournament_time");
+
+    const entryFee =
+        document.getElementById("entry_fee");
+
+    const prizePool =
+        document.getElementById("prize_pool");
+
+    const firstPrize =
+        document.getElementById("first_prize");
+
+    const secondPrize =
+        document.getElementById("second_prize");
+
+    const thirdPrize =
+        document.getElementById("third_prize");
+
+    const totalSlots =
+        document.getElementById("total_slots");
+
+    const matches =
+        document.getElementById("matches");
+
+    const description =
+        document.getElementById("description");
+
+
+
+    /* =========================================================
+       HELPER FUNCTIONS
+    ========================================================== */
+
+    function showError(input, errorId, message) {
+
+        input.classList.remove("input-success");
+
+        input.classList.add("input-error");
+
+        const error =
+            document.getElementById(errorId);
+
+        error.textContent = message;
+
+        error.classList.add("show");
+
+    }
+
+
+    function showSuccess(input, errorId) {
+
+        input.classList.remove("input-error");
+
+        input.classList.add("input-success");
+
+        const error =
+            document.getElementById(errorId);
+
+        error.classList.remove("show");
+
+    }
+
+
+    function clearValidation(input, errorId) {
+
+        input.classList.remove("input-error");
+
+        input.classList.remove("input-success");
+
+        document
+            .getElementById(errorId)
+            .classList.remove("show");
+
+    }
+
+
+
+    /* =========================================================
+       TOURNAMENT NAME
+    ========================================================== */
+
+    function validateTournamentName() {
+
+        const value =
+            tournamentName.value.trim();
+
+
+        if (value === "") {
+
+            showError(
+                tournamentName,
+                "tournament_name_error",
+                "Tournament name is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (value.length < 3) {
+
+            showError(
+                tournamentName,
+                "tournament_name_error",
+                "Tournament name must contain at least 3 characters."
+            );
+
+            return false;
+
+        }
+
+
+        if (value.length > 200) {
+
+            showError(
+                tournamentName,
+                "tournament_name_error",
+                "Tournament name cannot exceed 200 characters."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            tournamentName,
+            "tournament_name_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       MAP
+    ========================================================== */
+
+    function validateMap() {
+
+        if (map.value === "") {
+
+            showError(
+                map,
+                "map_error",
+                "Please select a map."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            map,
+            "map_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       GAME MODE
+    ========================================================== */
+
+    function validateGameMode() {
+
+        if (gameMode.value === "") {
+
+            showError(
+                gameMode,
+                "game_mode_error",
+                "Please select a game mode."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            gameMode,
+            "game_mode_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       DATE
+    ========================================================== */
+
+    function validateDate() {
+
+        const value =
+            tournamentDate.value;
+
+
+        if (value === "") {
+
+            showError(
+                tournamentDate,
+                "tournament_date_error",
+                "Tournament date is required."
+            );
+
+            return false;
+
+        }
+
+
+        const today =
+            new Date();
+
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        const selectedDate =
+            new Date(value + "T00:00:00");
+
+
+        if (selectedDate < today) {
+
+            showError(
+                tournamentDate,
+                "tournament_date_error",
+                "Tournament date cannot be in the past."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            tournamentDate,
+            "tournament_date_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       TIME
+    ========================================================== */
+
+    function validateTime() {
+
+        const value =
+            tournamentTime.value;
+
+
+        if (value === "") {
+
+            showError(
+                tournamentTime,
+                "tournament_time_error",
+                "Tournament time is required."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            tournamentTime,
+            "tournament_time_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       ENTRY FEE
+    ========================================================== */
+
+    function validateEntryFee() {
+
+        const value =
+            parseFloat(entryFee.value);
+
+
+        if (entryFee.value === "") {
+
+            showError(
+                entryFee,
+                "entry_fee_error",
+                "Entry fee is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (isNaN(value) || value < 0) {
+
+            showError(
+                entryFee,
+                "entry_fee_error",
+                "Entry fee must be 0 or greater."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            entryFee,
+            "entry_fee_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       PRIZE POOL
+    ========================================================== */
+
+    function validatePrizePool() {
+
+        const value =
+            parseFloat(prizePool.value);
+
+
+        if (prizePool.value === "") {
+
+            showError(
+                prizePool,
+                "prize_pool_error",
+                "Prize pool is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (isNaN(value) || value < 0) {
+
+            showError(
+                prizePool,
+                "prize_pool_error",
+                "Prize pool must be 0 or greater."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            prizePool,
+            "prize_pool_error"
+        );
+
+        validatePrizeDistribution();
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       FIRST PRIZE
+    ========================================================== */
+
+    function validateFirstPrize() {
+
+        const value =
+            parseFloat(firstPrize.value);
+
+
+        if (firstPrize.value === "") {
+
+            showError(
+                firstPrize,
+                "first_prize_error",
+                "First prize is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (isNaN(value) || value < 0) {
+
+            showError(
+                firstPrize,
+                "first_prize_error",
+                "First prize must be 0 or greater."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            firstPrize,
+            "first_prize_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       SECOND PRIZE
+    ========================================================== */
+
+    function validateSecondPrize() {
+
+        const value =
+            parseFloat(secondPrize.value);
+
+
+        if (secondPrize.value === "") {
+
+            showError(
+                secondPrize,
+                "second_prize_error",
+                "Second prize is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (isNaN(value) || value < 0) {
+
+            showError(
+                secondPrize,
+                "second_prize_error",
+                "Second prize must be 0 or greater."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            secondPrize,
+            "second_prize_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       THIRD PRIZE
+    ========================================================== */
+
+    function validateThirdPrize() {
+
+        const value =
+            parseFloat(thirdPrize.value);
+
+
+        if (thirdPrize.value === "") {
+
+            showError(
+                thirdPrize,
+                "third_prize_error",
+                "Third prize is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (isNaN(value) || value < 0) {
+
+            showError(
+                thirdPrize,
+                "third_prize_error",
+                "Third prize must be 0 or greater."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            thirdPrize,
+            "third_prize_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       PRIZE DISTRIBUTION
+    ========================================================== */
+
+    function validatePrizeDistribution() {
+
+        const pool =
+            parseFloat(prizePool.value) || 0;
+
+        const first =
+            parseFloat(firstPrize.value) || 0;
+
+        const second =
+            parseFloat(secondPrize.value) || 0;
+
+        const third =
+            parseFloat(thirdPrize.value) || 0;
+
+
+        const total =
+            first + second + third;
+
+
+        const display =
+            document.getElementById(
+                "prizeTotalDisplay"
+            );
+
+
+        const warning =
+            document.getElementById(
+                "prizeWarning"
+            );
+
+
+        display.textContent =
+            "₹" + total.toFixed(2);
+
+
+        if (
+            prizePool.value !== "" &&
+            Math.abs(total - pool) > 0.001
+        ) {
+
+            warning.textContent =
+                "Prize distribution total must equal the Prize Pool (₹" +
+                pool.toFixed(2) +
+                "). Current total: ₹" +
+                total.toFixed(2) +
+                ".";
+
+            warning.classList.add("show");
+
+            return false;
+
+        }
+
+
+        warning.classList.remove("show");
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       TOTAL SLOTS
+    ========================================================== */
+
+    function validateTotalSlots() {
+
+        const value =
+            Number(totalSlots.value);
+
+
+        if (totalSlots.value === "") {
+
+            showError(
+                totalSlots,
+                "total_slots_error",
+                "Total slots is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (
+            !Number.isInteger(value) ||
+            value < 1
+        ) {
+
+            showError(
+                totalSlots,
+                "total_slots_error",
+                "Total slots must be a whole number greater than 0."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            totalSlots,
+            "total_slots_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       MATCHES
+    ========================================================== */
+
+    function validateMatches() {
+
+        const value =
+            Number(matches.value);
+
+
+        if (matches.value === "") {
+
+            showError(
+                matches,
+                "matches_error",
+                "Number of matches is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (
+            !Number.isInteger(value) ||
+            value < 1
+        ) {
+
+            showError(
+                matches,
+                "matches_error",
+                "Number of matches must be a whole number greater than 0."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            matches,
+            "matches_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       DESCRIPTION
+    ========================================================== */
+
+    function validateDescription() {
+
+        const value =
+            description.value.trim();
+
+
+        if (value === "") {
+
+            showError(
+                description,
+                "description_error",
+                "Tournament description is required."
+            );
+
+            return false;
+
+        }
+
+
+        if (value.length < 10) {
+
+            showError(
+                description,
+                "description_error",
+                "Description must contain at least 10 characters."
+            );
+
+            return false;
+
+        }
+
+
+        if (value.length > 1000) {
+
+            showError(
+                description,
+                "description_error",
+                "Description cannot exceed 1000 characters."
+            );
+
+            return false;
+
+        }
+
+
+        showSuccess(
+            description,
+            "description_error"
+        );
+
+        return true;
+
+    }
+
+
+
+    /* =========================================================
+       DESCRIPTION COUNTER
+    ========================================================== */
+
+    const descriptionCount =
+        document.getElementById(
+            "descriptionCount"
+        );
+
+
+    description.addEventListener(
+        "input",
+        function () {
+
+            descriptionCount.textContent =
+                this.value.length;
+
+            validateDescription();
+
+        }
+    );
+
+
+
+    /* =========================================================
+       LIVE PRIZE DISPLAY
+    ========================================================== */
+
+    const firstPrizeDisplay =
+        document.getElementById(
+            "firstPrizeDisplay"
+        );
+
+    const secondPrizeDisplay =
+        document.getElementById(
+            "secondPrizeDisplay"
+        );
+
+    const thirdPrizeDisplay =
+        document.getElementById(
+            "thirdPrizeDisplay"
+        );
+
+
+    function updatePrizeDisplay() {
+
+        firstPrizeDisplay.textContent =
+            "₹" +
+            (firstPrize.value || "0");
+
+
+        secondPrizeDisplay.textContent =
+            "₹" +
+            (secondPrize.value || "0");
+
+
+        thirdPrizeDisplay.textContent =
+            "₹" +
+            (thirdPrize.value || "0");
+
+
+        validatePrizeDistribution();
+
+    }
+
+
+
+    /* =========================================================
+       REAL-TIME VALIDATION EVENTS
+    ========================================================== */
+
+    tournamentName.addEventListener(
+        "input",
+        validateTournamentName
+    );
+
+
+    map.addEventListener(
+        "change",
+        validateMap
+    );
+
+
+    gameMode.addEventListener(
+        "change",
+        validateGameMode
+    );
+
+
+    tournamentDate.addEventListener(
+        "change",
+        validateDate
+    );
+
+
+    tournamentTime.addEventListener(
+        "change",
+        validateTime
+    );
+
+
+    entryFee.addEventListener(
+        "input",
+        validateEntryFee
+    );
+
+
+    prizePool.addEventListener(
+        "input",
+        validatePrizePool
+    );
+
+
+    firstPrize.addEventListener(
+        "input",
+        function () {
+
+            validateFirstPrize();
+
+            updatePrizeDisplay();
+
+        }
+    );
+
+
+    secondPrize.addEventListener(
+        "input",
+        function () {
+
+            validateSecondPrize();
+
+            updatePrizeDisplay();
+
+        }
+    );
+
+
+    thirdPrize.addEventListener(
+        "input",
+        function () {
+
+            validateThirdPrize();
+
+            updatePrizeDisplay();
+
+        }
+    );
+
+
+    totalSlots.addEventListener(
+        "input",
+        validateTotalSlots
+    );
+
+
+    matches.addEventListener(
+        "input",
+        validateMatches
+    );
+
+
+
+    /* =========================================================
+       FORM SUBMIT
+    ========================================================== */
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+
+            const validations = [
+
+                validateTournamentName(),
+
+                validateMap(),
+
+                validateGameMode(),
+
+                validateDate(),
+
+                validateTime(),
+
+                validateEntryFee(),
+
+                validatePrizePool(),
+
+                validateFirstPrize(),
+
+                validateSecondPrize(),
+
+                validateThirdPrize(),
+
+                validateTotalSlots(),
+
+                validateMatches(),
+
+                validateDescription(),
+
+                validatePrizeDistribution()
+
+            ];
+
+
+            const isValid =
+                validations.every(
+                    result => result === true
+                );
+
+
+            if (!isValid) {
+
+                event.preventDefault();
+
+
+                formError.classList.remove(
+                    "hidden"
+                );
+
+
+                /* =========================================
+                   FIND FIRST INVALID FIELD
+                ========================================== */
+
+                const firstInvalid =
+                    document.querySelector(
+                        ".input-error"
+                    );
+
+
+                if (firstInvalid) {
+
+                    firstInvalid.scrollIntoView({
+
+                        behavior: "smooth",
+
+                        block: "center"
+
+                    });
+
+
+                    firstInvalid.focus();
+
+                }
+
+
+                return;
+
+            }
+
+
+            /* =============================================
+               VALID FORM
+            ============================================== */
+
+            formError.classList.add(
+                "hidden"
+            );
+
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                "CREATING TOURNAMENT...";
+
+
+            /*
+                Do NOT use event.preventDefault()
+                here.
+
+                Django will receive the POST request
+                together with the CSRF token.
+            */
+
+        }
+    );
+
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================== */
+
+    updatePrizeDisplay();
+
+
+</script>
+
+
+</body>
+
+</html>

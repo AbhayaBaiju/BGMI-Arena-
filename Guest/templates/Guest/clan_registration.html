@@ -1,0 +1,2644 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Clan Registration | BGMI Arena</title>
+
+    <!-- =====================================================
+         TAILWIND CSS
+    ====================================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =====================================================
+         GOOGLE FONTS
+    ====================================================== -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- =====================================================
+         TAILWIND CONFIG
+    ====================================================== -->
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        arena: "#050509",
+
+                        neon: "#a855f7",
+
+                        cyan: "#06b6d4"
+
+                    },
+
+                    fontFamily: {
+
+                        orbitron: ["Orbitron", "sans-serif"],
+
+                        poppins: ["Poppins", "sans-serif"]
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+
+    <!-- =====================================================
+         CUSTOM CSS
+    ====================================================== -->
+
+    <style>
+
+        body {
+
+            font-family: "Poppins", sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(168, 85, 247, 0.12),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(6, 182, 212, 0.10),
+                    transparent 35%
+                ),
+                #050509;
+
+            min-height: 100vh;
+
+        }
+
+
+        .grid-bg {
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+        }
+
+
+        .glass {
+
+            background: rgba(15, 15, 25, 0.78);
+
+            backdrop-filter: blur(16px);
+
+            -webkit-backdrop-filter: blur(16px);
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+        }
+
+
+        .input-box {
+
+            width: 100%;
+
+            background: rgba(255,255,255,0.04);
+
+            border: 1px solid rgba(255,255,255,0.10);
+
+            color: white;
+
+            border-radius: 0.75rem;
+
+            padding: 0.85rem 1rem;
+
+            outline: none;
+
+            transition: all 0.25s ease;
+
+        }
+
+
+        .input-box:focus {
+
+            border-color: #a855f7;
+
+            box-shadow:
+                0 0 0 2px rgba(168,85,247,0.15),
+                0 0 20px rgba(168,85,247,0.10);
+
+        }
+
+
+        .input-box::placeholder {
+
+            color: #6b7280;
+
+        }
+
+
+        select.input-box {
+
+            cursor: pointer;
+
+        }
+
+
+        select.input-box option {
+
+            background: #11111b;
+
+            color: white;
+
+        }
+
+
+        textarea.input-box {
+
+            resize: vertical;
+
+            min-height: 120px;
+
+        }
+
+
+        .field-error {
+
+            border-color: #ef4444 !important;
+
+            box-shadow:
+                0 0 0 2px rgba(239,68,68,0.10);
+
+        }
+
+
+        .field-success {
+
+            border-color: #22c55e !important;
+
+            box-shadow:
+                0 0 0 2px rgba(34,197,94,0.08);
+
+        }
+
+
+        .error-message {
+
+            display: none;
+
+            margin-top: 0.4rem;
+
+            color: #f87171;
+
+            font-size: 0.75rem;
+
+        }
+
+
+        .error-message.show {
+
+            display: block;
+
+        }
+
+
+        .success-message {
+
+            display: none;
+
+            margin-top: 0.4rem;
+
+            color: #4ade80;
+
+            font-size: 0.75rem;
+
+        }
+
+
+        .success-message.show {
+
+            display: block;
+
+        }
+
+
+        .password-strength {
+
+            height: 5px;
+
+            width: 100%;
+
+            background: rgba(255,255,255,0.08);
+
+            border-radius: 999px;
+
+            overflow: hidden;
+
+            margin-top: 8px;
+
+        }
+
+
+        .password-strength-bar {
+
+            height: 100%;
+
+            width: 0%;
+
+            transition: all 0.3s ease;
+
+        }
+
+
+        .password-strength-text {
+
+            font-size: 0.7rem;
+
+            margin-top: 4px;
+
+            color: #9ca3af;
+
+        }
+
+
+        .logo-preview {
+
+            display: none;
+
+            margin-top: 12px;
+
+            width: 100px;
+
+            height: 100px;
+
+            object-fit: cover;
+
+            border-radius: 14px;
+
+            border: 2px solid rgba(168,85,247,0.5);
+
+        }
+
+
+        .section-title {
+
+            font-family: "Orbitron", sans-serif;
+
+            letter-spacing: 0.04em;
+
+        }
+
+
+        .neon-text {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #a855f7,
+                    #06b6d4
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+        }
+
+
+        .submit-button {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #a855f7,
+                    #06b6d4
+                );
+
+            transition: all 0.3s ease;
+
+        }
+
+
+        .submit-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 30px rgba(168,85,247,0.25);
+
+        }
+
+
+        .submit-button:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none;
+
+            box-shadow: none;
+
+        }
+
+
+        .char-count {
+
+            font-size: 0.7rem;
+
+            color: #6b7280;
+
+            text-align: right;
+
+            margin-top: 4px;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="grid-bg text-white">
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="border-b border-white/10 bg-black/40">
+
+        <div class="max-w-7xl mx-auto px-6 py-5
+                    flex items-center justify-between">
+
+            <a href="{% url 'index' %}"
+               class="font-orbitron text-xl font-bold tracking-wider">
+
+                <span class="text-white">BGMI</span>
+
+                <span class="neon-text"> ARENA</span>
+
+            </a>
+
+
+            <a href="{% url 'registration_type' %}"
+               class="text-sm text-gray-400 hover:text-white transition">
+
+                ← Back
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="max-w-5xl mx-auto px-5 py-12">
+
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="text-center mb-10">
+
+            <p class="text-cyan-400 text-xs
+                      font-semibold tracking-[0.3em] uppercase mb-3">
+
+                BGMI ARENA
+
+            </p>
+
+
+            <h1 class="font-orbitron text-3xl md:text-5xl
+                       font-bold mb-4">
+
+                CREATE YOUR
+
+                <span class="neon-text">
+
+                    CLAN
+
+                </span>
+
+            </h1>
+
+
+            <p class="text-gray-400 max-w-2xl mx-auto">
+
+                Register your BGMI clan and compete
+                in exciting tournaments.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORM CONTAINER
+        ================================================== -->
+
+        <div class="glass rounded-3xl p-6 md:p-10 shadow-2xl">
+
+
+            <form method="POST"
+                  action=""
+                  enctype="multipart/form-data"
+                  id="clanRegistrationForm"
+                  novalidate>
+
+                {% csrf_token %}
+
+
+                <!-- =================================================
+                     CLAN INFORMATION
+                ================================================== -->
+
+                <div class="mb-12">
+
+
+                    <div class="flex items-center gap-3 mb-7">
+
+                        <div class="w-10 h-10 rounded-xl
+                                    bg-purple-500/10
+                                    border border-purple-500/20
+                                    flex items-center justify-center">
+
+                            <span class="text-purple-400
+                                         font-bold">
+
+                                01
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2 class="section-title text-xl
+                                       font-semibold">
+
+                                Clan Information
+
+                            </h2>
+
+                            <p class="text-xs text-gray-500">
+
+                                Basic information about your clan
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="grid md:grid-cols-2 gap-6">
+
+
+                        <!-- Clan Name -->
+
+                        <div>
+
+                            <label for="clan_name"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Clan Name
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="clan_name"
+                                   name="clan_name"
+                                   class="input-box"
+                                   placeholder="Enter clan name"
+                                   minlength="3"
+                                   maxlength="50"
+                                   autocomplete="organization"
+                                   required>
+
+
+                            <p id="clan_name_error"
+                               class="error-message">
+
+                                Clan name must be 3–50 characters.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Clan Tag -->
+
+                        <div>
+
+                            <label for="clan_tag"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Clan Tag
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="clan_tag"
+                                   name="clan_tag"
+                                   class="input-box uppercase"
+                                   placeholder="Example: LZS"
+                                   minlength="2"
+                                   maxlength="6"
+                                   autocomplete="off"
+                                   required>
+
+
+                            <p id="clan_tag_error"
+                               class="error-message">
+
+                                Clan tag must contain 2–6 letters or numbers.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Captain Name -->
+
+                        <div>
+
+                            <label for="captain_name"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Captain Name
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="captain_name"
+                                   name="captain_name"
+                                   class="input-box"
+                                   placeholder="Enter captain name"
+                                   minlength="3"
+                                   maxlength="50"
+                                   autocomplete="name"
+                                   required>
+
+
+                            <p id="captain_name_error"
+                               class="error-message">
+
+                                Enter a valid captain name.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Email -->
+
+                        <div>
+
+                            <label for="email"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Email Address
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <input type="email"
+                                   id="email"
+                                   name="email"
+                                   class="input-box"
+                                   placeholder="captain@example.com"
+                                   autocomplete="email"
+                                   required>
+
+
+                            <p id="email_error"
+                               class="error-message">
+
+                                Enter a valid email address.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Phone -->
+
+                        <div>
+
+                            <label for="phone"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Phone Number
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <input type="tel"
+                                   id="phone"
+                                   name="phone"
+                                   class="input-box"
+                                   placeholder="10 digit mobile number"
+                                   maxlength="10"
+                                   minlength="10"
+                                   inputmode="numeric"
+                                   autocomplete="tel"
+                                   required>
+
+
+                            <p id="phone_error"
+                               class="error-message">
+
+                                Enter a valid 10-digit mobile number
+                                starting with 6, 7, 8 or 9.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Clan Type -->
+
+                        <div>
+
+                            <label for="clan_type"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Clan Type
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <select id="clan_type"
+                                    name="clan_type"
+                                    class="input-box"
+                                    required>
+
+                                <option value="">
+                                    Select clan type
+                                </option>
+
+                                <option value="competitive">
+                                    Competitive
+                                </option>
+
+                                <option value="casual">
+                                    Casual
+                                </option>
+
+                                <option value="esports">
+                                    Esports
+                                </option>
+
+                            </select>
+
+
+                            <p id="clan_type_error"
+                               class="error-message">
+
+                                Please select a clan type.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     BGMI DETAILS
+                ================================================== -->
+
+                <div class="mb-12">
+
+
+                    <div class="flex items-center gap-3 mb-7">
+
+                        <div class="w-10 h-10 rounded-xl
+                                    bg-cyan-500/10
+                                    border border-cyan-500/20
+                                    flex items-center justify-center">
+
+                            <span class="text-cyan-400
+                                         font-bold">
+
+                                02
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2 class="section-title text-xl
+                                       font-semibold">
+
+                                BGMI Details
+
+                            </h2>
+
+                            <p class="text-xs text-gray-500">
+
+                                Game and team information
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="grid md:grid-cols-2 gap-6">
+
+
+                        <!-- Captain BGMI ID -->
+
+                        <div>
+
+                            <label for="captain_bgmi_id"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Captain BGMI ID
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="captain_bgmi_id"
+                                   name="captain_bgmi_id"
+                                   class="input-box"
+                                   placeholder="Enter BGMI ID"
+                                   minlength="5"
+                                   maxlength="20"
+                                   inputmode="numeric"
+                                   autocomplete="off"
+                                   required>
+
+
+                            <p id="captain_bgmi_id_error"
+                               class="error-message">
+
+                                BGMI ID must contain 5–20 digits.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Game Mode -->
+
+                        <div>
+
+                            <label for="game_mode"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Game Mode
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <select id="game_mode"
+                                    name="game_mode"
+                                    class="input-box"
+                                    required>
+
+                                <option value="">
+                                    Select game mode
+                                </option>
+
+                                <option value="squad">
+                                    Squad
+                                </option>
+
+                                <option value="duo">
+                                    Duo
+                                </option>
+
+                            </select>
+
+
+                            <p id="game_mode_error"
+                               class="error-message">
+
+                                Please select a game mode.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Member Count -->
+
+                        <div>
+
+                            <label for="member_count"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Number of Members
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <select id="member_count"
+                                    name="member_count"
+                                    class="input-box"
+                                    required>
+
+                                <option value="">
+                                    Select member count
+                                </option>
+
+                                <option value="2">
+                                    2 Members
+                                </option>
+
+                                <option value="3">
+                                    3 Members
+                                </option>
+
+                                <option value="4">
+                                    4 Members
+                                </option>
+
+                            </select>
+
+
+                            <p id="member_count_error"
+                               class="error-message">
+
+                                Please select the number of members.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Location -->
+
+                        <div>
+
+                            <label for="location"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Location
+
+                                <span class="text-gray-600">
+                                    (Optional)
+                                </span>
+
+                            </label>
+
+
+                            <input type="text"
+                                   id="location"
+                                   name="location"
+                                   class="input-box"
+                                   placeholder="City, State"
+                                   maxlength="100"
+                                   autocomplete="address-level2">
+
+
+                            <p id="location_error"
+                               class="error-message">
+
+                                Enter a valid location.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     ABOUT CLAN
+                ================================================== -->
+
+                <div class="mb-12">
+
+
+                    <div class="flex items-center gap-3 mb-7">
+
+                        <div class="w-10 h-10 rounded-xl
+                                    bg-purple-500/10
+                                    border border-purple-500/20
+                                    flex items-center justify-center">
+
+                            <span class="text-purple-400
+                                         font-bold">
+
+                                03
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2 class="section-title text-xl
+                                       font-semibold">
+
+                                About Your Clan
+
+                            </h2>
+
+                            <p class="text-xs text-gray-500">
+
+                                Tell us something about your clan
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <label for="description"
+                               class="block text-sm
+                                      font-medium
+                                      text-gray-300 mb-2">
+
+                            Clan Description
+
+                            <span class="text-gray-600">
+                                (Optional)
+                            </span>
+
+                        </label>
+
+
+                        <textarea id="description"
+                                  name="description"
+                                  class="input-box"
+                                  rows="5"
+                                  maxlength="1000"
+                                  placeholder="Tell us about your clan, achievements, play style, etc."></textarea>
+
+
+                        <div class="char-count">
+
+                            <span id="descriptionCount">
+                                0
+                            </span>
+                            / 1000
+
+                        </div>
+
+
+                        <p id="description_error"
+                           class="error-message">
+
+                            Description must contain at least
+                            10 characters if provided.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     CLAN LOGO
+                ================================================== -->
+
+                <div class="mb-12">
+
+
+                    <div class="flex items-center gap-3 mb-7">
+
+                        <div class="w-10 h-10 rounded-xl
+                                    bg-cyan-500/10
+                                    border border-cyan-500/20
+                                    flex items-center justify-center">
+
+                            <span class="text-cyan-400
+                                         font-bold">
+
+                                04
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2 class="section-title text-xl
+                                       font-semibold">
+
+                                Clan Logo
+
+                            </h2>
+
+                            <p class="text-xs text-gray-500">
+
+                                Upload your clan logo
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div>
+
+                        <label for="clan_logo"
+                               class="block text-sm
+                                      font-medium
+                                      text-gray-300 mb-2">
+
+                            Clan Logo
+
+                            <span class="text-gray-600">
+                                (Optional)
+                            </span>
+
+                        </label>
+
+
+                        <input type="file"
+                               id="clan_logo"
+                               name="clan_logo"
+                               class="input-box"
+                               accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+
+
+                        <p class="text-xs text-gray-500 mt-2">
+
+                            Allowed formats:
+                            JPG, JPEG, PNG.
+                            Maximum size: 2 MB.
+
+                        </p>
+
+
+                        <img id="logoPreview"
+                             class="logo-preview"
+                             alt="Clan logo preview">
+
+
+                        <p id="clan_logo_error"
+                           class="error-message">
+
+                            Please select a JPG, JPEG or PNG image
+                            smaller than 2 MB.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     ACCOUNT SECURITY
+                ================================================== -->
+
+                <div class="mb-12">
+
+
+                    <div class="flex items-center gap-3 mb-7">
+
+                        <div class="w-10 h-10 rounded-xl
+                                    bg-purple-500/10
+                                    border border-purple-500/20
+                                    flex items-center justify-center">
+
+                            <span class="text-purple-400
+                                         font-bold">
+
+                                05
+
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2 class="section-title text-xl
+                                       font-semibold">
+
+                                Account Security
+
+                            </h2>
+
+                            <p class="text-xs text-gray-500">
+
+                                Create a secure password
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="grid md:grid-cols-2 gap-6">
+
+
+                        <!-- Password -->
+
+                        <div>
+
+                            <label for="password"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Password
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <input type="password"
+                                   id="password"
+                                   name="password"
+                                   class="input-box"
+                                   placeholder="Create password"
+                                   minlength="8"
+                                   maxlength="50"
+                                   autocomplete="new-password"
+                                   required>
+
+
+                            <div class="password-strength">
+
+                                <div id="strengthBar"
+                                     class="password-strength-bar">
+                                </div>
+
+                            </div>
+
+
+                            <p id="strengthText"
+                               class="password-strength-text">
+
+                                Password strength
+
+                            </p>
+
+
+                            <p id="password_error"
+                               class="error-message">
+
+                                Password must contain at least
+                                8 characters, one uppercase letter,
+                                one lowercase letter, one number
+                                and one special character.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Confirm Password -->
+
+                        <div>
+
+                            <label for="confirm_password"
+                                   class="block text-sm
+                                          font-medium
+                                          text-gray-300 mb-2">
+
+                                Confirm Password
+                                <span class="text-red-400">*</span>
+
+                            </label>
+
+
+                            <input type="password"
+                                   id="confirm_password"
+                                   name="confirm_password"
+                                   class="input-box"
+                                   placeholder="Confirm password"
+                                   autocomplete="new-password"
+                                   required>
+
+
+                            <p id="confirm_password_error"
+                               class="error-message">
+
+                                Passwords do not match.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     TERMS
+                ================================================== -->
+
+                <div class="mb-8">
+
+
+                    <label class="flex items-start gap-3
+                                  cursor-pointer">
+
+                        <input type="checkbox"
+                               id="terms"
+                               name="terms"
+                               class="mt-1 w-4 h-4
+                                      accent-purple-500"
+                               required>
+
+
+                        <span class="text-sm text-gray-400">
+
+                            I agree to the BGMI Arena
+
+                            <span class="text-purple-400">
+                                Terms & Conditions
+                            </span>
+
+                            and confirm that the information
+                            provided is accurate.
+
+                        </span>
+
+                    </label>
+
+
+                    <p id="terms_error"
+                       class="error-message">
+
+                        You must accept the Terms & Conditions.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     GENERAL FORM ERROR
+                ================================================== -->
+
+                <div id="formError"
+                     class="hidden mb-6 p-4 rounded-xl
+                            border border-red-500/20
+                            bg-red-500/10
+                            text-red-400 text-sm">
+
+                    Please correct the highlighted fields
+                    before submitting the form.
+
+                </div>
+
+
+
+                <!-- =================================================
+                     SUBMIT BUTTON
+                ================================================== -->
+
+                <button type="submit"
+                        id="submitButton"
+                        class="submit-button w-full
+                               py-4 rounded-xl
+                               font-orbitron
+                               font-bold tracking-wider">
+
+                    CREATE CLAN →
+
+                </button>
+
+
+                <p class="text-center text-xs
+                          text-gray-600 mt-5">
+
+                    Your clan information will be securely stored.
+
+                </p>
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT VALIDATION
+    ====================================================== -->
+
+    <script>
+
+        const form =
+            document.getElementById("clanRegistrationForm");
+
+        const submitButton =
+            document.getElementById("submitButton");
+
+        const formError =
+            document.getElementById("formError");
+
+
+
+        /* =====================================================
+           HELPER FUNCTIONS
+        ====================================================== */
+
+        function showError(input, errorId, message = null) {
+
+            input.classList.remove("field-success");
+
+            input.classList.add("field-error");
+
+            const error =
+                document.getElementById(errorId);
+
+            if (message) {
+
+                error.textContent = message;
+
+            }
+
+            error.classList.add("show");
+
+        }
+
+
+
+        function showSuccess(input, errorId) {
+
+            input.classList.remove("field-error");
+
+            input.classList.add("field-success");
+
+            const error =
+                document.getElementById(errorId);
+
+            error.classList.remove("show");
+
+        }
+
+
+
+        function clearValidation(input, errorId) {
+
+            input.classList.remove("field-error");
+
+            input.classList.remove("field-success");
+
+            const error =
+                document.getElementById(errorId);
+
+            error.classList.remove("show");
+
+        }
+
+
+
+        function cleanText(value) {
+
+            return value.trim();
+
+        }
+
+
+
+        /* =====================================================
+           CLAN NAME
+        ====================================================== */
+
+        function validateClanName() {
+
+            const input =
+                document.getElementById("clan_name");
+
+            const value =
+                cleanText(input.value);
+
+            const regex =
+                /^[A-Za-z0-9][A-Za-z0-9 _-]{2,49}$/;
+
+
+            if (value === "") {
+
+                showError(
+                    input,
+                    "clan_name_error",
+                    "Clan name is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (!regex.test(value)) {
+
+                showError(
+                    input,
+                    "clan_name_error",
+                    "Clan name must be 3–50 characters and may contain letters, numbers, spaces, - or _."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(input, "clan_name_error");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           CLAN TAG
+        ====================================================== */
+
+        function validateClanTag() {
+
+            const input =
+                document.getElementById("clan_tag");
+
+            input.value =
+                input.value.toUpperCase();
+
+            const value =
+                input.value.trim();
+
+            const regex =
+                /^[A-Z0-9]{2,6}$/;
+
+
+            if (value === "") {
+
+                showError(
+                    input,
+                    "clan_tag_error",
+                    "Clan tag is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (!regex.test(value)) {
+
+                showError(
+                    input,
+                    "clan_tag_error",
+                    "Clan tag must contain 2–6 letters or numbers only."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(input, "clan_tag_error");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           CAPTAIN NAME
+        ====================================================== */
+
+        function validateCaptainName() {
+
+            const input =
+                document.getElementById("captain_name");
+
+            const value =
+                cleanText(input.value);
+
+            const regex =
+                /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/;
+
+
+            if (value === "") {
+
+                showError(
+                    input,
+                    "captain_name_error",
+                    "Captain name is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (
+                value.length < 3 ||
+                value.length > 50 ||
+                !regex.test(value)
+            ) {
+
+                showError(
+                    input,
+                    "captain_name_error",
+                    "Enter a valid captain name."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(input, "captain_name_error");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           EMAIL
+        ====================================================== */
+
+        function validateEmail() {
+
+            const input =
+                document.getElementById("email");
+
+            const value =
+                cleanText(input.value);
+
+            const regex =
+                /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+
+            if (value === "") {
+
+                showError(
+                    input,
+                    "email_error",
+                    "Email address is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (!regex.test(value)) {
+
+                showError(
+                    input,
+                    "email_error",
+                    "Enter a valid email address."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(input, "email_error");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           PHONE
+        ====================================================== */
+
+        function validatePhone() {
+
+            const input =
+                document.getElementById("phone");
+
+            input.value =
+                input.value.replace(/\D/g, "").slice(0, 10);
+
+            const value =
+                input.value;
+
+
+            const regex =
+                /^[6-9][0-9]{9}$/;
+
+
+            if (value === "") {
+
+                showError(
+                    input,
+                    "phone_error",
+                    "Phone number is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (!regex.test(value)) {
+
+                showError(
+                    input,
+                    "phone_error",
+                    "Enter a valid 10-digit mobile number starting with 6, 7, 8 or 9."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(input, "phone_error");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           CLAN TYPE
+        ====================================================== */
+
+        function validateClanType() {
+
+            const input =
+                document.getElementById("clan_type");
+
+
+            if (input.value === "") {
+
+                showError(
+                    input,
+                    "clan_type_error",
+                    "Please select a clan type."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(input, "clan_type_error");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           CAPTAIN BGMI ID
+        ====================================================== */
+
+        function validateCaptainBgmiId() {
+
+            const input =
+                document.getElementById("captain_bgmi_id");
+
+            input.value =
+                input.value.replace(/\D/g, "").slice(0, 20);
+
+            const value =
+                input.value;
+
+
+            const regex =
+                /^[0-9]{5,20}$/;
+
+
+            if (value === "") {
+
+                showError(
+                    input,
+                    "captain_bgmi_id_error",
+                    "Captain BGMI ID is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (!regex.test(value)) {
+
+                showError(
+                    input,
+                    "captain_bgmi_id_error",
+                    "BGMI ID must contain 5–20 digits."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(
+                input,
+                "captain_bgmi_id_error"
+            );
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           GAME MODE
+        ====================================================== */
+
+        function validateGameMode() {
+
+            const input =
+                document.getElementById("game_mode");
+
+
+            if (input.value === "") {
+
+                showError(
+                    input,
+                    "game_mode_error",
+                    "Please select a game mode."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(input, "game_mode_error");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           MEMBER COUNT
+        ====================================================== */
+
+        function validateMemberCount() {
+
+            const input =
+                document.getElementById("member_count");
+
+
+            if (input.value === "") {
+
+                showError(
+                    input,
+                    "member_count_error",
+                    "Please select the number of members."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(
+                input,
+                "member_count_error"
+            );
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           LOCATION
+        ====================================================== */
+
+        function validateLocation() {
+
+            const input =
+                document.getElementById("location");
+
+            const value =
+                cleanText(input.value);
+
+
+            if (value === "") {
+
+                clearValidation(
+                    input,
+                    "location_error"
+                );
+
+                return true;
+
+            }
+
+
+            const regex =
+                /^[A-Za-z0-9\s,.'-]{2,100}$/;
+
+
+            if (!regex.test(value)) {
+
+                showError(
+                    input,
+                    "location_error",
+                    "Enter a valid location."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(input, "location_error");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           DESCRIPTION
+        ====================================================== */
+
+        function validateDescription() {
+
+            const input =
+                document.getElementById("description");
+
+            const value =
+                cleanText(input.value);
+
+
+            if (value === "") {
+
+                clearValidation(
+                    input,
+                    "description_error"
+                );
+
+                return true;
+
+            }
+
+
+            if (
+                value.length < 10 ||
+                value.length > 1000
+            ) {
+
+                showError(
+                    input,
+                    "description_error",
+                    "Description must contain 10–1000 characters."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(
+                input,
+                "description_error"
+            );
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           DESCRIPTION CHARACTER COUNT
+        ====================================================== */
+
+        const description =
+            document.getElementById("description");
+
+        const descriptionCount =
+            document.getElementById("descriptionCount");
+
+
+        description.addEventListener(
+            "input",
+            function () {
+
+                descriptionCount.textContent =
+                    this.value.length;
+
+                validateDescription();
+
+            }
+        );
+
+
+
+        /* =====================================================
+           CLAN LOGO
+        ====================================================== */
+
+        const clanLogo =
+            document.getElementById("clan_logo");
+
+        const logoPreview =
+            document.getElementById("logoPreview");
+
+
+        function validateClanLogo() {
+
+            const input =
+                document.getElementById("clan_logo");
+
+            const file =
+                input.files[0];
+
+
+            if (!file) {
+
+                clearValidation(
+                    input,
+                    "clan_logo_error"
+                );
+
+                logoPreview.style.display = "none";
+
+                return true;
+
+            }
+
+
+            const allowedTypes = [
+
+                "image/jpeg",
+                "image/png"
+
+            ];
+
+
+            const maxSize =
+                2 * 1024 * 1024;
+
+
+            if (!allowedTypes.includes(file.type)) {
+
+                showError(
+                    input,
+                    "clan_logo_error",
+                    "Only JPG, JPEG and PNG images are allowed."
+                );
+
+                logoPreview.style.display = "none";
+
+                return false;
+
+            }
+
+
+            if (file.size > maxSize) {
+
+                showError(
+                    input,
+                    "clan_logo_error",
+                    "Image size must be less than 2 MB."
+                );
+
+                logoPreview.style.display = "none";
+
+                return false;
+
+            }
+
+
+            showSuccess(
+                input,
+                "clan_logo_error"
+            );
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (event) {
+
+                    logoPreview.src =
+                        event.target.result;
+
+                    logoPreview.style.display =
+                        "block";
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+
+            return true;
+
+        }
+
+
+        clanLogo.addEventListener(
+            "change",
+            validateClanLogo
+        );
+
+
+
+        /* =====================================================
+           PASSWORD
+        ====================================================== */
+
+        const password =
+            document.getElementById("password");
+
+        const confirmPassword =
+            document.getElementById("confirm_password");
+
+        const strengthBar =
+            document.getElementById("strengthBar");
+
+        const strengthText =
+            document.getElementById("strengthText");
+
+
+        function getPasswordStrength(value) {
+
+            let score = 0;
+
+
+            if (value.length >= 8) {
+
+                score++;
+
+            }
+
+
+            if (/[A-Z]/.test(value)) {
+
+                score++;
+
+            }
+
+
+            if (/[a-z]/.test(value)) {
+
+                score++;
+
+            }
+
+
+            if (/[0-9]/.test(value)) {
+
+                score++;
+
+            }
+
+
+            if (/[^A-Za-z0-9]/.test(value)) {
+
+                score++;
+
+            }
+
+
+            return score;
+
+        }
+
+
+
+        function updatePasswordStrength() {
+
+            const value =
+                password.value;
+
+            const score =
+                getPasswordStrength(value);
+
+
+            if (value.length === 0) {
+
+                strengthBar.style.width = "0%";
+
+                strengthText.textContent =
+                    "Password strength";
+
+                return;
+
+            }
+
+
+            if (score <= 2) {
+
+                strengthBar.style.width = "30%";
+
+                strengthBar.style.background =
+                    "#ef4444";
+
+                strengthText.textContent =
+                    "Weak password";
+
+            }
+
+            else if (score === 3 || score === 4) {
+
+                strengthBar.style.width = "65%";
+
+                strengthBar.style.background =
+                    "#f59e0b";
+
+                strengthText.textContent =
+                    "Medium password";
+
+            }
+
+            else {
+
+                strengthBar.style.width = "100%";
+
+                strengthBar.style.background =
+                    "#22c55e";
+
+                strengthText.textContent =
+                    "Strong password";
+
+            }
+
+        }
+
+
+
+        function validatePassword() {
+
+            const input =
+                document.getElementById("password");
+
+            const value =
+                input.value;
+
+
+            const regex =
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,50}$/;
+
+
+            if (value === "") {
+
+                showError(
+                    input,
+                    "password_error",
+                    "Password is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (!regex.test(value)) {
+
+                showError(
+                    input,
+                    "password_error",
+                    "Password must contain 8–50 characters, one uppercase letter, one lowercase letter, one number and one special character."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(
+                input,
+                "password_error"
+            );
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           CONFIRM PASSWORD
+        ====================================================== */
+
+        function validateConfirmPassword() {
+
+            const input =
+                document.getElementById("confirm_password");
+
+            const value =
+                input.value;
+
+
+            if (value === "") {
+
+                showError(
+                    input,
+                    "confirm_password_error",
+                    "Please confirm your password."
+                );
+
+                return false;
+
+            }
+
+
+            if (value !== password.value) {
+
+                showError(
+                    input,
+                    "confirm_password_error",
+                    "Passwords do not match."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(
+                input,
+                "confirm_password_error"
+            );
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           TERMS
+        ====================================================== */
+
+        function validateTerms() {
+
+            const input =
+                document.getElementById("terms");
+
+
+            if (!input.checked) {
+
+                document
+                    .getElementById("terms_error")
+                    .classList.add("show");
+
+                return false;
+
+            }
+
+
+            document
+                .getElementById("terms_error")
+                .classList.remove("show");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           PASSWORD EVENTS
+        ====================================================== */
+
+        password.addEventListener(
+            "input",
+            function () {
+
+                updatePasswordStrength();
+
+                validatePassword();
+
+                if (confirmPassword.value !== "") {
+
+                    validateConfirmPassword();
+
+                }
+
+            }
+        );
+
+
+        confirmPassword.addEventListener(
+            "input",
+            validateConfirmPassword
+        );
+
+
+
+        /* =====================================================
+           REAL-TIME EVENTS
+        ====================================================== */
+
+        document
+            .getElementById("clan_name")
+            .addEventListener(
+                "input",
+                validateClanName
+            );
+
+
+        document
+            .getElementById("clan_tag")
+            .addEventListener(
+                "input",
+                validateClanTag
+            );
+
+
+        document
+            .getElementById("captain_name")
+            .addEventListener(
+                "input",
+                validateCaptainName
+            );
+
+
+        document
+            .getElementById("email")
+            .addEventListener(
+                "input",
+                validateEmail
+            );
+
+
+        document
+            .getElementById("phone")
+            .addEventListener(
+                "input",
+                validatePhone
+            );
+
+
+        document
+            .getElementById("clan_type")
+            .addEventListener(
+                "change",
+                validateClanType
+            );
+
+
+        document
+            .getElementById("captain_bgmi_id")
+            .addEventListener(
+                "input",
+                validateCaptainBgmiId
+            );
+
+
+        document
+            .getElementById("game_mode")
+            .addEventListener(
+                "change",
+                validateGameMode
+            );
+
+
+        document
+            .getElementById("member_count")
+            .addEventListener(
+                "change",
+                validateMemberCount
+            );
+
+
+        document
+            .getElementById("location")
+            .addEventListener(
+                "input",
+                validateLocation
+            );
+
+
+        document
+            .getElementById("terms")
+            .addEventListener(
+                "change",
+                validateTerms
+            );
+
+
+
+        /* =====================================================
+           FORM SUBMIT
+        ====================================================== */
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+                const validations = [
+
+                    validateClanName(),
+
+                    validateClanTag(),
+
+                    validateCaptainName(),
+
+                    validateEmail(),
+
+                    validatePhone(),
+
+                    validateClanType(),
+
+                    validateCaptainBgmiId(),
+
+                    validateGameMode(),
+
+                    validateMemberCount(),
+
+                    validateLocation(),
+
+                    validateDescription(),
+
+                    validateClanLogo(),
+
+                    validatePassword(),
+
+                    validateConfirmPassword(),
+
+                    validateTerms()
+
+                ];
+
+
+                const isValid =
+                    validations.every(
+                        result => result === true
+                    );
+
+
+                if (!isValid) {
+
+                    event.preventDefault();
+
+                    formError.classList.remove(
+                        "hidden"
+                    );
+
+
+                    const firstError =
+                        document.querySelector(
+                            ".field-error"
+                        );
+
+
+                    if (firstError) {
+
+                        firstError.scrollIntoView({
+
+                            behavior: "smooth",
+
+                            block: "center"
+
+                        });
+
+
+                        firstError.focus();
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                formError.classList.add(
+                    "hidden"
+                );
+
+
+                submitButton.disabled = true;
+
+                submitButton.textContent =
+                    "CREATING CLAN...";
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

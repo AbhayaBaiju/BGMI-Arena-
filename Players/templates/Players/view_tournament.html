@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | Tournaments</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    fontFamily: {
+
+                        orbitron: ['Orbitron', 'sans-serif'],
+
+                        poppins: ['Poppins', 'sans-serif']
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+
+    <style>
+
+        body {
+
+            font-family: 'Poppins', sans-serif;
+
+            background: #050509;
+
+        }
+
+
+        .orbitron {
+
+            font-family: 'Orbitron', sans-serif;
+
+        }
+
+
+        .glass {
+
+            background: rgba(15, 15, 25, 0.88);
+
+            backdrop-filter: blur(14px);
+
+            border: 1px solid rgba(168, 85, 247, 0.25);
+
+        }
+
+
+        .grid-bg {
+
+            background-image:
+
+                linear-gradient(
+                    rgba(168, 85, 247, 0.05) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(6, 182, 212, 0.05) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+        }
+
+
+        .tournament-card {
+
+            transition: all 0.3s ease;
+
+        }
+
+
+        .tournament-card:hover {
+
+            transform: translateY(-6px);
+
+            border-color: rgba(6, 182, 212, 0.45);
+
+            box-shadow: 0 15px 40px rgba(6, 182, 212, 0.08);
+
+        }
+
+
+        .alert-box {
+
+            animation: slideIn 0.4s ease-out;
+
+        }
+
+
+        @keyframes slideIn {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateX(50px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateX(0);
+
+            }
+
+        }
+
+
+        .fade-out {
+
+            opacity: 0;
+
+            transform: translateX(50px);
+
+            transition: all 0.5s ease;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white min-h-screen grid-bg">
+
+
+<!-- ============================================================
+     ALERT MESSAGES
+============================================================= -->
+
+{% if messages %}
+
+    <div id="message-container"
+         class="fixed top-24 right-5 z-[100] w-[90%] max-w-md">
+
+        {% for message in messages %}
+
+            <div class="alert-box mb-3
+                        glass
+                        rounded-xl
+                        px-5
+                        py-4
+                        shadow-2xl
+                        {% if message.tags == 'warning' %}
+                            border-yellow-500/40
+                        {% elif message.tags == 'error' %}
+                            border-red-500/40
+                        {% elif message.tags == 'success' %}
+                            border-green-500/40
+                        {% else %}
+                            border-cyan-500/40
+                        {% endif %}">
+
+                <div class="flex items-center gap-4">
+
+                    <!-- ICON -->
+
+                    <div class="text-2xl">
+
+                        {% if message.tags == 'warning' %}
+
+                            ⚠️
+
+                        {% elif message.tags == 'error' %}
+
+                            ❌
+
+                        {% elif message.tags == 'success' %}
+
+                            ✅
+
+                        {% else %}
+
+                            ℹ️
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- MESSAGE -->
+
+                    <div class="flex-1">
+
+                        <p class="font-semibold
+                                  {% if message.tags == 'warning' %}
+                                      text-yellow-400
+                                  {% elif message.tags == 'error' %}
+                                      text-red-400
+                                  {% elif message.tags == 'success' %}
+                                      text-green-400
+                                  {% else %}
+                                      text-cyan-400
+                                  {% endif %}">
+
+                            {{ message }}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- CLOSE -->
+
+                    <button onclick="closeAlert(this)"
+                            class="text-gray-500
+                                   hover:text-white
+                                   text-xl">
+
+                        ×
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}
+
+
+
+<!-- ============================================================
+     NAVBAR
+============================================================= -->
+
+<nav class="fixed top-0 left-0 right-0 z-50 
+            glass border-b border-white/10">
+
+    <div class="max-w-7xl mx-auto px-6 py-4 
+                flex items-center justify-between">
+
+        <!-- ================= LOGO ================= -->
+
+        <a href="{% url 'player_dashboard' %}"
+           class="font-orbitron text-xl font-bold">
+
+            <span class="gradient-text">
+                BGMI
+            </span>
+
+            <span class="text-white">
+                ARENA
+            </span>
+
+        </a>
+
+
+        <!-- ================= NAVIGATION ================= -->
+
+        <div class="flex items-center gap-3">
+
+            <!-- DASHBOARD BUTTON -->
+
+            <a href="{% url 'player_dashboard' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-purple-600/20
+                      border border-purple-500/30
+                      hover:bg-purple-600/40
+                      transition">
+
+                🏠 Dashboard
+
+            </a>
+
+
+            <!-- PROFILE BUTTON -->
+
+            <a href="{% url 'player_profile' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-white/5
+                      border border-white/10
+                      hover:bg-purple-600/20
+                      transition">
+
+                👤 Profile
+
+            </a>
+
+
+            <!-- TOURNAMENT BUTTON -->
+
+            <a href="{% url 'view_tournament' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-white/5
+                      border border-white/10
+                      hover:bg-purple-600/20
+                      transition">
+
+                🏆 Tournaments
+
+            </a>
+
+
+            <!-- LOGOUT BUTTON -->
+
+            <a href="{% url 'logout' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-red-500/10
+                      border border-red-500/20
+                      text-red-400
+                      hover:bg-red-500
+                      hover:text-white
+                      transition">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ============================================================
+     MAIN
+============================================================= -->
+
+<main class="pt-32 pb-16 px-5">
+
+    <div class="max-w-7xl mx-auto">
+
+
+        <!-- ====================================================
+             PAGE HEADING
+        ===================================================== -->
+
+        <div class="text-center mb-14">
+
+
+            <p class="text-cyan-400
+                      text-sm
+                      uppercase
+                      tracking-[5px]
+                      mb-4">
+
+                Compete • Win • Conquer
+
+            </p>
+
+
+            <h1 class="orbitron
+                       text-4xl
+                       md:text-6xl
+                       font-bold">
+
+                <span class="text-purple-400">
+
+                    BGMI
+
+                </span>
+
+                <span class="text-cyan-400">
+
+                    TOURNAMENTS
+
+                </span>
+
+            </h1>
+
+
+            <p class="text-gray-400
+                      mt-5
+                      max-w-2xl
+                      mx-auto">
+
+                Choose your tournament, reserve your slot
+                and compete with the best players.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- ====================================================
+             TOURNAMENT COUNT
+        ===================================================== -->
+
+        <div class="flex justify-between items-center mb-7">
+
+
+            <div>
+
+                <p class="text-gray-500
+                          text-xs
+                          uppercase
+                          tracking-widest">
+
+                    Available Competitions
+
+                </p>
+
+
+                <h2 class="orbitron
+                           text-xl
+                           font-semibold
+                           mt-1">
+
+                    TOURNAMENTS
+
+                </h2>
+
+            </div>
+
+
+            <div class="glass
+                        rounded-lg
+                        px-5
+                        py-3">
+
+                <span class="text-gray-400 text-sm">
+
+                    Total:
+
+                </span>
+
+                <span class="text-cyan-400
+                             font-bold
+                             ml-2">
+
+                    {{ tournaments|length }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ====================================================
+             TOURNAMENT LIST
+        ===================================================== -->
+
+        {% if tournaments %}
+
+
+            <div class="grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        lg:grid-cols-3
+                        gap-6">
+
+
+                {% for tournament in tournaments %}
+
+
+                    <!-- =================================================
+                         TOURNAMENT CARD
+                    ================================================== -->
+
+                    <div class="tournament-card
+                                glass
+                                rounded-2xl
+                                overflow-hidden">
+
+
+                        <!-- TOP GRADIENT -->
+
+                        <div class="h-2
+                                    bg-gradient-to-r
+                                    from-purple-600
+                                    to-cyan-500">
+                        </div>
+
+
+                        <div class="p-6">
+
+
+                            <!-- TOURNAMENT TITLE -->
+
+                            <div class="mb-5">
+
+                                <p class="text-purple-400
+                                          text-xs
+                                          uppercase
+                                          tracking-widest">
+
+                                    Featured Tournament
+
+                                </p>
+
+
+                                <h2 class="orbitron
+                                           text-xl
+                                           md:text-2xl
+                                           font-bold
+                                           mt-2
+                                           break-words">
+
+                                    {{ tournament.tournament_name }}
+
+                                </h2>
+
+
+                                <!-- ORGANIZER -->
+
+                                {% if tournament.clan %}
+
+                                    <p class="text-gray-500
+                                              text-sm
+                                              mt-2">
+
+                                        Organized by
+
+                                        <span class="text-cyan-400">
+
+                                            {{ tournament.clan.clan_name }}
+
+                                        </span>
+
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <!-- ENTRY FEE -->
+
+                            <div class="rounded-xl
+                                        bg-cyan-500/5
+                                        border border-cyan-500/10
+                                        p-4
+                                        mb-5">
+
+                                <div class="flex
+                                            items-center
+                                            justify-between">
+
+                                    <div>
+
+                                        <p class="text-gray-500
+                                                  text-xs
+                                                  uppercase">
+
+                                            Entry Fee
+
+                                        </p>
+
+                                        <p class="orbitron
+                                                  text-2xl
+                                                  font-bold
+                                                  text-cyan-400
+                                                  mt-1">
+
+                                            ₹{{ tournament.entry_fee }}
+
+                                        </p>
+
+                                    </div>
+
+
+                                    <div class="text-4xl">
+
+                                        🎮
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- TOURNAMENT DETAILS -->
+
+                            <div class="grid
+                                        grid-cols-2
+                                        gap-3
+                                        mb-5">
+
+
+                                <!-- MAP -->
+
+                                <div class="rounded-lg
+                                            bg-white/5
+                                            border border-white/5
+                                            p-3">
+
+                                    <p class="text-gray-500
+                                              text-xs
+                                              uppercase">
+
+                                        Map
+
+                                    </p>
+
+                                    <p class="font-semibold
+                                              text-sm
+                                              mt-1">
+
+                                        {{ tournament.map }}
+
+                                    </p>
+
+                                </div>
+
+
+                                <!-- MODE -->
+
+                                <div class="rounded-lg
+                                            bg-white/5
+                                            border border-white/5
+                                            p-3">
+
+                                    <p class="text-gray-500
+                                              text-xs
+                                              uppercase">
+
+                                        Mode
+
+                                    </p>
+
+                                    <p class="font-semibold
+                                              text-sm
+                                              text-purple-400
+                                              mt-1">
+
+                                        {{ tournament.game_mode }}
+
+                                    </p>
+
+                                </div>
+
+
+                                <!-- DATE -->
+
+                                <div class="rounded-lg
+                                            bg-white/5
+                                            border border-white/5
+                                            p-3">
+
+                                    <p class="text-gray-500
+                                              text-xs
+                                              uppercase">
+
+                                        Date
+
+                                    </p>
+
+                                    <p class="font-semibold
+                                              text-sm
+                                              mt-1">
+
+                                        {{ tournament.tournament_date|date:"d M Y" }}
+
+                                    </p>
+
+                                </div>
+
+
+                                <!-- TIME -->
+
+                                <div class="rounded-lg
+                                            bg-white/5
+                                            border border-white/5
+                                            p-3">
+
+                                    <p class="text-gray-500
+                                              text-xs
+                                              uppercase">
+
+                                        Time
+
+                                    </p>
+
+                                    <p class="font-semibold
+                                              text-sm
+                                              mt-1">
+
+                                        {{ tournament.tournament_time|time:"h:i A" }}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- SLOT INFORMATION -->
+
+                            <div class="rounded-xl
+                                        bg-purple-500/5
+                                        border border-purple-500/10
+                                        p-4
+                                        mb-6">
+
+                                <div class="flex
+                                            justify-between
+                                            items-center">
+
+
+                                    <div>
+
+                                        <p class="text-gray-500
+                                                  text-xs
+                                                  uppercase">
+
+                                            Available Slots
+
+                                        </p>
+
+                                    </div>
+
+
+                                    {% if tournament.total_slot > 0 %}
+
+                                        <span class="text-cyan-400
+                                                     font-bold">
+
+                                            {{ tournament.total_slot }}
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="text-red-400
+                                                     font-bold">
+
+                                            FULL
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- SLOT BAR -->
+
+                                <div class="w-full
+                                            bg-gray-800
+                                            rounded-full
+                                            h-2
+                                            mt-3">
+
+                                    {% if tournament.max_players > 0 %}
+
+                                        <div class="bg-gradient-to-r
+                                                    from-purple-600
+                                                    to-cyan-500
+                                                    h-2
+                                                    rounded-full"
+                                             style="width:
+                                             {% widthratio tournament.total_slot tournament.max_players 100 %}%">
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- BOOK BUTTON -->
+
+                            {% if tournament.total_slot <= 0 %}
+
+                                <button disabled
+                                        class="w-full
+                                               py-3
+                                               rounded-xl
+                                               bg-gray-700
+                                               text-gray-500
+                                               font-semibold
+                                               cursor-not-allowed">
+
+                                    🔒 TOURNAMENT FULL
+
+                                </button>
+
+
+                            {% else %}
+
+                                <!-- BOOK NOW -->
+
+                                <a href="{% url 'booking' tournament.id %}"
+                                   class="block
+                                          w-full
+                                          text-center
+                                          py-3
+                                          rounded-xl
+                                          font-semibold
+                                          orbitron
+                                          bg-gradient-to-r
+                                          from-purple-600
+                                          to-cyan-500
+                                          hover:scale-[1.02]
+                                          hover:shadow-lg
+                                          hover:shadow-purple-500/20
+                                          transition
+                                          duration-300">
+
+                                    🎮 BOOK NOW
+
+                                </a>
+
+                            {% endif %}
+
+
+                        </div>
+
+                    </div>
+
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- =================================================
+                 NO TOURNAMENTS
+            ================================================== -->
+
+            <div class="glass
+                        rounded-2xl
+                        p-12
+                        text-center">
+
+
+                <div class="text-6xl mb-6">
+
+                    🎮
+
+                </div>
+
+
+                <h2 class="orbitron
+                           text-2xl
+                           font-bold
+                           text-purple-400">
+
+                    NO TOURNAMENTS AVAILABLE
+
+                </h2>
+
+
+                <p class="text-gray-400
+                          mt-4">
+
+                    There are currently no tournaments available.
+                    Please check again later.
+
+                </p>
+
+
+                <a href="{% url 'player_dashboard' %}"
+                   class="inline-block
+                          mt-7
+                          px-7
+                          py-3
+                          rounded-xl
+                          bg-gradient-to-r
+                          from-purple-600
+                          to-cyan-500
+                          font-semibold">
+
+                    BACK TO DASHBOARD
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</main>
+
+
+
+<!-- ============================================================
+     FOOTER
+============================================================= -->
+
+<footer class="border-t border-white/10">
+
+    <div class="max-w-7xl
+                mx-auto
+                px-6
+                py-8
+                text-center">
+
+        <p class="text-gray-500 text-sm">
+
+            © 2026 BGMI Arena. All rights reserved.
+
+        </p>
+
+
+        <p class="text-gray-600 text-xs mt-2">
+
+            PLAY. COMPETE. CONQUER.
+
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ============================================================
+     ALERT JAVASCRIPT
+============================================================= -->
+
+<script>
+
+    function closeAlert(button) {
+
+        const alert = button.closest('.alert-box');
+
+        if (alert) {
+
+            alert.classList.add('fade-out');
+
+            setTimeout(function () {
+
+                alert.remove();
+
+            }, 500);
+
+        }
+
+    }
+
+
+    // Automatically hide alert after 4 seconds
+
+    setTimeout(function () {
+
+        const container =
+            document.getElementById('message-container');
+
+        if (container) {
+
+            const alerts =
+                container.querySelectorAll('.alert-box');
+
+            alerts.forEach(function (alert) {
+
+                alert.classList.add('fade-out');
+
+                setTimeout(function () {
+
+                    alert.remove();
+
+                }, 500);
+
+            });
+
+        }
+
+    }, 4000);
+
+</script>
+
+
+</body>
+
+</html>

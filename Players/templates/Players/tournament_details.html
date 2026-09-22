@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ tournament.tournament_name }} | BGMI Arena</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    },
+                    colors: {
+                        dark: '#050509',
+                        purple: '#a855f7',
+                        cyan: '#06b6d4'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(168,85,247,0.15), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(6,182,212,0.12), transparent 30%),
+                #050509;
+        }
+
+        .glass {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(14px);
+        }
+
+        .neon-border {
+            box-shadow:
+                0 0 20px rgba(168,85,247,0.12),
+                inset 0 0 20px rgba(6,182,212,0.03);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #a855f7, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+
+<body class="text-white font-poppins min-h-screen grid-bg">
+
+    <!-- NAVBAR -->
+    <!-- ================= NAVBAR ================= -->
+
+<nav class="fixed top-0 left-0 right-0 z-50
+            glass border-b border-white/10">
+
+    <div class="max-w-7xl mx-auto px-6 py-4
+                flex items-center justify-between">
+
+        <!-- ================= LOGO ================= -->
+
+        <a href="{% url 'player_dashboard' %}"
+           class="font-orbitron text-xl font-bold">
+
+            <span class="gradient-text">
+                BGMI
+            </span>
+
+            <span class="text-white">
+                ARENA
+            </span>
+
+        </a>
+
+
+        <!-- ================= NAVIGATION ================= -->
+
+        <div class="flex items-center gap-3">
+
+            <!-- DASHBOARD BUTTON -->
+
+            <a href="{% url 'player_dashboard' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-purple-600/20
+                      border border-purple-500/30
+                      hover:bg-purple-600/40
+                      transition">
+
+                🏠 Dashboard
+
+            </a>
+
+
+            <!-- PROFILE BUTTON -->
+
+            <a href="{% url 'player_profile' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-white/5
+                      border border-white/10
+                      hover:bg-purple-600/20
+                      transition">
+
+                👤 Profile
+
+            </a>
+
+
+            <!-- TOURNAMENT BUTTON -->
+
+            <a href="{% url 'view_tournament' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-white/5
+                      border border-white/10
+                      hover:bg-purple-600/20
+                      transition">
+
+                🏆 Tournaments
+
+            </a>
+
+
+            <!-- LOGOUT BUTTON -->
+
+            <a href="{% url 'logout' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-red-500/10
+                      border border-red-500/20
+                      text-red-400
+                      hover:bg-red-500
+                      hover:text-white
+                      transition">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+    <!-- MAIN -->
+    <main class="max-w-6xl mx-auto px-6 py-12">
+
+        <!-- BACK BUTTON -->
+        <div class="mb-8">
+            <a href="{% url 'view_tournament' %}"
+               class="inline-flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition">
+
+                <span>←</span>
+                <span>Back to Tournaments</span>
+
+            </a>
+        </div>
+
+
+        <!-- TOURNAMENT HEADER -->
+        <section class="glass neon-border rounded-3xl p-8 mb-8">
+
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+                <div>
+
+                    <p class="text-sm text-purple-400 font-semibold uppercase tracking-widest mb-3">
+                        Clan Tournament
+                    </p>
+
+                    <h1 class="font-orbitron text-3xl md:text-5xl font-bold gradient-text">
+                        {{ tournament.tournament_name }}
+                    </h1>
+
+                    <p class="text-gray-400 mt-4">
+                        Organized by
+                        <span class="text-cyan-400 font-semibold">
+                            {{ tournament.clan.clan_name }}
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <!-- GAME MODE -->
+                <div class="glass rounded-2xl px-6 py-5 text-center min-w-[150px]">
+
+                    <p class="text-gray-500 text-xs uppercase tracking-wider">
+                        Game Mode
+                    </p>
+
+                    <p class="font-orbitron text-xl font-bold text-cyan-400 mt-2">
+                        {{ tournament.game_mode }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- BASIC INFORMATION -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+
+            <!-- MAP -->
+            <div class="glass rounded-2xl p-6">
+                <p class="text-gray-500 text-sm">Map</p>
+
+                <p class="font-orbitron text-lg font-bold text-purple-400 mt-2">
+                    {{ tournament.map }}
+                </p>
+            </div>
+
+
+            <!-- DATE -->
+            <div class="glass rounded-2xl p-6">
+                <p class="text-gray-500 text-sm">Date</p>
+
+                <p class="font-orbitron text-lg font-bold text-white mt-2">
+                    {{ tournament.tournament_date|date:"d M Y" }}
+                </p>
+            </div>
+
+
+            <!-- TIME -->
+            <div class="glass rounded-2xl p-6">
+                <p class="text-gray-500 text-sm">Time</p>
+
+                <p class="font-orbitron text-lg font-bold text-cyan-400 mt-2">
+                    {{ tournament.tournament_time|time:"h:i A" }}
+                </p>
+            </div>
+
+
+            <!-- MATCHES -->
+            <div class="glass rounded-2xl p-6">
+                <p class="text-gray-500 text-sm">Matches</p>
+
+                <p class="font-orbitron text-lg font-bold text-purple-400 mt-2">
+                    {{ tournament.matches }}
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- ENTRY + SLOTS -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+            <!-- ENTRY FEE -->
+            <div class="glass neon-border rounded-2xl p-7">
+
+                <p class="text-gray-500 text-sm">
+                    Entry Fee
+                </p>
+
+                <p class="font-orbitron text-3xl font-bold text-cyan-400 mt-3">
+                    ₹{{ tournament.entry_fee }}
+                </p>
+
+            </div>
+
+
+            <!-- PRIZE POOL -->
+            <div class="glass neon-border rounded-2xl p-7">
+
+                <p class="text-gray-500 text-sm">
+                    Prize Pool
+                </p>
+
+                <p class="font-orbitron text-3xl font-bold text-purple-400 mt-3">
+                    ₹{{ tournament.prize_pool }}
+                </p>
+
+            </div>
+
+
+            <!-- TOTAL SLOTS -->
+            <div class="glass neon-border rounded-2xl p-7">
+
+                <p class="text-gray-500 text-sm">
+                    Total Slots
+                </p>
+
+                <p class="font-orbitron text-3xl font-bold text-white mt-3">
+                    {{ tournament.total_slot }}
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- PRIZE DISTRIBUTION -->
+        <section class="glass neon-border rounded-3xl p-8 mb-8">
+
+            <div class="mb-7">
+
+                <p class="text-purple-400 text-sm uppercase tracking-widest font-semibold">
+                    Rewards
+                </p>
+
+                <h2 class="font-orbitron text-2xl font-bold mt-2">
+                    Prize Distribution
+                </h2>
+
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+                <!-- FIRST -->
+                <div class="rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-6 text-center">
+
+                    <div class="text-4xl mb-3">
+                        🥇
+                    </div>
+
+                    <p class="text-gray-400">
+                        1st Place
+                    </p>
+
+                    <p class="font-orbitron text-2xl font-bold text-yellow-400 mt-2">
+                        ₹{{ tournament.first_prize }}
+                    </p>
+
+                </div>
+
+
+                <!-- SECOND -->
+                <div class="rounded-2xl border border-gray-400/20 bg-gray-400/5 p-6 text-center">
+
+                    <div class="text-4xl mb-3">
+                        🥈
+                    </div>
+
+                    <p class="text-gray-400">
+                        2nd Place
+                    </p>
+
+                    <p class="font-orbitron text-2xl font-bold text-gray-300 mt-2">
+                        ₹{{ tournament.second_prize }}
+                    </p>
+
+                </div>
+
+
+                <!-- THIRD -->
+                <div class="rounded-2xl border border-orange-500/20 bg-orange-500/5 p-6 text-center">
+
+                    <div class="text-4xl mb-3">
+                        🥉
+                    </div>
+
+                    <p class="text-gray-400">
+                        3rd Place
+                    </p>
+
+                    <p class="font-orbitron text-2xl font-bold text-orange-400 mt-2">
+                        ₹{{ tournament.third_prize }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TOURNAMENT DETAILS -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+
+            <!-- DESCRIPTION -->
+            <div class="glass rounded-3xl p-8">
+
+                <p class="text-purple-400 text-sm uppercase tracking-widest font-semibold">
+                    About
+                </p>
+
+                <h2 class="font-orbitron text-2xl font-bold mt-2 mb-5">
+                    Tournament Details
+                </h2>
+
+                <p class="text-gray-400 leading-8">
+                    {{ tournament.description }}
+                </p>
+
+            </div>
+
+
+            <!-- PLAYER LIMIT -->
+            <div class="glass rounded-3xl p-8">
+
+                <p class="text-cyan-400 text-sm uppercase tracking-widest font-semibold">
+                    Participation
+                </p>
+
+                <h2 class="font-orbitron text-2xl font-bold mt-2 mb-6">
+                    Player Information
+                </h2>
+
+
+                <div class="space-y-5">
+
+                    <div class="flex justify-between items-center border-b border-white/10 pb-4">
+
+                        
+
+                        <span class="font-semibold text-white">
+                            {{ tournament.max_players }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="flex justify-between items-center border-b border-white/10 pb-4">
+
+                        <span class="text-gray-400">
+                            Total Slots
+                        </span>
+
+                        <span class="font-semibold text-cyan-400">
+                            {{ tournament.total_slot }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="flex justify-between items-center">
+
+                        <span class="text-gray-400">
+                            Game Mode
+                        </span>
+
+                        <span class="font-semibold text-purple-400">
+                            {{ tournament.game_mode }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- JOIN BUTTON -->
+        <section class="glass neon-border rounded-3xl p-8 text-center">
+
+            <h2 class="font-orbitron text-2xl font-bold mb-3">
+                Ready to Compete?
+            </h2>
+
+            <p class="text-gray-400 mb-7">
+                Join this tournament and prove your skills.
+            </p>
+
+             <h2 class="font-orbitron text-2xl font-bold mb-3">
+                Slot Booked..
+            </h2>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 mt-10">
+
+        <div class="max-w-7xl mx-auto px-6 py-8 text-center">
+
+            <p class="text-gray-500 text-sm">
+                © 2026 BGMI Arena. All rights reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+</html>

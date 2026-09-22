@@ -1,0 +1,1044 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena - Login</title>
+
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <style>
+
+        body {
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(168, 85, 247, 0.18),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(6, 182, 212, 0.15),
+                    transparent 35%
+                ),
+
+                #020617;
+
+        }
+
+
+        .glass {
+
+            background:
+                rgba(15, 23, 42, 0.85);
+
+            backdrop-filter:
+                blur(20px);
+
+        }
+
+
+        .glow {
+
+            box-shadow:
+                0 0 30px rgba(168, 85, 247, 0.15),
+                0 0 60px rgba(6, 182, 212, 0.08);
+
+        }
+
+
+        /* =====================================================
+           VALIDATION STYLES
+        ====================================================== */
+
+        .field-error {
+
+            border-color: #ef4444 !important;
+
+            box-shadow:
+                0 0 0 2px rgba(239, 68, 68, 0.10);
+
+        }
+
+
+        .field-success {
+
+            border-color: #22c55e !important;
+
+            box-shadow:
+                0 0 0 2px rgba(34, 197, 94, 0.08);
+
+        }
+
+
+        .error-message {
+
+            display: none;
+
+            margin-top: 6px;
+
+            font-size: 12px;
+
+            color: #f87171;
+
+        }
+
+
+        .error-message.show {
+
+            display: block;
+
+        }
+
+
+        .login-button:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none !important;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="min-h-screen
+             flex
+             items-center
+             justify-center
+             px-4">
+
+
+    <!-- =====================================================
+         MAIN CONTAINER
+    ====================================================== -->
+
+    <div class="w-full max-w-md">
+
+
+        <!-- =====================================================
+             LOGO / HEADING
+        ====================================================== -->
+
+        <div class="text-center mb-8">
+
+
+            <!-- LOGO -->
+
+            <div class="inline-flex
+                        items-center
+                        justify-center
+                        w-16
+                        h-16
+                        rounded-2xl
+                        bg-gradient-to-br
+                        from-purple-600
+                        to-cyan-500
+                        shadow-lg
+                        shadow-purple-500/30
+                        mb-5">
+
+                <span class="text-3xl">
+
+                    🎮
+
+                </span>
+
+            </div>
+
+
+            <!-- TITLE -->
+
+            <h1 class="text-3xl
+                       font-black
+                       text-white">
+
+                BGMI
+
+                <span class="text-purple-400">
+
+                    ARENA
+
+                </span>
+
+            </h1>
+
+
+            <p class="text-slate-400 mt-2">
+
+                Login to continue
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- =====================================================
+             LOGIN CARD
+        ====================================================== -->
+
+        <div class="glass
+                    glow
+                    border
+                    border-slate-800
+                    rounded-3xl
+                    p-7">
+
+
+            <!-- =================================================
+                 DJANGO MESSAGES
+            ================================================== -->
+
+            {% if messages %}
+
+            <div class="mb-5 space-y-2">
+
+                {% for message in messages %}
+
+                <div class="px-4 py-3
+                            rounded-xl
+                            bg-red-500/10
+                            border
+                            border-red-500/30
+                            text-red-300
+                            text-sm
+                            font-medium">
+
+                    {{ message }}
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 LOGIN FORM
+            ================================================== -->
+
+            <form method="POST"
+                  id="loginForm"
+                  novalidate>
+
+                {% csrf_token %}
+
+
+
+                <!-- =================================================
+                     ACCOUNT TYPE
+                ================================================== -->
+
+                <div class="mb-6">
+
+
+                    <label class="block
+                                  text-sm
+                                  font-semibold
+                                  text-slate-300
+                                  mb-3">
+
+                        Login As
+
+                    </label>
+
+
+                    <div class="grid
+                                grid-cols-2
+                                gap-3">
+
+
+                        <!-- PLAYER -->
+
+                        <label class="cursor-pointer">
+
+                            <input type="radio"
+                                   name="user_type"
+                                   value="player"
+                                   class="peer hidden"
+                                   checked>
+
+
+                            <div class="p-4
+                                        rounded-xl
+                                        border
+                                        border-slate-700
+                                        bg-slate-950
+                                        text-center
+                                        text-slate-400
+                                        transition
+
+                                        peer-checked:border-purple-500
+                                        peer-checked:bg-purple-500/10
+                                        peer-checked:text-purple-300">
+
+
+                                <div class="text-2xl mb-1">
+
+                                    👤
+
+                                </div>
+
+
+                                <div class="font-semibold">
+
+                                    Player
+
+                                </div>
+
+
+                            </div>
+
+                        </label>
+
+
+
+                        <!-- CLAN -->
+
+                        <label class="cursor-pointer">
+
+                            <input type="radio"
+                                   name="user_type"
+                                   value="clan"
+                                   class="peer hidden">
+
+
+                            <div class="p-4
+                                        rounded-xl
+                                        border
+                                        border-slate-700
+                                        bg-slate-950
+                                        text-center
+                                        text-slate-400
+                                        transition
+
+                                        peer-checked:border-cyan-500
+                                        peer-checked:bg-cyan-500/10
+                                        peer-checked:text-cyan-300">
+
+
+                                <div class="text-2xl mb-1">
+
+                                    ⚔️
+
+                                </div>
+
+
+                                <div class="font-semibold">
+
+                                    Clan
+
+                                </div>
+
+
+                            </div>
+
+                        </label>
+
+
+                    </div>
+
+
+                    <p id="userTypeError"
+                       class="error-message">
+
+                        Please select Player or Clan.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     USERNAME
+                ================================================== -->
+
+                <div class="mb-5">
+
+
+                    <label for="username"
+                           class="block
+                                  text-sm
+                                  font-semibold
+                                  text-slate-300
+                                  mb-2">
+
+                        Username / Clan Name
+
+                    </label>
+
+
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           placeholder="Enter username or clan name"
+                           minlength="3"
+                           maxlength="50"
+                           autocomplete="username"
+                           required
+
+                           class="w-full
+                                  px-4
+                                  py-3.5
+                                  rounded-xl
+                                  bg-slate-950
+                                  border
+                                  border-slate-700
+                                  text-white
+                                  placeholder-slate-600
+
+                                  focus:outline-none
+                                  focus:border-purple-500
+                                  focus:ring-2
+                                  focus:ring-purple-500/20
+
+                                  transition">
+
+
+                    <p id="usernameError"
+                       class="error-message">
+
+                        Username / Clan Name is required.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PASSWORD
+                ================================================== -->
+
+                <div class="mb-6">
+
+
+                    <label for="password"
+                           class="block
+                                  text-sm
+                                  font-semibold
+                                  text-slate-300
+                                  mb-2">
+
+                        Password
+
+                    </label>
+
+
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Enter your password"
+                           minlength="8"
+                           maxlength="50"
+                           autocomplete="current-password"
+                           required
+
+                           class="w-full
+                                  px-4
+                                  py-3.5
+                                  rounded-xl
+                                  bg-slate-950
+                                  border
+                                  border-slate-700
+                                  text-white
+                                  placeholder-slate-600
+
+                                  focus:outline-none
+                                  focus:border-purple-500
+                                  focus:ring-2
+                                  focus:ring-purple-500/20
+
+                                  transition">
+
+
+                    <p id="passwordError"
+                       class="error-message">
+
+                        Password is required.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     GENERAL FORM ERROR
+                ================================================== -->
+
+                <div id="formError"
+                     class="hidden
+                            mb-5
+                            px-4
+                            py-3
+                            rounded-xl
+                            bg-red-500/10
+                            border
+                            border-red-500/30
+                            text-red-300
+                            text-sm">
+
+                    Please correct the highlighted fields.
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LOGIN BUTTON
+                ================================================== -->
+
+                <button type="submit"
+                        id="loginButton"
+
+                        class="login-button
+                               w-full
+                               py-3.5
+                               rounded-xl
+                               font-bold
+                               text-white
+
+                               bg-gradient-to-r
+                               from-purple-600
+                               to-cyan-500
+
+                               hover:from-purple-500
+                               hover:to-cyan-400
+
+                               shadow-lg
+                               shadow-purple-500/20
+
+                               transition
+                               transform
+                               hover:-translate-y-0.5">
+
+                    LOGIN
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- =================================================
+                 REGISTER
+            ================================================== -->
+
+            <div class="text-center mt-6">
+
+
+                <p class="text-slate-500 text-sm">
+
+                    Don't have an account?
+
+
+                    <a href="{% url 'registration_type' %}"
+
+                       class="text-purple-400
+                              hover:text-purple-300
+                              font-semibold">
+
+                        Register Now
+
+                    </a>
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             BACK TO HOME BUTTON
+        ================================================== -->
+
+        <div class="text-center mt-6">
+
+
+            <a href="{% url 'index' %}"
+
+               class="inline-flex
+                      items-center
+                      justify-center
+
+                      px-6
+                      py-3
+
+                      rounded-xl
+
+                      bg-white/5
+
+                      border
+                      border-slate-700
+
+                      text-slate-300
+
+                      hover:bg-purple-600
+
+                      hover:border-purple-500
+
+                      hover:text-white
+
+                      transition
+
+                      font-semibold
+
+                      shadow-lg
+                      shadow-purple-500/10">
+
+                ← Back to Home
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT VALIDATION
+    ====================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           GET ELEMENTS
+        ====================================================== */
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const username =
+            document.getElementById("username");
+
+        const password =
+            document.getElementById("password");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        const formError =
+            document.getElementById("formError");
+
+
+
+        /* =====================================================
+           SHOW ERROR
+        ====================================================== */
+
+        function showError(input, errorElement, message) {
+
+            input.classList.remove("field-success");
+
+            input.classList.add("field-error");
+
+            errorElement.textContent = message;
+
+            errorElement.classList.add("show");
+
+        }
+
+
+
+        /* =====================================================
+           SHOW SUCCESS
+        ====================================================== */
+
+        function showSuccess(input, errorElement) {
+
+            input.classList.remove("field-error");
+
+            input.classList.add("field-success");
+
+            errorElement.classList.remove("show");
+
+        }
+
+
+
+        /* =====================================================
+           USERNAME VALIDATION
+        ====================================================== */
+
+        function validateUsername() {
+
+            const value =
+                username.value.trim();
+
+
+            const error =
+                document.getElementById("usernameError");
+
+
+            if (value === "") {
+
+                showError(
+                    username,
+                    error,
+                    "Username / Clan Name is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (value.length < 3) {
+
+                showError(
+                    username,
+                    error,
+                    "Username / Clan Name must contain at least 3 characters."
+                );
+
+                return false;
+
+            }
+
+
+            if (value.length > 50) {
+
+                showError(
+                    username,
+                    error,
+                    "Username / Clan Name cannot exceed 50 characters."
+                );
+
+                return false;
+
+            }
+
+
+            /*
+
+                Allows:
+
+                Letters
+                Numbers
+                Spaces
+                Underscore
+                Hyphen
+
+            */
+
+            const regex =
+                /^[A-Za-z0-9][A-Za-z0-9 _-]*$/;
+
+
+            if (!regex.test(value)) {
+
+                showError(
+                    username,
+                    error,
+                    "Only letters, numbers, spaces, hyphens and underscores are allowed."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(
+                username,
+                error
+            );
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           PASSWORD VALIDATION
+        ====================================================== */
+
+        function validatePassword() {
+
+            const value =
+                password.value;
+
+
+            const error =
+                document.getElementById("passwordError");
+
+
+            if (value === "") {
+
+                showError(
+                    password,
+                    error,
+                    "Password is required."
+                );
+
+                return false;
+
+            }
+
+
+            if (value.length < 8) {
+
+                showError(
+                    password,
+                    error,
+                    "Password must contain at least 8 characters."
+                );
+
+                return false;
+
+            }
+
+
+            if (value.length > 50) {
+
+                showError(
+                    password,
+                    error,
+                    "Password cannot exceed 50 characters."
+                );
+
+                return false;
+
+            }
+
+
+            showSuccess(
+                password,
+                error
+            );
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           USER TYPE VALIDATION
+        ====================================================== */
+
+        function validateUserType() {
+
+            const selected =
+                document.querySelector(
+                    'input[name="user_type"]:checked'
+                );
+
+
+            const error =
+                document.getElementById(
+                    "userTypeError"
+                );
+
+
+            if (!selected) {
+
+                error.classList.add("show");
+
+                return false;
+
+            }
+
+
+            error.classList.remove("show");
+
+            return true;
+
+        }
+
+
+
+        /* =====================================================
+           USERNAME REAL-TIME VALIDATION
+        ====================================================== */
+
+        username.addEventListener(
+            "input",
+            function () {
+
+                validateUsername();
+
+            }
+        );
+
+
+
+        /* =====================================================
+           PASSWORD REAL-TIME VALIDATION
+        ====================================================== */
+
+        password.addEventListener(
+            "input",
+            function () {
+
+                validatePassword();
+
+            }
+        );
+
+
+
+        /* =====================================================
+           USER TYPE CHANGE
+        ====================================================== */
+
+        document
+            .querySelectorAll(
+                'input[name="user_type"]'
+            )
+            .forEach(
+                function (radio) {
+
+                    radio.addEventListener(
+                        "change",
+                        validateUserType
+                    );
+
+                }
+            );
+
+
+
+        /* =====================================================
+           FORM SUBMIT
+        ====================================================== */
+
+        loginForm.addEventListener(
+            "submit",
+            function (event) {
+
+
+                const usernameValid =
+                    validateUsername();
+
+
+                const passwordValid =
+                    validatePassword();
+
+
+                const userTypeValid =
+                    validateUserType();
+
+
+                const isValid =
+                    usernameValid &&
+                    passwordValid &&
+                    userTypeValid;
+
+
+                if (!isValid) {
+
+                    event.preventDefault();
+
+
+                    formError.classList.remove(
+                        "hidden"
+                    );
+
+
+                    /* =========================================
+                       FOCUS FIRST INVALID FIELD
+                    ========================================== */
+
+                    if (!usernameValid) {
+
+                        username.focus();
+
+                        username.scrollIntoView({
+
+                            behavior: "smooth",
+
+                            block: "center"
+
+                        });
+
+                    }
+
+                    else if (!passwordValid) {
+
+                        password.focus();
+
+                        password.scrollIntoView({
+
+                            behavior: "smooth",
+
+                            block: "center"
+
+                        });
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                /* =============================================
+                   FORM IS VALID
+                ============================================== */
+
+                formError.classList.add(
+                    "hidden"
+                );
+
+
+                loginButton.disabled = true;
+
+                loginButton.textContent =
+                    "LOGGING IN...";
+
+
+                /*
+                    Do NOT prevent the form here.
+
+                    Django will receive:
+
+                    user_type
+                    username
+                    password
+                    csrf_token
+
+                */
+
+            }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

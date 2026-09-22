@@ -1,0 +1,1468 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile | BGMI Arena</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neon: "#a855f7",
+                        cyan: "#06b6d4",
+                        dark: "#050509"
+                    },
+                    boxShadow: {
+                        neon: "0 0 30px rgba(168,85,247,0.35)"
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #050509;
+        }
+
+        .gaming-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .hero-bg {
+            background:
+                radial-gradient(
+                    circle at 20% 30%,
+                    rgba(168, 85, 247, 0.20),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 80% 20%,
+                    rgba(6, 182, 212, 0.15),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #050509 0%,
+                    #090912 50%,
+                    #050509 100%
+                );
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.03) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.03) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+        }
+
+        .glass {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    90deg,
+                    #c084fc,
+                    #22d3ee
+                );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-box {
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .input-box:focus {
+            border-color: rgba(168,85,247,0.7);
+            box-shadow:
+                0 0 15px rgba(168,85,247,0.15);
+
+            outline: none;
+        }
+
+        .profile-image {
+            object-fit: cover;
+        }
+
+        /* Validation error */
+        .input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 12px rgba(239,68,68,0.15) !important;
+        }
+
+        .error-message {
+            color: #f87171;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white min-h-screen">
+
+
+<!-- ================================================= -->
+<!-- NAVBAR -->
+<!-- ================================================= -->
+
+<nav class="fixed top-0 left-0 right-0 z-50
+            glass border-b border-white/10">
+
+    <div class="max-w-7xl mx-auto px-6 py-4
+                flex items-center justify-between">
+
+        <!-- LOGO -->
+
+        <a href="{% url 'player_dashboard' %}"
+           class="font-orbitron text-xl font-bold">
+
+            <span class="gradient-text">
+                BGMI
+            </span>
+
+            <span class="text-white">
+                ARENA
+            </span>
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="flex items-center gap-3">
+
+            <a href="{% url 'player_dashboard' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-purple-600/20
+                      border border-purple-500/30
+                      hover:bg-purple-600/40
+                      transition">
+
+                🏠 Dashboard
+
+            </a>
+
+
+            <a href="{% url 'player_profile' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-white/5
+                      border border-white/10
+                      hover:bg-purple-600/20
+                      transition">
+
+                👤 Profile
+
+            </a>
+
+
+            <a href="{% url 'view_tournament' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-white/5
+                      border border-white/10
+                      hover:bg-purple-600/20
+                      transition">
+
+                🏆 Tournaments
+
+            </a>
+
+
+            <a href="{% url 'logout' %}"
+               class="px-4 py-2 rounded-xl
+                      bg-red-500/10
+                      border border-red-500/20
+                      text-red-400
+                      hover:bg-red-500
+                      hover:text-white
+                      transition">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- ================================================= -->
+<!-- MAIN -->
+<!-- ================================================= -->
+
+<main class="hero-bg grid-bg
+            min-h-screen
+            pt-32
+            pb-20">
+
+    <div class="max-w-4xl mx-auto px-6">
+
+
+        <!-- PAGE TITLE -->
+
+        <div class="text-center mb-10">
+
+            <p class="text-purple-400
+                      text-sm
+                      font-semibold
+                      tracking-[4px]">
+
+                ACCOUNT SETTINGS
+
+            </p>
+
+
+            <h1 class="gaming-font
+                       text-3xl
+                       md:text-5xl
+                       font-bold
+                       mt-3">
+
+                Edit
+
+                <span class="gradient-text">
+                    Profile
+                </span>
+
+            </h1>
+
+
+            <p class="text-gray-500 mt-4">
+
+                Update your BGMI Arena player information.
+
+            </p>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- DJANGO MESSAGES -->
+        <!-- ================================================= -->
+
+        {% if messages %}
+
+            <div class="mb-6">
+
+                {% for message in messages %}
+
+                    <div class="px-5 py-4 rounded-xl
+                                bg-green-500/10
+                                border border-green-500/20
+                                text-green-400
+                                text-sm">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ================================================= -->
+        <!-- PROFILE CARD -->
+        <!-- ================================================= -->
+
+        <div class="glass
+                    rounded-3xl
+                    overflow-hidden">
+
+
+            <!-- HEADER -->
+
+            <div class="p-8
+                        bg-gradient-to-r
+                        from-purple-900/30
+                        via-black/30
+                        to-cyan-900/30
+                        border-b border-white/10">
+
+                <div class="flex items-center gap-5">
+
+
+                    {% if player.profile_image %}
+
+                        <img src="{{ player.profile_image.url }}"
+                             class="w-20 h-20
+                                    rounded-full
+                                    profile-image
+                                    border-4
+                                    border-purple-500/40
+                                    shadow-neon"
+                             alt="Profile">
+
+                    {% else %}
+
+                        <div class="w-20 h-20
+                                    rounded-full
+                                    bg-gradient-to-br
+                                    from-purple-600
+                                    to-cyan-500
+                                    flex items-center
+                                    justify-center
+                                    text-3xl">
+
+                            👤
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div>
+
+                        <h2 class="gaming-font
+                                   text-xl
+                                   font-bold">
+
+                            {{ player.full_name }}
+
+                        </h2>
+
+
+                        <p class="text-purple-300
+                                  text-sm
+                                  mt-1">
+
+                            @{{ player.username }}
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- FORM -->
+            <!-- ================================================= -->
+
+            <form method="POST"
+                  enctype="multipart/form-data"
+                  id="profileForm"
+                  class="p-8 md:p-10">
+
+                {% csrf_token %}
+
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+
+                    <!-- FULL NAME -->
+
+                    <div>
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            FULL NAME
+
+                        </label>
+
+                        <input type="text"
+                               name="full_name"
+                               id="full_name"
+                               value="{{ player.full_name }}"
+                               required
+                               maxlength="50"
+                               class="input-box
+                                      w-full
+                                      px-4
+                                      py-3
+                                      rounded-xl
+                                      text-white">
+
+                        <p id="full_name_error"
+                           class="error-message hidden"></p>
+
+                    </div>
+
+
+                    <!-- USERNAME -->
+
+                    <div>
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            USERNAME
+
+                        </label>
+
+                        <input type="text"
+                               name="username"
+                               id="username"
+                               value="{{ player.username }}"
+                               required
+                               maxlength="30"
+                               class="input-box
+                                      w-full
+                                      px-4
+                                      py-3
+                                      rounded-xl
+                                      text-white">
+
+                        <p id="username_error"
+                           class="error-message hidden"></p>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div>
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            EMAIL
+
+                        </label>
+
+                        <input type="email"
+                               name="email"
+                               id="email"
+                               value="{{ player.email }}"
+                               required
+                               class="input-box
+                                      w-full
+                                      px-4
+                                      py-3
+                                      rounded-xl
+                                      text-white">
+
+                        <p id="email_error"
+                           class="error-message hidden"></p>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div>
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            PHONE
+
+                        </label>
+
+                        <input type="text"
+                               name="phone"
+                               id="phone"
+                               value="{{ player.phone }}"
+                               maxlength="10"
+                               minlength="10"
+                               inputmode="numeric"
+                               required
+                               class="input-box
+                                      w-full
+                                      px-4
+                                      py-3
+                                      rounded-xl
+                                      text-white">
+
+                        <p id="phone_error"
+                           class="error-message hidden"></p>
+
+                    </div>
+
+
+                    <!-- BGMI ID -->
+
+                    <div>
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            BGMI ID
+
+                        </label>
+
+                        <input type="text"
+                               name="bgmi_id"
+                               id="bgmi_id"
+                               value="{{ player.bgmi_id }}"
+                               required
+                               inputmode="numeric"
+                               class="input-box
+                                      w-full
+                                      px-4
+                                      py-3
+                                      rounded-xl
+                                      text-white">
+
+                        <p id="bgmi_id_error"
+                           class="error-message hidden"></p>
+
+                    </div>
+
+
+                    <!-- IN GAME NAME -->
+
+                    <div>
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            IN-GAME NAME
+
+                        </label>
+
+                        <input type="text"
+                               name="in_game_name"
+                               id="in_game_name"
+                               value="{{ player.in_game_name }}"
+                               required
+                               maxlength="50"
+                               class="input-box
+                                      w-full
+                                      px-4
+                                      py-3
+                                      rounded-xl
+                                      text-white">
+
+                        <p id="in_game_name_error"
+                           class="error-message hidden"></p>
+
+                    </div>
+
+
+                    <!-- GAME MODE -->
+
+                    <div>
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            GAME MODE
+
+                        </label>
+
+                        <select name="game_mode"
+                                id="game_mode"
+                                required
+                                class="input-box
+                                       w-full
+                                       px-4
+                                       py-3
+                                       rounded-xl
+                                       text-white">
+
+                            <option value=""
+                                    class="bg-gray-900">
+
+                                Select Game Mode
+
+                            </option>
+
+                            <option value="solo"
+                                class="bg-gray-900"
+                                {% if player.game_mode == "solo" %}
+                                    selected
+                                {% endif %}>
+
+                                Solo
+
+                            </option>
+
+                            <option value="duo"
+                                class="bg-gray-900"
+                                {% if player.game_mode == "duo" %}
+                                    selected
+                                {% endif %}>
+
+                                Duo
+
+                            </option>
+
+                            <option value="squad"
+                                class="bg-gray-900"
+                                {% if player.game_mode == "squad" %}
+                                    selected
+                                {% endif %}>
+
+                                Squad
+
+                            </option>
+
+                        </select>
+
+                        <p id="game_mode_error"
+                           class="error-message hidden"></p>
+
+                    </div>
+
+
+                    <!-- PLAYER ROLE -->
+
+                    <div>
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            PLAYER ROLE
+
+                        </label>
+
+                        <select name="player_role"
+                                id="player_role"
+                                required
+                                class="input-box
+                                       w-full
+                                       px-4
+                                       py-3
+                                       rounded-xl
+                                       text-white">
+
+                            <option value=""
+                                    class="bg-gray-900">
+
+                                Select Role
+
+                            </option>
+
+                            <option value="assault"
+                                class="bg-gray-900"
+                                {% if player.player_role == "assault" %}
+                                    selected
+                                {% endif %}>
+
+                                Assault
+
+                            </option>
+
+                            <option value="sniper"
+                                class="bg-gray-900"
+                                {% if player.player_role == "sniper" %}
+                                    selected
+                                {% endif %}>
+
+                                Sniper
+
+                            </option>
+
+                            <option value="support"
+                                class="bg-gray-900"
+                                {% if player.player_role == "support" %}
+                                    selected
+                                {% endif %}>
+
+                                Support
+
+                            </option>
+
+                            <option value="igl"
+                                class="bg-gray-900"
+                                {% if player.player_role == "igl" %}
+                                    selected
+                                {% endif %}>
+
+                                IGL
+
+                            </option>
+
+                        </select>
+
+                        <p id="player_role_error"
+                           class="error-message hidden"></p>
+
+                    </div>
+
+
+                    <!-- PROFILE IMAGE -->
+
+                    <div class="md:col-span-2">
+
+                        <label class="block
+                                      text-xs
+                                      text-gray-400
+                                      tracking-wider
+                                      mb-2">
+
+                            PROFILE IMAGE
+
+                        </label>
+
+                        <input type="file"
+                               name="profile_image"
+                               id="profile_image"
+                               accept="image/jpeg,image/png,image/webp"
+                               class="input-box
+                                      w-full
+                                      px-4
+                                      py-3
+                                      rounded-xl
+                                      text-gray-300">
+
+                        <p id="profile_image_error"
+                           class="error-message hidden"></p>
+
+                        <p class="text-xs text-gray-600 mt-2">
+
+                            JPG, PNG or WEBP only. Maximum size: 2 MB.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================================= -->
+                <!-- BUTTONS -->
+                <!-- ================================================= -->
+
+                <div class="grid sm:grid-cols-2
+                            gap-4
+                            mt-10">
+
+
+                    <!-- SAVE -->
+
+                    <button type="submit"
+                            class="py-3
+                                   rounded-xl
+                                   bg-gradient-to-r
+                                   from-purple-600
+                                   to-cyan-500
+                                   font-semibold
+                                   hover:opacity-90
+                                   transition
+                                   shadow-neon">
+
+                        💾 Save Changes
+
+                    </button>
+
+
+                    <!-- CANCEL -->
+
+                    <a href="{% url 'player_profile' %}"
+                       class="text-center
+                              py-3
+                              rounded-xl
+                              bg-white/5
+                              border border-white/10
+                              hover:bg-purple-600
+                              transition
+                              font-semibold">
+
+                        ← Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- ================================================= -->
+<!-- FOOTER -->
+<!-- ================================================= -->
+
+<footer class="border-t
+               border-white/10
+               bg-black">
+
+    <div class="max-w-7xl mx-auto
+                px-6
+                py-8">
+
+        <div class="flex
+                    flex-col
+                    md:flex-row
+                    justify-between
+                    gap-5">
+
+
+            <div>
+
+                <h2 class="gaming-font
+                           font-bold
+                           text-lg">
+
+                    BGMI
+
+                    <span class="gradient-text">
+                        ARENA
+                    </span>
+
+                </h2>
+
+                <p class="text-gray-500
+                          text-sm
+                          mt-2">
+
+                    Competitive tournament platform
+                    for BGMI players.
+
+                </p>
+
+            </div>
+
+
+            <div class="text-xs
+                        text-gray-600
+                        flex items-center">
+
+                © 2026 BGMI Arena.
+                All rights reserved.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- ================================================= -->
+<!-- JAVASCRIPT VALIDATION -->
+<!-- ================================================= -->
+
+<script>
+
+const form = document.getElementById("profileForm");
+
+
+/* =====================================================
+   VALIDATION FUNCTIONS
+===================================================== */
+
+function showError(input, errorElement, message) {
+
+    input.classList.add("input-error");
+
+    errorElement.textContent = message;
+
+    errorElement.classList.remove("hidden");
+
+    return false;
+}
+
+
+function clearError(input, errorElement) {
+
+    input.classList.remove("input-error");
+
+    errorElement.textContent = "";
+
+    errorElement.classList.add("hidden");
+
+    return true;
+}
+
+
+/* =====================================================
+   FULL NAME
+===================================================== */
+
+function validateFullName() {
+
+    const input = document.getElementById("full_name");
+
+    const error = document.getElementById("full_name_error");
+
+    const value = input.value.trim();
+
+    const namePattern = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/;
+
+
+    if (value === "") {
+
+        return showError(
+            input,
+            error,
+            "Full name is required."
+        );
+
+    }
+
+
+    if (value.length < 3) {
+
+        return showError(
+            input,
+            error,
+            "Full name must contain at least 3 characters."
+        );
+
+    }
+
+
+    if (!namePattern.test(value)) {
+
+        return showError(
+            input,
+            error,
+            "Full name can contain letters and spaces only."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   USERNAME
+===================================================== */
+
+function validateUsername() {
+
+    const input = document.getElementById("username");
+
+    const error = document.getElementById("username_error");
+
+    const value = input.value.trim();
+
+    const usernamePattern = /^[A-Za-z0-9_]+$/;
+
+
+    if (value === "") {
+
+        return showError(
+            input,
+            error,
+            "Username is required."
+        );
+
+    }
+
+
+    if (value.length < 3) {
+
+        return showError(
+            input,
+            error,
+            "Username must contain at least 3 characters."
+        );
+
+    }
+
+
+    if (!usernamePattern.test(value)) {
+
+        return showError(
+            input,
+            error,
+            "Username can contain letters, numbers and underscore only."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   EMAIL
+===================================================== */
+
+function validateEmail() {
+
+    const input = document.getElementById("email");
+
+    const error = document.getElementById("email_error");
+
+    const value = input.value.trim();
+
+
+    const emailPattern =
+        /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+
+    if (value === "") {
+
+        return showError(
+            input,
+            error,
+            "Email is required."
+        );
+
+    }
+
+
+    if (!emailPattern.test(value)) {
+
+        return showError(
+            input,
+            error,
+            "Please enter a valid email address."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   PHONE
+===================================================== */
+
+function validatePhone() {
+
+    const input = document.getElementById("phone");
+
+    const error = document.getElementById("phone_error");
+
+    const value = input.value.trim();
+
+
+    if (value === "") {
+
+        return showError(
+            input,
+            error,
+            "Phone number is required."
+        );
+
+    }
+
+
+    if (!/^[0-9]+$/.test(value)) {
+
+        return showError(
+            input,
+            error,
+            "Phone number must contain digits only."
+        );
+
+    }
+
+
+    if (value.length !== 10) {
+
+        return showError(
+            input,
+            error,
+            "Phone number must contain exactly 10 digits."
+        );
+
+    }
+
+
+    if (!/^[6-9]/.test(value)) {
+
+        return showError(
+            input,
+            error,
+            "Please enter a valid Indian mobile number."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   BGMI ID
+===================================================== */
+
+function validateBgmiId() {
+
+    const input = document.getElementById("bgmi_id");
+
+    const error = document.getElementById("bgmi_id_error");
+
+    const value = input.value.trim();
+
+
+    if (value === "") {
+
+        return showError(
+            input,
+            error,
+            "BGMI ID is required."
+        );
+
+    }
+
+
+    if (!/^[0-9]+$/.test(value)) {
+
+        return showError(
+            input,
+            error,
+            "BGMI ID must contain numbers only."
+        );
+
+    }
+
+
+    if (value.length < 5) {
+
+        return showError(
+            input,
+            error,
+            "Please enter a valid BGMI ID."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   IN GAME NAME
+===================================================== */
+
+function validateInGameName() {
+
+    const input = document.getElementById("in_game_name");
+
+    const error = document.getElementById("in_game_name_error");
+
+    const value = input.value.trim();
+
+
+    if (value === "") {
+
+        return showError(
+            input,
+            error,
+            "In-game name is required."
+        );
+
+    }
+
+
+    if (value.length < 2) {
+
+        return showError(
+            input,
+            error,
+            "In-game name must contain at least 2 characters."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   GAME MODE
+===================================================== */
+
+function validateGameMode() {
+
+    const input = document.getElementById("game_mode");
+
+    const error = document.getElementById("game_mode_error");
+
+
+    if (input.value === "") {
+
+        return showError(
+            input,
+            error,
+            "Please select a game mode."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   PLAYER ROLE
+===================================================== */
+
+function validatePlayerRole() {
+
+    const input = document.getElementById("player_role");
+
+    const error = document.getElementById("player_role_error");
+
+
+    if (input.value === "") {
+
+        return showError(
+            input,
+            error,
+            "Please select your player role."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   PROFILE IMAGE
+===================================================== */
+
+function validateProfileImage() {
+
+    const input = document.getElementById("profile_image");
+
+    const error = document.getElementById("profile_image_error");
+
+
+    if (input.files.length === 0) {
+
+        return clearError(input, error);
+
+    }
+
+
+    const file = input.files[0];
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+
+    if (!allowedTypes.includes(file.type)) {
+
+        input.value = "";
+
+        return showError(
+            input,
+            error,
+            "Only JPG, PNG or WEBP images are allowed."
+        );
+
+    }
+
+
+    const maxSize = 2 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+        input.value = "";
+
+        return showError(
+            input,
+            error,
+            "Image size must be less than 2 MB."
+        );
+
+    }
+
+
+    return clearError(input, error);
+}
+
+
+/* =====================================================
+   FORM SUBMIT
+===================================================== */
+
+form.addEventListener("submit", function(event) {
+
+    const validFullName = validateFullName();
+
+    const validUsername = validateUsername();
+
+    const validEmail = validateEmail();
+
+    const validPhone = validatePhone();
+
+    const validBgmiId = validateBgmiId();
+
+    const validInGameName = validateInGameName();
+
+    const validGameMode = validateGameMode();
+
+    const validPlayerRole = validatePlayerRole();
+
+    const validProfileImage = validateProfileImage();
+
+
+    const isValid =
+        validFullName &&
+        validUsername &&
+        validEmail &&
+        validPhone &&
+        validBgmiId &&
+        validInGameName &&
+        validGameMode &&
+        validPlayerRole &&
+        validProfileImage;
+
+
+    if (!isValid) {
+
+        event.preventDefault();
+
+
+        const firstError =
+            document.querySelector(".input-error");
+
+
+        if (firstError) {
+
+            firstError.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+            firstError.focus();
+
+        }
+
+    }
+
+});
+
+
+/* =====================================================
+   LIVE VALIDATION
+===================================================== */
+
+document
+    .getElementById("full_name")
+    .addEventListener("input", validateFullName);
+
+
+document
+    .getElementById("username")
+    .addEventListener("input", validateUsername);
+
+
+document
+    .getElementById("email")
+    .addEventListener("input", validateEmail);
+
+
+document
+    .getElementById("phone")
+    .addEventListener("input", function() {
+
+        this.value = this.value.replace(/\D/g, "");
+
+        validatePhone();
+
+    });
+
+
+document
+    .getElementById("bgmi_id")
+    .addEventListener("input", function() {
+
+        this.value = this.value.replace(/\D/g, "");
+
+        validateBgmiId();
+
+    });
+
+
+document
+    .getElementById("in_game_name")
+    .addEventListener("input", validateInGameName);
+
+
+document
+    .getElementById("game_mode")
+    .addEventListener("change", validateGameMode);
+
+
+document
+    .getElementById("player_role")
+    .addEventListener("change", validatePlayerRole);
+
+
+document
+    .getElementById("profile_image")
+    .addEventListener("change", validateProfileImage);
+
+</script>
+
+
+</body>
+</html>

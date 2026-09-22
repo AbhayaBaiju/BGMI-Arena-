@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clan Dashboard | BGMI Arena</title>
+
+
+    <!-- Tailwind CSS -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+                        neon: "#a855f7",
+                        cyan: "#06b6d4",
+                        dark: "#050509"
+                    },
+
+                    boxShadow: {
+
+                        neon:
+                            "0 0 30px rgba(168,85,247,0.35)",
+
+                        cyan:
+                            "0 0 30px rgba(6,182,212,0.25)"
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+
+    <style>
+
+        body {
+
+            font-family: 'Poppins', sans-serif;
+
+            background: #050509;
+
+        }
+
+
+        .gaming-font {
+
+            font-family: 'Orbitron', sans-serif;
+
+        }
+
+
+        .hero-bg {
+
+            background:
+
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(168, 85, 247, 0.18),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 80% 30%,
+                    rgba(6, 182, 212, 0.14),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #050509 0%,
+                    #090912 50%,
+                    #050509 100%
+                );
+
+        }
+
+
+        .grid-bg {
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255, 255, 255, 0.025) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+        }
+
+
+        .glass {
+
+            background:
+                rgba(255, 255, 255, 0.04);
+
+            backdrop-filter:
+                blur(15px);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+        }
+
+
+        .gradient-text {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #c084fc,
+                    #22d3ee
+                );
+
+            -webkit-background-clip:
+                text;
+
+            -webkit-text-fill-color:
+                transparent;
+
+        }
+
+
+        .dashboard-card {
+
+            transition:
+                all 0.3s ease;
+
+        }
+
+
+        .dashboard-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            border-color:
+                rgba(168, 85, 247, 0.45);
+
+            box-shadow:
+                0 20px 50px rgba(168, 85, 247, 0.12);
+
+        }
+
+
+        .clan-logo {
+
+            object-fit: cover;
+
+        }
+
+
+        .profile-link {
+
+            transition:
+                all 0.3s ease;
+
+        }
+
+
+        .profile-link:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 0 20px rgba(168, 85, 247, 0.20);
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white min-h-screen">
+
+
+    <!-- ===================================================== -->
+    <!-- NAVBAR -->
+    <!-- ===================================================== -->
+
+    <nav class="fixed
+                top-0
+                left-0
+                right-0
+                z-50
+
+                bg-black/70
+                backdrop-blur-xl
+
+                border-b
+                border-white/10">
+
+
+        <div class="max-w-7xl
+                    mx-auto
+                    px-6">
+
+
+            <div class="flex
+                        items-center
+                        justify-between
+                        h-20">
+
+
+                <!-- LOGO -->
+
+                <a href="{% url 'index' %}"
+                   class="flex
+                          items-center
+                          gap-3">
+
+
+                    <div class="w-11
+                                h-11
+                                rounded-xl
+
+                                bg-gradient-to-br
+                                from-purple-600
+                                to-cyan-500
+
+                                flex
+                                items-center
+                                justify-center
+
+                                shadow-neon">
+
+                        ⚔️
+
+                    </div>
+
+
+                    <div>
+
+                        <h1 class="gaming-font
+                                   font-bold
+                                   text-lg
+                                   tracking-wider">
+
+                            BGMI
+
+                            <span class="gradient-text">
+
+                                ARENA
+
+                            </span>
+
+                        </h1>
+
+
+                        <p class="text-[10px]
+                                  text-gray-500
+                                  tracking-[3px]">
+
+                            CLAN PANEL
+
+                        </p>
+
+                    </div>
+
+
+                </a>
+
+
+                <!-- RIGHT SIDE -->
+
+                <div class="flex
+                            items-center
+                            gap-3
+                            sm:gap-4">
+
+
+                    <!-- ===================================== -->
+                    <!-- NAVIGATION BUTTONS -->
+                    <!-- ===================================== -->
+
+                    <div class="hidden md:flex
+                                items-center
+                                gap-3
+                                text-sm">
+
+
+                        <!-- DASHBOARD BUTTON -->
+
+                        <a href="{% url 'clan_dashboard' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  text-slate-300
+
+                                  border
+                                  border-white/10
+
+                                  hover:border-purple-500/40
+                                  hover:text-purple-400
+
+                                  transition
+                                  duration-300">
+
+                            🏠 Dashboard
+
+                        </a>
+
+
+                        <!-- ================================= -->
+                        <!-- VIEW BOOKINGS BUTTON -->
+                        <!-- ================================= -->
+
+                        <a href="{% url 'view_booking' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  text-slate-300
+
+                                  border
+                                  border-white/10
+
+                                  hover:border-cyan-500/40
+                                  hover:text-cyan-400
+
+                                  transition
+                                  duration-300">
+
+                            👥 Bookings
+
+                        </a>
+
+
+                        <!-- PROFILE BUTTON -->
+
+                        <a href="{% url 'clan_profile' %}"
+
+                           class="px-5
+                                  py-2.5
+
+                                  rounded-xl
+
+                                  bg-gradient-to-r
+                                  from-purple-600
+                                  to-cyan-500
+
+                                  text-white
+                                  font-semibold
+
+                                  hover:opacity-90
+                                  hover:scale-105
+
+                                  transition
+                                  duration-300
+
+                                  shadow-lg
+                                  shadow-purple-500/20">
+
+                            👤 Profile
+
+                        </a>
+
+
+                    </div>
+
+
+                    <!-- ===================================== -->
+                    <!-- LOGOUT -->
+                    <!-- ===================================== -->
+
+                    <a href="{% url 'logout' %}"
+
+                       class="hidden
+                              sm:block
+
+                              px-4
+                              py-2
+
+                              rounded-lg
+
+                              bg-red-500/10
+
+                              text-red-400
+
+                              border
+                              border-red-500/20
+
+                              hover:bg-red-500
+                              hover:text-white
+
+                              transition
+
+                              text-sm">
+
+                        Logout
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </nav>
+
+
+
+    <!-- ===================================================== -->
+    <!-- MAIN -->
+    <!-- ===================================================== -->
+
+    <main class="hero-bg
+                 grid-bg
+
+                 min-h-screen
+
+                 pt-32
+                 pb-20">
+
+
+        <div class="max-w-7xl
+                    mx-auto
+                    px-6">
+
+
+            <!-- ================================================= -->
+            <!-- WELCOME -->
+            <!-- ================================================= -->
+
+            <div class="mb-10">
+
+
+                <p class="text-purple-400
+                          text-sm
+                          font-semibold
+                          tracking-[4px]">
+
+                    CLAN DASHBOARD
+
+                </p>
+
+
+                <h1 class="gaming-font
+                           text-3xl
+                           md:text-5xl
+                           font-bold
+                           mt-3">
+
+                    Welcome,
+
+                    <span class="gradient-text">
+
+                        {{ clan.clan_name }}
+
+                    </span>
+
+                </h1>
+
+
+                <p class="text-gray-500
+                          mt-4
+                          max-w-2xl">
+
+                    Manage your clan, participate in BGMI
+                    tournaments, and track your clan activities
+                    from one place.
+
+                </p>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- CLAN HERO CARD -->
+            <!-- ================================================= -->
+
+            <div class="glass
+                        rounded-3xl
+                        p-8
+                        md:p-10
+                        mb-8">
+
+
+                <div class="flex
+                            flex-col
+                            md:flex-row
+                            items-center
+                            gap-8">
+
+
+                    <!-- CLAN LOGO -->
+
+                    <div class="relative">
+
+
+                        {% if clan.clan_logo %}
+
+                        <img
+                            src="{{ clan.clan_logo.url }}"
+
+                            class="w-32
+                                   h-32
+                                   md:w-40
+                                   md:h-40
+
+                                   rounded-3xl
+
+                                   clan-logo
+
+                                   border-4
+                                   border-purple-500/40
+
+                                   shadow-neon"
+
+                            alt="Clan Logo">
+
+                        {% else %}
+
+                        <div class="w-32
+                                    h-32
+                                    md:w-40
+                                    md:h-40
+
+                                    rounded-3xl
+
+                                    bg-gradient-to-br
+                                    from-purple-600
+                                    to-cyan-500
+
+                                    flex
+                                    items-center
+                                    justify-center
+
+                                    text-6xl
+
+                                    border-4
+                                    border-purple-500/40
+
+                                    shadow-neon">
+
+                            ⚔️
+
+                        </div>
+
+                        {% endif %}
+
+
+                        <!-- ACTIVE -->
+
+                        <span class="absolute
+                                     -bottom-2
+                                     -right-2
+
+                                     px-3
+                                     py-1
+
+                                     rounded-full
+
+                                     bg-green-500/20
+
+                                     border
+                                     border-green-500/30
+
+                                     text-green-400
+
+                                     text-xs
+                                     font-semibold">
+
+                            ● ACTIVE
+
+                        </span>
+
+
+                    </div>
+
+
+
+                    <!-- CLAN DETAILS -->
+
+                    <div class="text-center
+                                md:text-left
+                                flex-1">
+
+
+                        <p class="text-cyan-400
+                                  text-xs
+                                  tracking-[3px]
+                                  font-semibold">
+
+                            BGMI CLAN
+
+                        </p>
+
+
+                        <h2 class="gaming-font
+                                   text-3xl
+                                   md:text-4xl
+                                   font-bold
+                                   mt-2">
+
+                            {{ clan.clan_name }}
+
+                        </h2>
+
+
+                        <p class="text-gray-400
+                                  mt-3">
+
+                            Welcome to your clan management panel.
+
+                        </p>
+
+
+                        <div class="flex
+                                    flex-wrap
+                                    justify-center
+                                    md:justify-start
+                                    gap-3
+                                    mt-5">
+
+
+                            <span class="px-4
+                                         py-2
+                                         rounded-full
+
+                                         bg-purple-500/10
+
+                                         border
+                                         border-purple-500/20
+
+                                         text-purple-300
+
+                                         text-xs">
+
+                                ⚔️ CLAN
+
+                            </span>
+
+
+                            <span class="px-4
+                                         py-2
+                                         rounded-full
+
+                                         bg-cyan-500/10
+
+                                         border
+                                         border-cyan-500/20
+
+                                         text-cyan-300
+
+                                         text-xs">
+
+                                🏆 COMPETITIVE
+
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- INFORMATION CARDS -->
+            <!-- ================================================= -->
+
+            <div class="grid
+                        md:grid-cols-2
+                        gap-6">
+
+
+                <!-- ACCOUNT INFORMATION -->
+
+                <div class="glass
+                            rounded-3xl
+                            p-8">
+
+
+                    <div class="flex
+                                items-center
+                                gap-4
+                                mb-6">
+
+
+                        <div class="w-11
+                                    h-11
+                                    rounded-xl
+
+                                    bg-purple-500/10
+
+                                    flex
+                                    items-center
+                                    justify-center">
+
+                            ⚔️
+
+                        </div>
+
+
+                        <div>
+
+                            <p class="text-purple-400
+                                      text-xs
+                                      tracking-widest">
+
+                                CLAN INFORMATION
+
+                            </p>
+
+
+                            <h3 class="gaming-font
+                                       text-xl
+                                       font-bold">
+
+                                Account Details
+
+                            </h3>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="space-y-4">
+
+
+                        <!-- CLAN NAME -->
+
+                        <div class="rounded-xl
+                                    bg-black/30
+                                    border
+                                    border-white/5
+                                    p-4">
+
+
+                            <p class="text-xs
+                                      text-gray-500">
+
+                                CLAN NAME
+
+                            </p>
+
+
+                            <p class="font-medium
+                                      mt-1">
+
+                                {{ clan.clan_name }}
+
+                            </p>
+
+
+                        </div>
+
+
+
+                        <!-- EMAIL -->
+
+                        {% if clan.email %}
+
+                        <div class="rounded-xl
+                                    bg-black/30
+                                    border
+                                    border-white/5
+                                    p-4">
+
+
+                            <p class="text-xs
+                                      text-gray-500">
+
+                                EMAIL
+
+                            </p>
+
+
+                            <p class="font-medium
+                                      mt-1
+                                      break-all">
+
+                                {{ clan.email }}
+
+                            </p>
+
+
+                        </div>
+
+                        {% endif %}
+
+
+
+                        <!-- PHONE -->
+
+                        {% if clan.phone %}
+
+                        <div class="rounded-xl
+                                    bg-black/30
+                                    border
+                                    border-white/5
+                                    p-4">
+
+
+                            <p class="text-xs
+                                      text-gray-500">
+
+                                PHONE
+
+                            </p>
+
+
+                            <p class="font-medium
+                                      mt-1">
+
+                                {{ clan.phone }}
+
+                            </p>
+
+
+                        </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================================================= -->
+                <!-- TOURNAMENT CARD -->
+                <!-- ================================================= -->
+
+                <div class="glass
+                            rounded-3xl
+                            p-8">
+
+
+                    <div class="flex
+                                items-center
+                                gap-4
+                                mb-6">
+
+
+                        <div class="w-11
+                                    h-11
+                                    rounded-xl
+
+                                    bg-cyan-500/10
+
+                                    flex
+                                    items-center
+                                    justify-center">
+
+                            🏆
+
+                        </div>
+
+
+                        <div>
+
+                            <p class="text-cyan-400
+                                      text-xs
+                                      tracking-widest">
+
+                                COMPETITIVE ARENA
+
+                            </p>
+
+
+                            <h3 class="gaming-font
+                                       text-xl
+                                       font-bold">
+
+                                Tournament Center
+
+                            </h3>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="rounded-2xl
+                                bg-gradient-to-br
+                                from-purple-600/10
+                                to-cyan-500/10
+
+                                border
+                                border-white/5
+
+                                p-6">
+
+
+                        <p class="text-gray-400
+                                  text-sm">
+
+                            Ready to compete?
+
+                        </p>
+
+
+                        <h3 class="gaming-font
+                                   text-xl
+                                   font-bold
+                                   mt-2">
+
+                            Add a Tournament
+
+                        </h3>
+
+
+                        <p class="text-gray-500
+                                  text-sm
+                                  mt-2">
+
+                            Create BGMI tournaments and compete
+                            with other players and clans.
+
+                        </p>
+
+
+                        <a href="{% url 'add_tournament' %}"
+
+                           class="inline-block
+                                  mt-5
+
+                                  px-5
+                                  py-3
+
+                                  rounded-xl
+
+                                  bg-gradient-to-r
+                                  from-purple-600
+                                  to-cyan-500
+
+                                  font-semibold
+
+                                  hover:opacity-90
+
+                                  hover:scale-105
+
+                                  transition">
+
+                            🏆 Add Tournament →
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- TOURNAMENT SHORTCUT -->
+            <!-- ================================================= -->
+
+            <div class="glass
+                        rounded-3xl
+                        p-8
+                        mt-8">
+
+
+                <div class="flex
+                            flex-col
+                            md:flex-row
+                            items-center
+                            justify-between
+                            gap-5">
+
+
+                    <div>
+
+                        <p class="text-purple-400
+                                  text-xs
+                                  tracking-widest">
+
+                            CLAN TOURNAMENTS
+
+                        </p>
+
+
+                        <h3 class="gaming-font
+                                   text-xl
+                                   font-bold
+                                   mt-2">
+
+                            View Your Clan Tournaments
+
+                        </h3>
+
+
+                        <p class="text-gray-500
+                                  text-sm
+                                  mt-2">
+
+                            View all tournaments created by
+                            your clan and check their details.
+
+                        </p>
+
+                    </div>
+
+
+                    <a href="{% url 'view_tournaments' %}"
+
+                       class="px-6
+                              py-3
+
+                              rounded-xl
+
+                              bg-gradient-to-r
+                              from-purple-600
+                              to-cyan-500
+
+                              font-semibold
+
+                              hover:scale-105
+
+                              hover:opacity-90
+
+                              transition
+
+                              whitespace-nowrap">
+
+                        🏆 View Tournaments →
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            
+
+
+
+            
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- ===================================================== -->
+    <!-- FOOTER -->
+    <!-- ===================================================== -->
+
+    <footer class="border-t
+                   border-white/10
+                   bg-black">
+
+
+        <div class="max-w-7xl
+                    mx-auto
+                    px-6
+                    py-8">
+
+
+            <div class="flex
+                        flex-col
+                        md:flex-row
+                        justify-between
+                        gap-5">
+
+
+                <div>
+
+                    <h2 class="gaming-font
+                               font-bold
+                               text-lg">
+
+                        BGMI
+
+                        <span class="gradient-text">
+
+                            ARENA
+
+                        </span>
+
+                    </h2>
+
+
+                    <p class="text-gray-500
+                              text-sm
+                              mt-2">
+
+                        Competitive tournament platform
+                        for BGMI clans and players.
+
+                    </p>
+
+                </div>
+
+
+                <div class="text-xs
+                            text-gray-600
+                            flex
+                            items-center">
+
+                    © 2026 BGMI Arena.
+                    All rights reserved.
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </footer>
+
+
+</body>
+
+</html>

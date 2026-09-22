@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BGMI Arena | Admin Login</title>
+
+
+    <!-- Tailwind CSS -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #050509;
+        }
+
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+
+        /* Background */
+
+        .grid-bg {
+
+            background-image:
+                linear-gradient(
+                    rgba(168, 85, 247, 0.04) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(6, 182, 212, 0.04) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+        }
+
+
+        /* Glass Card */
+
+        .glass {
+
+            background: rgba(255, 255, 255, 0.04);
+
+            border: 1px solid
+                rgba(168, 85, 247, 0.25);
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 0 40px
+                rgba(168, 85, 247, 0.08);
+        }
+
+
+        /* Input */
+
+        .input-box {
+
+            background: rgba(0, 0, 0, 0.35);
+
+            border: 1px solid
+                rgba(168, 85, 247, 0.25);
+
+            transition: all 0.3s ease;
+        }
+
+
+        .input-box:focus {
+
+            outline: none;
+
+            border-color: #a855f7;
+
+            box-shadow:
+                0 0 15px
+                rgba(168, 85, 247, 0.25);
+        }
+
+
+        /* Valid Input */
+
+        .input-valid {
+
+            border-color: #22c55e !important;
+
+            box-shadow:
+                0 0 12px
+                rgba(34, 197, 94, 0.15);
+        }
+
+
+        /* Invalid Input */
+
+        .input-invalid {
+
+            border-color: #ef4444 !important;
+
+            box-shadow:
+                0 0 12px
+                rgba(239, 68, 68, 0.15);
+        }
+
+
+        /* Login Button */
+
+        .login-btn {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #7e22ce,
+                    #a855f7,
+                    #06b6d4
+                );
+
+            transition: all 0.3s ease;
+        }
+
+
+        .login-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 0 25px
+                rgba(168, 85, 247, 0.45);
+        }
+
+
+        /* Error */
+
+        .error-message {
+
+            background: rgba(239, 68, 68, 0.08);
+
+            border: 1px solid
+                rgba(239, 68, 68, 0.25);
+        }
+
+
+        /* Field Error */
+
+        .field-error {
+
+            color: #f87171;
+
+            font-size: 12px;
+
+            margin-top: 6px;
+
+            display: none;
+        }
+
+
+        /* Success */
+
+        .success-message {
+
+            background: rgba(34, 197, 94, 0.08);
+
+            border: 1px solid
+                rgba(34, 197, 94, 0.25);
+        }
+
+    </style>
+
+</head>
+
+
+<body class="text-white min-h-screen grid-bg">
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav class="border-b
+            border-purple-500/20
+            bg-black/70
+            backdrop-blur-xl">
+
+    <div class="max-w-7xl
+                mx-auto
+                px-6
+                py-5
+                flex
+                items-center
+                justify-between">
+
+
+        <!-- Logo -->
+
+        <a href="{% url 'index' %}"
+           class="orbitron
+                  text-xl
+                  md:text-2xl
+                  font-bold">
+
+            <span class="text-purple-500">
+                BGMI
+            </span>
+
+            <span class="text-cyan-400">
+                ARENA
+            </span>
+
+        </a>
+
+
+        <!-- Admin -->
+
+        <div class="flex
+                    items-center
+                    gap-2
+                    text-sm
+                    text-gray-400">
+
+            <span class="text-purple-400">
+                🛡
+            </span>
+
+            ADMIN PANEL
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     LOGIN SECTION
+========================================================= -->
+
+<section class="min-h-[calc(100vh-76px)]
+                flex
+                items-center
+                justify-center
+                px-6
+                py-12">
+
+
+    <div class="w-full max-w-md">
+
+
+        <!-- LOGIN CARD -->
+
+        <div class="glass
+                    rounded-3xl
+                    p-8
+                    md:p-10">
+
+
+            <!-- Icon -->
+
+            <div class="flex
+                        justify-center
+                        mb-6">
+
+                <div class="w-20
+                            h-20
+                            rounded-2xl
+                            flex
+                            items-center
+                            justify-center
+                            bg-purple-500/10
+                            border
+                            border-purple-500/30
+                            shadow-lg
+                            shadow-purple-500/10">
+
+                    <span class="text-4xl">
+                        🛡️
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Heading -->
+
+            <div class="text-center
+                        mb-8">
+
+                <p class="text-cyan-400
+                          text-xs
+                          font-semibold
+                          uppercase
+                          tracking-[0.3em]">
+
+                    Secure Access
+
+                </p>
+
+
+                <h1 class="orbitron
+                           text-2xl
+                           md:text-3xl
+                           font-bold
+                           mt-3">
+
+                    Admin Login
+
+                </h1>
+
+
+                <p class="text-gray-400
+                          text-sm
+                          mt-3">
+
+                    Sign in to manage BGMI Arena
+
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 DJANGO MESSAGES
+            ================================================== -->
+
+            {% if messages %}
+
+                {% for message in messages %}
+
+                    <div class="
+                        rounded-xl
+                        px-4
+                        py-3
+                        mb-6
+                        text-sm
+                        flex
+                        items-center
+                        gap-3
+
+                        {% if message.tags == 'success' %}
+
+                            success-message
+                            text-green-400
+
+                        {% else %}
+
+                            error-message
+                            text-red-400
+
+                        {% endif %}
+                    ">
+
+                        <span>
+                            {% if message.tags == 'success' %}
+                                ✅
+                            {% else %}
+                                ⚠️
+                            {% endif %}
+                        </span>
+
+                        <span>
+                            {{ message }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 LOGIN FORM
+            ================================================== -->
+
+            <form
+                method="POST"
+                id="adminLoginForm"
+                novalidate>
+
+                {% csrf_token %}
+
+
+                <!-- =================================================
+                     USERNAME
+                ================================================= -->
+
+                <div class="mb-5">
+
+                    <label
+                        for="username"
+                        class="block
+                               text-sm
+                               font-medium
+                               text-gray-300
+                               mb-2">
+
+                        Username
+
+                    </label>
+
+
+                    <div class="relative">
+
+                        <span class="absolute
+                                     left-4
+                                     top-1/2
+                                     -translate-y-1/2
+                                     text-gray-500">
+
+                            👤
+
+                        </span>
+
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+
+                            placeholder="Enter admin username"
+
+                            required
+
+                            minlength="3"
+
+                            maxlength="50"
+
+                            autocomplete="username"
+
+                            class="input-box
+                                   w-full
+                                   pl-12
+                                   pr-4
+                                   py-3.5
+                                   rounded-xl
+                                   text-white
+                                   placeholder-gray-600">
+
+
+                    </div>
+
+
+                    <!-- Username Error -->
+
+                    <p
+                        id="usernameError"
+                        class="field-error">
+
+                        Please enter a valid username.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PASSWORD
+                ================================================== -->
+
+                <div class="mb-7">
+
+                    <label
+                        for="password"
+                        class="block
+                               text-sm
+                               font-medium
+                               text-gray-300
+                               mb-2">
+
+                        Password
+
+                    </label>
+
+
+                    <div class="relative">
+
+                        <span class="absolute
+                                     left-4
+                                     top-1/2
+                                     -translate-y-1/2
+                                     text-gray-500">
+
+                            🔒
+
+                        </span>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+
+                            placeholder="Enter admin password"
+
+                            required
+
+                            minlength="6"
+
+                            maxlength="128"
+
+                            autocomplete="current-password"
+
+                            class="input-box
+                                   w-full
+                                   pl-12
+                                   pr-12
+                                   py-3.5
+                                   rounded-xl
+                                   text-white
+                                   placeholder-gray-600">
+
+
+                        <!-- Show Password -->
+
+                        <button
+                            type="button"
+                            onclick="togglePassword()"
+
+                            class="absolute
+                                   right-4
+                                   top-1/2
+                                   -translate-y-1/2
+                                   text-gray-500
+                                   hover:text-purple-400
+                                   transition">
+
+                            👁
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Password Error -->
+
+                    <p
+                        id="passwordError"
+                        class="field-error">
+
+                        Password must contain at least 6 characters.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LOGIN BUTTON
+                ================================================== -->
+
+                <button
+                    type="submit"
+                    id="loginButton"
+
+                    class="login-btn
+                           w-full
+                           py-3.5
+                           rounded-xl
+                           font-semibold
+                           text-white
+                           orbitron
+                           text-sm
+                           tracking-wide">
+
+                    LOGIN TO ADMIN PANEL
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- =================================================
+                 BACK TO HOME
+            ================================================== -->
+
+            <div class="text-center
+                        mt-7">
+
+                <a
+                    href="{% url 'index' %}"
+
+                    class="text-sm
+                           text-gray-400
+                           hover:text-cyan-400
+                           transition">
+
+                    ← Back to Home
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- Security -->
+
+        <div class="text-center
+                    mt-6
+                    text-xs
+                    text-gray-600">
+
+            🔐 Authorized administrators only
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT VALIDATION
+========================================================= -->
+
+<script>
+
+
+// =========================================================
+// GET ELEMENTS
+// =========================================================
+
+const form =
+    document.getElementById("adminLoginForm");
+
+const username =
+    document.getElementById("username");
+
+const password =
+    document.getElementById("password");
+
+const usernameError =
+    document.getElementById("usernameError");
+
+const passwordError =
+    document.getElementById("passwordError");
+
+
+
+// =========================================================
+// USERNAME VALIDATION
+// =========================================================
+
+function validateUsername() {
+
+    const value =
+        username.value.trim();
+
+
+    username.classList.remove(
+        "input-valid",
+        "input-invalid"
+    );
+
+
+    usernameError.style.display = "none";
+
+
+    // Empty
+
+    if (value === "") {
+
+        username.classList.add(
+            "input-invalid"
+        );
+
+        usernameError.textContent =
+            "Username is required.";
+
+        usernameError.style.display =
+            "block";
+
+        return false;
+    }
+
+
+    // Minimum length
+
+    if (value.length < 3) {
+
+        username.classList.add(
+            "input-invalid"
+        );
+
+        usernameError.textContent =
+            "Username must contain at least 3 characters.";
+
+        usernameError.style.display =
+            "block";
+
+        return false;
+    }
+
+
+    // Spaces
+
+    if (/\s/.test(value)) {
+
+        username.classList.add(
+            "input-invalid"
+        );
+
+        usernameError.textContent =
+            "Username cannot contain spaces.";
+
+        usernameError.style.display =
+            "block";
+
+        return false;
+    }
+
+
+    username.classList.add(
+        "input-valid"
+    );
+
+    return true;
+}
+
+
+
+// =========================================================
+// PASSWORD VALIDATION
+// =========================================================
+
+function validatePassword() {
+
+    const value =
+        password.value;
+
+
+    password.classList.remove(
+        "input-valid",
+        "input-invalid"
+    );
+
+
+    passwordError.style.display =
+        "none";
+
+
+    // Empty
+
+    if (value === "") {
+
+        password.classList.add(
+            "input-invalid"
+        );
+
+        passwordError.textContent =
+            "Password is required.";
+
+        passwordError.style.display =
+            "block";
+
+        return false;
+    }
+
+
+    // Minimum length
+
+    if (value.length < 6) {
+
+        password.classList.add(
+            "input-invalid"
+        );
+
+        passwordError.textContent =
+            "Password must contain at least 6 characters.";
+
+        passwordError.style.display =
+            "block";
+
+        return false;
+    }
+
+
+    password.classList.add(
+        "input-valid"
+    );
+
+    return true;
+}
+
+
+
+// =========================================================
+// LIVE VALIDATION
+// =========================================================
+
+username.addEventListener(
+    "input",
+    validateUsername
+);
+
+password.addEventListener(
+    "input",
+    validatePassword
+);
+
+
+
+// =========================================================
+// FORM SUBMIT VALIDATION
+// =========================================================
+
+form.addEventListener(
+    "submit",
+    function(event) {
+
+        const usernameValid =
+            validateUsername();
+
+        const passwordValid =
+            validatePassword();
+
+
+        if (
+            !usernameValid ||
+            !passwordValid
+        ) {
+
+            event.preventDefault();
+
+            return false;
+        }
+
+
+        // Disable button after valid submit
+
+        const button =
+            document.getElementById(
+                "loginButton"
+            );
+
+        button.disabled = true;
+
+        button.innerHTML =
+            "CHECKING LOGIN...";
+
+    }
+);
+
+
+
+// =========================================================
+// SHOW / HIDE PASSWORD
+// =========================================================
+
+function togglePassword() {
+
+    const passwordInput =
+        document.getElementById(
+            "password"
+        );
+
+
+    if (
+        passwordInput.type === "password"
+    ) {
+
+        passwordInput.type =
+            "text";
+
+    } else {
+
+        passwordInput.type =
+            "password";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>
