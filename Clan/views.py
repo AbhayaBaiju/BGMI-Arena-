@@ -1,10 +1,8 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.urls import reverse
 
 from decimal import Decimal, InvalidOperation
-import uuid
 
 from Guest.models import ClanRegistration
 from .models import Tournament, Booking
@@ -26,6 +24,7 @@ def clan_dashboard(request):
 
     try:
         clan = ClanRegistration.objects.get(id=clan_id)
+
     except ClanRegistration.DoesNotExist:
         request.session.flush()
         return redirect("login")
@@ -43,37 +42,6 @@ def clan_dashboard(request):
 # CLAN PROFILE
 # ============================================================
 
-# def clan_profile(request):
-
-#     if request.session.get("user_type") != "clan":
-#         return redirect("login")
-
-#     clan_id = request.session.get("clan_id")
-
-#     if not clan_id:
-#         return redirect("login")
-
-#     try:
-#         clan = ClanRegistration.objects.get(id=clan_id)
-#     except ClanRegistration.DoesNotExist:
-#         request.session.flush()
-#         return redirect("login")
-
-#     return render(
-#         request,
-#         "Clan/clan_profile.html",
-#         {
-#             "clan": clan
-#         }
-#     )
-
-
-import os
-from django.conf import settings
-from django.shortcuts import render, redirect
-from .models import ClanRegistration
-
-
 def clan_profile(request):
 
     if request.session.get("user_type") != "clan":
@@ -86,18 +54,27 @@ def clan_profile(request):
 
     try:
         clan = ClanRegistration.objects.get(id=clan_id)
+
     except ClanRegistration.DoesNotExist:
         request.session.flush()
         return redirect("login")
 
+    # ========================================================
+    # CLOUDINARY IMAGE
+    # ========================================================
+    # IMPORTANT:
+    # Do NOT use clan.clan_logo.path
+    #
+    # Cloudinary does not support absolute local file paths.
+    # Use clan.clan_logo.url instead.
+
     print("================================")
     print("IMAGE FIELD :", clan.clan_logo)
-    print("IMAGE URL   :", clan.clan_logo.url if clan.clan_logo else "NO IMAGE")
-    print("MEDIA_ROOT  :", settings.MEDIA_ROOT)
 
     if clan.clan_logo:
-        print("IMAGE PATH  :", clan.clan_logo.path)
-        print("FILE EXISTS :", os.path.exists(clan.clan_logo.path))
+        print("IMAGE URL   :", clan.clan_logo.url)
+    else:
+        print("IMAGE URL   : NO IMAGE")
 
     print("================================")
 
@@ -108,6 +85,7 @@ def clan_profile(request):
             "clan": clan
         }
     )
+
 
 # ============================================================
 # EDIT PROFILE
@@ -170,12 +148,20 @@ def edit_profile(request):
             clan.game_mode
         )
 
+        # ====================================================
+        # MEMBER COUNT
+        # ====================================================
+
         if hasattr(clan, "member_count"):
 
             member_count = request.POST.get("member_count")
 
             if member_count:
                 clan.member_count = member_count
+
+        # ====================================================
+        # LOCATION
+        # ====================================================
 
         if hasattr(clan, "location"):
 
@@ -184,6 +170,10 @@ def edit_profile(request):
                 clan.location
             )
 
+        # ====================================================
+        # DESCRIPTION
+        # ====================================================
+
         if hasattr(clan, "description"):
 
             clan.description = request.POST.get(
@@ -191,9 +181,17 @@ def edit_profile(request):
                 clan.description
             )
 
+        # ====================================================
+        # CLAN LOGO
+        # ====================================================
+
         if "clan_logo" in request.FILES:
 
             clan.clan_logo = request.FILES["clan_logo"]
+
+        # ====================================================
+        # SAVE
+        # ====================================================
 
         try:
 
@@ -237,11 +235,15 @@ def change_password(request):
         return redirect("login")
 
     try:
-        clan = ClanRegistration.objects.get(id=clan_id)
+
+        clan = ClanRegistration.objects.get(
+            id=clan_id
+        )
 
     except ClanRegistration.DoesNotExist:
 
         request.session.flush()
+
         return redirect("login")
 
     if request.method == "POST":
@@ -261,6 +263,10 @@ def change_password(request):
             ""
         )
 
+        # ====================================================
+        # CURRENT PASSWORD
+        # ====================================================
+
         if current_password != clan.password:
 
             messages.error(
@@ -271,8 +277,14 @@ def change_password(request):
             return render(
                 request,
                 "Clan/changepassword.html",
-                {"clan": clan}
+                {
+                    "clan": clan
+                }
             )
+
+        # ====================================================
+        # NEW PASSWORD REQUIRED
+        # ====================================================
 
         if not new_password:
 
@@ -284,8 +296,14 @@ def change_password(request):
             return render(
                 request,
                 "Clan/changepassword.html",
-                {"clan": clan}
+                {
+                    "clan": clan
+                }
             )
+
+        # ====================================================
+        # PASSWORD LENGTH
+        # ====================================================
 
         if len(new_password) < 6:
 
@@ -297,8 +315,14 @@ def change_password(request):
             return render(
                 request,
                 "Clan/changepassword.html",
-                {"clan": clan}
+                {
+                    "clan": clan
+                }
             )
+
+        # ====================================================
+        # CONFIRM PASSWORD
+        # ====================================================
 
         if new_password != confirm_password:
 
@@ -310,8 +334,14 @@ def change_password(request):
             return render(
                 request,
                 "Clan/changepassword.html",
-                {"clan": clan}
+                {
+                    "clan": clan
+                }
             )
+
+        # ====================================================
+        # SAME PASSWORD
+        # ====================================================
 
         if current_password == new_password:
 
@@ -323,10 +353,17 @@ def change_password(request):
             return render(
                 request,
                 "Clan/changepassword.html",
-                {"clan": clan}
+                {
+                    "clan": clan
+                }
             )
 
+        # ====================================================
+        # SAVE NEW PASSWORD
+        # ====================================================
+
         clan.password = new_password
+
         clan.save()
 
         messages.success(
@@ -363,16 +400,23 @@ def view_tournaments(request):
 
     # Get clan
     try:
-        clan = ClanRegistration.objects.get(id=clan_id)
+
+        clan = ClanRegistration.objects.get(
+            id=clan_id
+        )
 
     except ClanRegistration.DoesNotExist:
+
         request.session.flush()
+
         return redirect("login")
 
     # Get tournaments created by this clan
     tournaments = Tournament.objects.filter(
         clan_id=clan.id
-    ).order_by("-created_at")
+    ).order_by(
+        "-created_at"
+    )
 
     return render(
         request,
@@ -406,10 +450,12 @@ def tournament_details(request, tournament_id):
         id=tournament_id
     )
 
-    # Optional security:
-    # Make sure the tournament belongs to the logged-in clan
+    # Make sure tournament belongs to logged-in clan
     if tournament.clan_id != int(clan_id):
-        return redirect("view_tournaments")
+
+        return redirect(
+            "view_tournaments"
+        )
 
     return render(
         request,
@@ -432,69 +478,171 @@ def add_tournament(request):
 
     clan_id = request.session.get("clan_id")
 
+    if not clan_id:
+        return redirect("login")
+
     try:
-        clan = ClanRegistration.objects.get(id=clan_id)
+
+        clan = ClanRegistration.objects.get(
+            id=clan_id
+        )
+
     except ClanRegistration.DoesNotExist:
+
+        request.session.flush()
+
         return redirect("login")
 
     if request.method == "POST":
 
-        tournament_name = request.POST.get("tournament_name")
-        map_name = request.POST.get("map")
-        game_mode = request.POST.get("game_mode")
+        # ====================================================
+        # GET FORM VALUES
+        # ====================================================
 
-        tournament_date = request.POST.get("tournament_date")
-        tournament_time = request.POST.get("tournament_time")
+        tournament_name = request.POST.get(
+            "tournament_name"
+        )
 
-        entry_fee = request.POST.get("entry_fee")
-        prize_pool = request.POST.get("prize_pool")
+        map_name = request.POST.get(
+            "map"
+        )
 
-        first_prize = request.POST.get("first_prize")
-        second_prize = request.POST.get("second_prize")
-        third_prize = request.POST.get("third_prize")
+        game_mode = request.POST.get(
+            "game_mode"
+        )
 
-        # IMPORTANT
-        total_slot = request.POST.get("total_slot")
-        matches = request.POST.get("matches")
+        tournament_date = request.POST.get(
+            "tournament_date"
+        )
 
-        description = request.POST.get("description")
+        tournament_time = request.POST.get(
+            "tournament_time"
+        )
 
-        # Convert Decimal values
+        entry_fee = request.POST.get(
+            "entry_fee"
+        )
+
+        prize_pool = request.POST.get(
+            "prize_pool"
+        )
+
+        first_prize = request.POST.get(
+            "first_prize"
+        )
+
+        second_prize = request.POST.get(
+            "second_prize"
+        )
+
+        third_prize = request.POST.get(
+            "third_prize"
+        )
+
+        total_slot = request.POST.get(
+            "total_slot"
+        )
+
+        matches = request.POST.get(
+            "matches"
+        )
+
+        description = request.POST.get(
+            "description"
+        )
+
+        # ====================================================
+        # DECIMAL VALUES
+        # ====================================================
+
         try:
-            entry_fee = Decimal(entry_fee or "0")
-            prize_pool = Decimal(prize_pool or "0")
 
-            first_prize = Decimal(first_prize or "0")
-            second_prize = Decimal(second_prize or "0")
-            third_prize = Decimal(third_prize or "0")
+            entry_fee = Decimal(
+                entry_fee or "0"
+            )
+
+            prize_pool = Decimal(
+                prize_pool or "0"
+            )
+
+            first_prize = Decimal(
+                first_prize or "0"
+            )
+
+            second_prize = Decimal(
+                second_prize or "0"
+            )
+
+            third_prize = Decimal(
+                third_prize or "0"
+            )
 
         except InvalidOperation:
-            messages.error(request, "Please enter valid prize/fee values.")
-            return redirect("add_tournament")
 
-        # Convert integer values
-        total_slot = int(total_slot or 1)
-        matches = int(matches or 1)
+            messages.error(
+                request,
+                "Please enter valid prize/fee values."
+            )
 
-        # Create tournament
+            return redirect(
+                "add_tournament"
+            )
+
+        # ====================================================
+        # INTEGER VALUES
+        # ====================================================
+
+        try:
+
+            total_slot = int(
+                total_slot or 1
+            )
+
+            matches = int(
+                matches or 1
+            )
+
+        except (ValueError, TypeError):
+
+            messages.error(
+                request,
+                "Please enter valid slot and match values."
+            )
+
+            return redirect(
+                "add_tournament"
+            )
+
+        # ====================================================
+        # CREATE TOURNAMENT
+        # ====================================================
+
         Tournament.objects.create(
+
             clan=clan,
 
             tournament_name=tournament_name,
+
             map=map_name,
+
             game_mode=game_mode,
 
             tournament_date=tournament_date,
+
             tournament_time=tournament_time,
 
             entry_fee=entry_fee,
+
             prize_pool=prize_pool,
 
             first_prize=first_prize,
+
             second_prize=second_prize,
+
             third_prize=third_prize,
 
             total_slot=total_slot,
+
             matches=matches,
 
             description=description
@@ -505,12 +653,15 @@ def add_tournament(request):
             "Tournament created successfully!"
         )
 
-        return redirect("view_tournaments")
+        return redirect(
+            "view_tournaments"
+        )
 
     return render(
         request,
         "Clan/add_tournaments.html"
     )
+
 
 # ============================================================
 # VIEW BOOKINGS
@@ -527,10 +678,15 @@ def view_booking(request):
         return redirect("login")
 
     try:
-        clan = ClanRegistration.objects.get(id=clan_id)
+
+        clan = ClanRegistration.objects.get(
+            id=clan_id
+        )
 
     except ClanRegistration.DoesNotExist:
+
         request.session.flush()
+
         return redirect("login")
 
     # ========================================================
@@ -554,51 +710,96 @@ def view_booking(request):
             ""
         ).strip()
 
+        # ====================================================
+        # TOURNAMENT CHECK
+        # ====================================================
+
         if not tournament_id:
+
             messages.error(
                 request,
                 "Please select a tournament."
             )
-            return redirect("view_booking")
+
+            return redirect(
+                "view_booking"
+            )
+
+        # ====================================================
+        # GAME ID CHECK
+        # ====================================================
 
         if not game_id:
+
             messages.error(
                 request,
                 "Game ID is required."
             )
-            return redirect("view_booking")
+
+            return redirect(
+                "view_booking"
+            )
+
+        # ====================================================
+        # GAME PASSWORD CHECK
+        # ====================================================
 
         if not game_password:
+
             messages.error(
                 request,
                 "Game password is required."
             )
-            return redirect("view_booking")
+
+            return redirect(
+                "view_booking"
+            )
+
+        # ====================================================
+        # CONVERT TO INTEGER
+        # ====================================================
 
         try:
-            tournament_id = int(tournament_id)
+
+            tournament_id = int(
+                tournament_id
+            )
 
         except (ValueError, TypeError):
+
             messages.error(
                 request,
                 "Invalid tournament selected."
             )
-            return redirect("view_booking")
 
-        # Check tournament belongs to this clan
+            return redirect(
+                "view_booking"
+            )
+
+        # ====================================================
+        # CHECK TOURNAMENT
+        # ====================================================
+
         tournament = Tournament.objects.filter(
             id=tournament_id,
             clan_id=clan.id
         ).first()
 
         if not tournament:
+
             messages.error(
                 request,
                 "Tournament not found."
             )
-            return redirect("view_booking")
 
-        # Save room details
+            return redirect(
+                "view_booking"
+            )
+
+        # ====================================================
+        # SAVE ROOM DETAILS
+        # ====================================================
+
         Tournament.objects.filter(
             id=tournament_id,
             clan_id=clan.id
@@ -626,7 +827,9 @@ def view_booking(request):
     ).only(
         "id",
         "tournament_name"
-    ).order_by("-id")
+    ).order_by(
+        "-id"
+    )
 
     # ========================================================
     # GET BOOKINGS
@@ -648,12 +851,22 @@ def view_booking(request):
         "booked_at",
         "tournament__id",
         "tournament__tournament_name"
-    ).order_by("-id")
+    ).order_by(
+        "-id"
+    )
+
+    # ========================================================
+    # CONTEXT
+    # ========================================================
 
     context = {
+
         "clan": clan,
+
         "tournaments": tournaments,
+
         "bookings": bookings,
+
         "total_bookings": bookings.count()
     }
 
@@ -683,15 +896,30 @@ def send_whatsapp(request, tournament_id):
         id=clan_id
     )
 
+    # ========================================================
+    # CONVERT TO INTEGER
+    # ========================================================
+
     try:
-        tournament_id = int(tournament_id)
+
+        tournament_id = int(
+            tournament_id
+        )
 
     except (ValueError, TypeError):
+
         messages.error(
             request,
             "Invalid tournament."
         )
-        return redirect("view_booking")
+
+        return redirect(
+            "view_booking"
+        )
+
+    # ========================================================
+    # GET TOURNAMENT
+    # ========================================================
 
     tournament = Tournament.objects.filter(
         id=tournament_id,
@@ -699,11 +927,19 @@ def send_whatsapp(request, tournament_id):
     ).first()
 
     if not tournament:
+
         messages.error(
             request,
             "Tournament not found."
         )
-        return redirect("view_booking")
+
+        return redirect(
+            "view_booking"
+        )
+
+    # ========================================================
+    # GET BOOKINGS
+    # ========================================================
 
     bookings = Booking.objects.filter(
         tournament_id=tournament_id
@@ -717,20 +953,36 @@ def send_whatsapp(request, tournament_id):
         "id"
     )
 
+    # ========================================================
+    # WHATSAPP DATA
+    # ========================================================
+
     whatsapp_data = []
 
     for booking in bookings:
 
-        whatsapp_data.append({
-            "player_name": booking.player_name,
-            "phone": booking.phone
-        })
+        whatsapp_data.append(
+            {
+                "player_name": booking.player_name,
+                "phone": booking.phone
+            }
+        )
+
+    # ========================================================
+    # CONTEXT
+    # ========================================================
 
     context = {
+
         "clan": clan,
+
         "tournament": tournament,
+
         "whatsapp_data": whatsapp_data,
-        "total_players": len(whatsapp_data)
+
+        "total_players": len(
+            whatsapp_data
+        )
     }
 
     return render(
@@ -740,7 +992,9 @@ def send_whatsapp(request, tournament_id):
     )
 
 
-
+# ============================================================
+# CLAN LOGOUT
+# ============================================================
 
 def clan_logout(request):
 
@@ -751,4 +1005,6 @@ def clan_logout(request):
         "Clan logged out successfully."
     )
 
-    return redirect("login")
+    return redirect(
+        "login"
+    )
