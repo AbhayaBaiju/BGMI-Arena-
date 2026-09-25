@@ -32,6 +32,15 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 
 # =========================================================
+# RENDER HOSTNAME
+# =========================================================
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get(
+    "RENDER_EXTERNAL_HOSTNAME"
+)
+
+
+# =========================================================
 # CLOUDINARY CONFIGURATION
 # =========================================================
 
@@ -49,32 +58,28 @@ CLOUDINARY_STORAGE = {
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "bgmi-arena-vtz2.onrender.com",
 ]
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get(
-    "RENDER_EXTERNAL_HOSTNAME"
-)
-
 if RENDER_EXTERNAL_HOSTNAME:
-    if RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
-        ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # =========================================================
 # CSRF TRUSTED ORIGINS
 # =========================================================
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://bgmi-arena-vtz2.onrender.com",
-]
+CSRF_TRUSTED_ORIGINS = []
 
 if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(
+        f"https://{RENDER_EXTERNAL_HOSTNAME}"
+    )
 
-    render_origin = f"https://{RENDER_EXTERNAL_HOSTNAME}"
-
-    if render_origin not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(render_origin)
+# Optional fixed Render URL
+if "https://bgmi-arena-vtz2.onrender.com" not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append(
+        "https://bgmi-arena-vtz2.onrender.com"
+    )
 
 
 # =========================================================
@@ -83,14 +88,23 @@ if RENDER_EXTERNAL_HOSTNAME:
 
 INSTALLED_APPS = [
 
+    # -----------------------------------------------------
     # Jazzmin
+    # -----------------------------------------------------
+
     "jazzmin",
 
+    # -----------------------------------------------------
     # Cloudinary
+    # -----------------------------------------------------
+
     "cloudinary",
     "cloudinary_storage",
 
+    # -----------------------------------------------------
     # Django
+    # -----------------------------------------------------
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -98,7 +112,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    # -----------------------------------------------------
     # Project Apps
+    # -----------------------------------------------------
+
     "Guest",
     "Players",
     "Clan",
@@ -255,13 +272,19 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 STORAGES = {
 
-    # Cloudinary for uploaded images/files
+    # -----------------------------------------------------
+    # Cloudinary
+    # -----------------------------------------------------
+
     "default": {
         "BACKEND":
             "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
 
-    # WhiteNoise for static files
+    # -----------------------------------------------------
+    # WhiteNoise
+    # -----------------------------------------------------
+
     "staticfiles": {
         "BACKEND":
             "whitenoise.storage.CompressedManifestStaticFilesStorage",
@@ -279,19 +302,43 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # =========================================================
 # PRODUCTION SECURITY
 # =========================================================
+#
+# These settings are enabled only when:
+#
+# 1. DEBUG=False
+# 2. RENDER_EXTERNAL_HOSTNAME exists
+#
+# Therefore:
+#
+# LOCAL:
+# http://127.0.0.1:8000/
+#
+# RENDER:
+# https://bgmi-arena-vtz2.onrender.com/
+#
+# =========================================================
 
-if not DEBUG:
+if not DEBUG and RENDER_EXTERNAL_HOSTNAME:
+
+    # Render terminates HTTPS before forwarding
+    # the request to Django.
 
     SECURE_PROXY_SSL_HEADER = (
         "HTTP_X_FORWARDED_PROTO",
         "https",
     )
 
+    # Secure cookies on HTTPS
+
     SESSION_COOKIE_SECURE = True
 
     CSRF_COOKIE_SECURE = True
 
+    # Redirect HTTP requests to HTTPS
+
     SECURE_SSL_REDIRECT = True
+
+    # HSTS
 
     SECURE_HSTS_SECONDS = 31536000
 
